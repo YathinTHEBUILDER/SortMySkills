@@ -12,7 +12,7 @@ interface OtpFormProps {
 
 export default function OtpForm({ email, type }: OtpFormProps) {
   const router = useRouter();
-  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [otp, setOtp] = useState<string[]>(Array(8).fill(""));
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -50,7 +50,7 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     setOtp(newOtp);
 
     // Auto-focus next input if value is entered
-    if (value && index < 5) {
+    if (value && index < 7) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -78,12 +78,12 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     e.preventDefault();
     const pasteData = e.clipboardData.getData("text").trim();
 
-    // Check if pasted value is a 6-digit number
-    if (/^\d{6}$/.test(pasteData)) {
+    // Check if pasted value is an 8-digit number
+    if (/^\d{8}$/.test(pasteData)) {
       const pasteDigits = pasteData.split("");
       setOtp(pasteDigits);
       // Focus the last input box
-      inputRefs.current[5]?.focus();
+      inputRefs.current[7]?.focus();
     }
   };
 
@@ -94,15 +94,20 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     setSuccessMessage(null);
 
     const token = otp.join("");
-    if (token.length !== 6) {
-      setError("Please enter the complete 6-digit verification code.");
+    if (token.length !== 8) {
+      setError("Please enter the complete 8-digit verification code.");
       return;
     }
 
     startTransition(async () => {
       const res = await verifyEmailOtpAction({ email, token, type });
       if ("success" in res && res.success) {
-        router.push("/dashboard");
+        if (type === "recovery") {
+          // Recovery OTP verified — redirect to set new password
+          router.push("/reset-password");
+        } else {
+          router.push("/dashboard");
+        }
         router.refresh();
       } else {
         setError(("error" in res && res.error) || "Verification failed. Please check the code and try again.");
@@ -117,9 +122,8 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     setSuccessMessage(null);
 
     startTransition(async () => {
-      // resendOtpAction strictly takes 'signup' | 'email_change'
-      const resendType = type === "recovery" ? "signup" : type;
-      const res = await resendOtpAction({ email, type: resendType });
+      // resendOtpAction supports 'signup' | 'email_change' | 'recovery'
+      const res = await resendOtpAction({ email, type });
       if ("success" in res && res.success) {
         setSuccessMessage(res.message || "A new code has been sent!");
         setResendCooldown(60); // 60 seconds cooldown
@@ -133,7 +137,7 @@ export default function OtpForm({ email, type }: OtpFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="flex justify-between gap-2 sm:gap-3 py-2">
+      <div className="flex justify-center gap-1.5 sm:gap-2 py-2">
         {otp.map((digit, index) => (
           <input
             key={index}
@@ -150,7 +154,7 @@ export default function OtpForm({ email, type }: OtpFormProps) {
             }}
             disabled={isPending}
             aria-label={`Digit ${index + 1}`}
-            className="w-12 h-14 sm:w-14 sm:h-16 text-center text-xl font-bold bg-[var(--background)] border border-[var(--border-muted)] rounded-xl focus:border-accent-green focus:outline-none focus:ring-2 focus:ring-accent-green/20 transition-all text-text-primary disabled:opacity-50"
+            className="w-10 h-12 sm:w-11 sm:h-14 text-center text-lg font-bold bg-[var(--background)] border border-[var(--border-muted)] rounded-lg focus:border-accent-green focus:outline-none focus:ring-2 focus:ring-accent-green/20 transition-all text-text-primary disabled:opacity-50"
           />
         ))}
       </div>

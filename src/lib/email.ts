@@ -1,8 +1,4 @@
-/**
- * Brevo Transactional Email Utility
- * Powered by Brevo SMTP REST API v3
- * Zero-dependency, lightweight, type-safe
- */
+import nodemailer from "nodemailer";
 
 export interface EmailRecipient {
   email: string;
@@ -33,7 +29,7 @@ export interface SendEmailParams {
    */
   textContent?: string;
   /**
-   * Optional custom sender. Defaults to BREVO_SENDER_EMAIL / BREVO_SENDER_NAME from env.
+   * Optional custom sender. Defaults to GMAIL_SENDER_EMAIL / GMAIL_SENDER_NAME from env.
    */
   sender?: EmailSender;
   /**
@@ -47,7 +43,7 @@ export interface BrevoApiResponse {
 }
 
 /**
- * Sends a transactional email using the Brevo REST API.
+ * Sends a transactional email using Gmail SMTP via Nodemailer.
  * 
  * @param params Email parameters including to, subject, and HTML content.
  * @returns Object indicating success status, and message ID or error message.
@@ -56,13 +52,14 @@ export async function sendTransactionalEmail(params: SendEmailParams): Promise<
   | { success: true; messageId: string }
   | { success: false; error: string }
 > {
-  const apiKey = process.env.BREVO_API_KEY;
-  const defaultSenderEmail = process.env.BREVO_SENDER_EMAIL;
-  const defaultSenderName = process.env.BREVO_SENDER_NAME || "SortMySkills";
+  const smtpUser = process.env.GMAIL_SMTP_USER;
+  const smtpPass = process.env.GMAIL_SMTP_PASSWORD;
+  const defaultSenderEmail = process.env.GMAIL_SENDER_EMAIL || smtpUser;
+  const defaultSenderName = process.env.GMAIL_SENDER_NAME || "SortMySkills";
 
-  if (!apiKey) {
-    console.error("Brevo Error: BREVO_API_KEY is not configured.");
-    return { success: false, error: "Brevo API Key is missing from server environment." };
+  if (!smtpUser || !smtpPass) {
+    console.error("Gmail SMTP Error: GMAIL_SMTP_USER and GMAIL_SMTP_PASSWORD are not configured.");
+    return { success: false, error: "SMTP credentials are missing from server environment." };
   }
 
   // 1. Normalize Sender
@@ -71,65 +68,44 @@ export async function sendTransactionalEmail(params: SendEmailParams): Promise<
     name: params.sender?.name || defaultSenderName,
   };
 
-  if (!sender.email) {
-    console.error("Brevo Error: Sender email is not defined (BREVO_SENDER_EMAIL not set).");
-    return { success: false, error: "Sender email is missing from server environment." };
-  }
-
   // 2. Normalize Recipients
-  let toArray: EmailRecipient[] = [];
+  let toArray: string[] = [];
   if (typeof params.to === "string") {
-    toArray = [{ email: params.to }];
+    toArray = [params.to];
   } else if (Array.isArray(params.to)) {
     toArray = params.to.map((item) =>
-      typeof item === "string" ? { email: item } : item
+      typeof item === "string" ? item : item.email
     );
   } else {
-    toArray = [params.to];
+    toArray = [params.to.email];
   }
 
-  // 3. Build Payload
-  const payload = {
-    sender,
-    to: toArray,
-    subject: params.subject,
-    htmlContent: params.htmlContent,
-    ...(params.textContent && { textContent: params.textContent }),
-    ...(params.replyTo && { replyTo: params.replyTo }),
-  };
-
   try {
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "api-key": apiKey,
-        "content-type": "application/json",
+    // Create Nodemailer Transporter for Gmail
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
       },
-      body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      let errorMessage = `HTTP Error ${response.status}: ${response.statusText}`;
-      try {
-        const errorJson = JSON.parse(errorText);
-        if (errorJson.message) {
-          errorMessage = errorJson.message;
-        }
-      } catch {
-        // Fallback to raw error text
-        if (errorText) errorMessage = errorText;
-      }
-      console.error("Brevo API sending failed:", errorMessage);
-      return { success: false, error: errorMessage };
-    }
+    const formattedSender = sender.name ? `"${sender.name}" <${sender.email}>` : sender.email;
 
-    const data = (await response.json()) as BrevoApiResponse;
-    return { success: true, messageId: data.messageId };
+    const mailOptions = {
+      from: formattedSender,
+      to: toArray.join(", "),
+      subject: params.subject,
+      html: params.htmlContent,
+      ...(params.textContent && { text: params.textContent }),
+      ...(params.replyTo && { replyTo: params.replyTo.email }),
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    return { success: true, messageId: info.messageId || "gmail-smtp-id" };
   } catch (error: unknown) {
-    const err = error instanceof Error ? error.message : "An unknown fetch error occurred";
-    console.error("Error calling Brevo API:", err);
+    const err = error instanceof Error ? error.message : "An unknown nodemailer error occurred";
+    console.error("Error calling Gmail SMTP via Nodemailer:", err);
     return { success: false, error: err };
   }
 }

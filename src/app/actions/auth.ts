@@ -6,8 +6,6 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
-// Define site URL for redirects
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 // Custom type for Server Action Responses
 export type ActionResponse =
@@ -46,7 +44,7 @@ const verifyOtpSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
   token: z
     .string()
-    .length(6, "Verification code must be exactly 6 digits.")
+    .length(8, "Verification code must be exactly 8 digits.")
     .regex(/^\d+$/, "Verification code must contain digits only."),
   type: z.enum(["signup", "recovery", "email_change"], {
     message: "Invalid verification type.",
@@ -55,7 +53,7 @@ const verifyOtpSchema = z.object({
 
 const resendOtpSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
-  type: z.enum(["signup", "email_change"], {
+  type: z.enum(["signup", "email_change", "recovery"], {
     message: "Invalid verification type.",
   }),
 });
@@ -106,7 +104,6 @@ export async function signUpAction(formData: z.infer<typeof signUpSchema>): Prom
       email,
       password,
       options: {
-        emailRedirectTo: `${siteUrl}/auth/callback`,
         data: {
           full_name: fullName,
           role,
@@ -250,13 +247,21 @@ export async function resendOtpAction(formData: z.infer<typeof resendOtpSchema>)
   // 3. Supabase Auth Call
   try {
     const supabase = await createServerSupabaseClient();
-    const { error } = await supabase.auth.resend({
-      email,
-      type,
-    });
 
-    if (error) {
-      return { success: false, error: error.message };
+    if (type === "recovery") {
+      // Recovery uses resetPasswordForEmail to resend the OTP
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    } else {
+      const { error } = await supabase.auth.resend({
+        email,
+        type,
+      });
+      if (error) {
+        return { success: false, error: error.message };
+      }
     }
 
     return { success: true, message: "A new verification code has been sent." };
@@ -290,12 +295,10 @@ export async function forgotPasswordAction(
     };
   }
 
-  // 3. Supabase Auth Call
+  // 3. Supabase Auth Call — send OTP code (not a link)
   try {
     const supabase = await createServerSupabaseClient();
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${siteUrl}/auth/callback?next=/reset-password`,
-    });
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
 
     if (error) {
       // Return success even on error (e.g. user not found) to prevent email enumeration
@@ -304,14 +307,16 @@ export async function forgotPasswordAction(
 
     return {
       success: true,
-      message: "If an account exists with that email, a password reset link has been sent.",
+      email,
+      message: "If an account exists with that email, a verification code has been sent.",
     };
   } catch (error: unknown) {
     // Return a generic success to hide server issues/account presence details
     console.error("Forgot password server error:", error);
     return {
       success: true,
-      message: "If an account exists with that email, a password reset link has been sent.",
+      email,
+      message: "If an account exists with that email, a verification code has been sent.",
     };
   }
 }
