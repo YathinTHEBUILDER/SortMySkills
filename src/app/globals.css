@@ -122,7 +122,7 @@ body {
 }
 
 /* ==========================================================================
-   Premium UI/UX Design System Layouts (Torivo Style)
+   Premium UI/UX Design System Layouts
    ========================================================================== */
 
 /* Shell containers */
@@ -382,7 +382,7 @@ html.dark .glass-card {
 }
 
 /* ==========================================================================
-   Torivo Signature Double-Border Tactile 3D Offset Buttons
+   Signature Double-Border Tactile 3D Offset Buttons
    ========================================================================== */
 .torivo-btn-wrapper {
   position: relative;

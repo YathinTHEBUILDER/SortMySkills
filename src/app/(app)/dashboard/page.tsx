@@ -37,18 +37,13 @@ export default async function DashboardPage() {
 
   // 2. Fetch parallel activity statistics
   let auditsCount = 0;
-  let jobMatchesCount = 0;
-  let parserCount = 0;
 
   if (user) {
-    const [auditsRes, analysesRes, parserRes] = await Promise.all([
-      supabase.from("skill_audits").select("*", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("job_analyses").select("*", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("parser_history").select("*", { count: "exact", head: true }).eq("user_id", user.id),
-    ]);
+    const auditsRes = await supabase
+      .from("skill_audits")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id);
     auditsCount = auditsRes.count || 0;
-    jobMatchesCount = analysesRes.count || 0;
-    parserCount = parserRes.count || 0;
   }
 
   // Privacy Fix: Mask full email as requested (madeinruntime@gmail.com -> madeinruntime@...)
@@ -64,8 +59,6 @@ export default async function DashboardPage() {
       targetRoleTitle={targetRoleTitle}
       targetRoleKey={targetRoleKey}
       realAuditsCount={auditsCount}
-      realJobMatchesCount={jobMatchesCount}
-      realParserCount={parserCount}
       maskedEmail={maskedEmail}
       roleText={roleText}
     />

@@ -46,12 +46,7 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
             >
               Tools
             </a>
-            <a
-              href="#career-twin-sandbox"
-              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
-            >
-              Career Twin
-            </a>
+
             <Link
               href="/interview-packs"
               className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
@@ -141,13 +136,7 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
             >
               Tools
             </a>
-            <a
-              href="#career-twin-sandbox"
-              onClick={closeMobileMenu}
-              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
-            >
-              Career Twin
-            </a>
+
             <Link
               href="/interview-packs"
               onClick={closeMobileMenu}

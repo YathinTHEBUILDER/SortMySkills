@@ -5,7 +5,6 @@ import { ButtonLink } from "@/components/ui/Button";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import LandingAnimations from "@/components/landing/LandingAnimations";
 import MarketingHeader from "@/components/landing/MarketingHeader";
-import CareerTwinSimulator from "@/components/landing/CareerTwinSimulator";
 import {
   ArrowRight,
   Compass,
@@ -15,7 +14,6 @@ import {
   Sparkles,
   CheckCircle2,
   AlertTriangle,
-  Cpu,
   Globe,
 } from "lucide-react";
 
@@ -30,12 +28,11 @@ export default async function LandingPage() {
     "900+ interview questions",
     "Skill parser",
     "Job-match engine",
-    "Career Twin simulator",
   ];
 
   return (
     <div className="min-h-screen flex flex-col bg-[var(--background)] warm-noise-bg overflow-x-hidden relative font-sans text-text-primary">
-      {/* Dynamic Glowing Mesh Orbs (Torivo-Style) */}
+      {/* Dynamic Glowing Mesh Orbs */}
       <div className="orb-bg w-[500px] h-[500px] bg-accent-primary/10 top-[-150px] left-[-150px] opacity-70" />
       <div className="orb-bg w-[600px] h-[600px] bg-accent-secondary/5 top-[350px] right-[-150px] opacity-50" />
       <div className="orb-bg w-[550px] h-[550px] bg-accent-tertiary/10 bottom-[150px] left-[5%] opacity-60" />
@@ -92,13 +89,7 @@ export default async function LandingPage() {
                 </ButtonLink>
               </>
             )}
-            <a
-              href="#career-twin-sandbox"
-              className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-accent-primary transition-colors flex items-center gap-1.5 ml-2"
-            >
-              <span>Explore Career Twin</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-accent-secondary animate-ping" />
-            </a>
+
           </div>
 
           {/* Core Signals Strip */}
@@ -120,7 +111,7 @@ export default async function LandingPage() {
           </div>
         </div>
 
-        {/* Right Hero Visual: Torivo-Style Floating Dashboard Mockup */}
+        {/* Right Hero Visual: Floating Dashboard Mockup */}
         <div className="lg:col-span-5 relative w-full flex justify-center visual-card-reveal opacity-0">
           <div className="w-full max-w-[420px] rounded-3xl border border-[var(--border-muted)] bg-surface-card p-6 shadow-lg relative overflow-hidden animated-border">
             {/* Dot grid decoration */}
@@ -284,25 +275,7 @@ export default async function LandingPage() {
               </div>
             </div>
 
-            {/* Feature 3: Career Twin */}
-            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-accent-tertiary/10 border border-accent-tertiary/20 flex items-center justify-center text-accent-tertiary mb-5">
-                  <Cpu className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Career Twin</h3>
-                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Simulate your digital profile. See which roles are realistic, what your risks of rejection are, and what changes if you learn a new target skill.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">PROFILE SIMULATION</span>
-                <a href="#career-twin-sandbox" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Explore Sandbox</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
+
 
             {/* Feature 4: Skill Gap Roadmap */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
@@ -442,23 +415,6 @@ export default async function LandingPage() {
                 <p className="text-[10px] text-text-muted mt-1 leading-snug font-sans">{item.desc}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Career Twin Highlight Sandbox */}
-      <section id="career-twin-sandbox" className="section-shell border-t border-[var(--border-muted)] bg-[var(--surface-card-warm)]/15 reveal-section">
-        <div className="container-shell text-center">
-          <span className="eyebrow reveal-item opacity-0">Interactive Twin Simulator</span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
-            Meet your Career Twin.
-          </h2>
-          <p className="text-sm text-text-secondary mt-3 max-w-xl mx-auto mb-16 reveal-item opacity-0">
-            A live simulation of your current career profile. See which roles are realistic, where you might get rejected, what changes if you learn a new skill, and toggle the Sandbox to bridge gaps.
-          </p>
-
-          <div className="reveal-item opacity-0">
-            <CareerTwinSimulator />
           </div>
         </div>
       </section>
@@ -696,7 +652,6 @@ export default async function LandingPage() {
         {/* Bottom bar */}
         <div className="max-w-6xl mx-auto px-6 pt-6 border-t border-[var(--border-muted)] flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
           <span>SortMySkills © 2026 · Premium Career Intelligence Platform</span>
-          <span className="font-mono text-[9px] text-text-muted">DESIGN_INSPIRE: TORIVO</span>
         </div>
       </footer>
     </div>
