@@ -376,8 +376,8 @@ export default function ResumeBuilderPage() {
       )}
 
       {error && screen !== "result" && (
-        <Card className="border-red-500/30 bg-red-500/[0.04]">
-          <CardBody className="py-4 px-6 text-sm font-medium text-red-600 dark:text-red-400">
+        <Card className="border-danger/30 bg-danger/[0.04]">
+          <CardBody className="py-4 px-6 text-sm font-medium text-danger">
             {error}
           </CardBody>
         </Card>
@@ -628,7 +628,7 @@ export default function ResumeBuilderPage() {
                                 <button
                                   type="button"
                                   onClick={() => handleRemoveExperience(idx)}
-                                  className="text-text-muted hover:text-red-500 transition-colors p-1"
+                                  className="text-text-muted hover:text-danger transition-colors p-1"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
@@ -791,7 +791,7 @@ export default function ResumeBuilderPage() {
                                 <button
                                   type="button"
                                   onClick={() => handleRemoveProject(idx)}
-                                  className="text-text-muted hover:text-red-500 transition-colors"
+                                  className="text-text-muted hover:text-danger transition-colors"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                 </button>

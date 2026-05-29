@@ -167,15 +167,15 @@ export default function WhyNoReplyPage() {
 
     switch (severity) {
       case "critical":
-        styleClasses = "border-red-500 text-red-500";
+        styleClasses = "border-danger text-danger";
         label = "Critical issue";
         break;
       case "major":
-        styleClasses = "border-amber-500 text-amber-500";
+        styleClasses = "border-warning text-warning";
         label = "Major issue";
         break;
       case "minor":
-        styleClasses = "border-gray-500 text-gray-500 dark:text-text-secondary";
+        styleClasses = "border-[var(--border-strong)] text-text-secondary";
         label = "Minor issue";
         break;
     }
@@ -191,13 +191,13 @@ export default function WhyNoReplyPage() {
   const renderRating = (rating: "not_competitive" | "slightly_competitive" | "competitive" | "very_competitive") => {
     switch (rating) {
       case "not_competitive":
-        return <span className="text-red-500">Not competitive</span>;
+        return <span className="text-danger">Not competitive</span>;
       case "slightly_competitive":
-        return <span className="text-amber-500">Slightly competitive</span>;
+        return <span className="text-warning">Slightly competitive</span>;
       case "competitive":
-        return <span className="text-green-500">Competitive</span>;
+        return <span className="text-success">Competitive</span>;
       case "very_competitive":
-        return <span className="text-green-400 font-bold">Very competitive</span>;
+        return <span className="text-success font-bold">Very competitive</span>;
     }
   };
 
@@ -213,17 +213,17 @@ export default function WhyNoReplyPage() {
 
       {/* ── Rate limit countdown warning card ── */}
       {rateLimited && pageState === "input" && (
-        <Card className="mb-6 border-amber-500/40 bg-amber-500/[0.04]">
+        <Card className="mb-6 border-warning/40 bg-warning/[0.04]">
           <CardBody className="pt-6">
             <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <Clock className="w-5 h-5 text-warning shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                <p className="text-sm font-medium text-warning">
                   {countdown > 0 
                     ? "3 diagnoses per 15 minutes. Read the feedback you already have." 
                     : "Rate limit reset."}
                 </p>
-                <p className={`text-xs font-mono mt-2 ${countdown > 0 ? "text-text-secondary" : "text-green-600 dark:text-green-400 font-semibold"}`}>
+                <p className={`text-xs font-mono mt-2 ${countdown > 0 ? "text-text-secondary" : "text-success font-semibold"}`}>
                   {countdown > 0 ? formatCountdown(countdown) : "You are good to go."}
                 </p>
               </div>
@@ -234,11 +234,11 @@ export default function WhyNoReplyPage() {
 
       {/* ── Generic validation/API errors ── */}
       {error && pageState === "input" && (
-        <Card className="mb-6 border-red-500/30 bg-red-500/[0.04]">
+        <Card className="mb-6 border-danger/30 bg-danger/[0.04]">
           <CardBody className="pt-6">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+              <AlertTriangle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
+              <p className="text-sm text-danger">{error}</p>
             </div>
           </CardBody>
         </Card>
@@ -259,7 +259,7 @@ export default function WhyNoReplyPage() {
                 onChange={(e) => setJobDescription(e.target.value)}
                 disabled={rateLimited && countdown > 0}
                 placeholder="Paste the full job description here."
-                className="w-full min-h-[180px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full min-h-[180px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -274,7 +274,7 @@ export default function WhyNoReplyPage() {
                 onChange={(e) => setResumeText(e.target.value)}
                 disabled={rateLimited && countdown > 0}
                 placeholder="Paste your complete resume as plain text. Include everything — education, projects, skills, experience."
-                className="w-full min-h-[200px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full min-h-[200px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               />
             </div>
 
@@ -356,7 +356,7 @@ export default function WhyNoReplyPage() {
               </p>
               
               {/* Monospace Codeblock copy widget */}
-              <div className="relative rounded-lg bg-[var(--surface-soft)] border-l-3 border-[var(--accent-primary)] p-4 pr-16 font-mono text-[13px] leading-[1.7] text-text-primary whitespace-pre-wrap">
+              <div className="relative rounded-lg bg-[var(--surface-soft)] border-l-3 border-accent-primary p-4 pr-16 font-mono text-[13px] leading-[1.7] text-text-primary whitespace-pre-wrap">
                 {result.theFix.exactWording}
                 <button
                   type="button"
@@ -365,7 +365,7 @@ export default function WhyNoReplyPage() {
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3 h-3 text-green-500" />
+                      <Check className="w-3.5 h-3.5 text-success" />
                       <span>Copied ✓</span>
                     </>
                   ) : (
@@ -398,8 +398,8 @@ export default function WhyNoReplyPage() {
               </p>
               
               {/* Distinct inset box for advantage */}
-              <div className="rounded-lg bg-[var(--accent-secondary)]/[0.06] border border-[var(--border-muted)] p-4 text-sm text-text-primary flex items-start gap-2">
-                <span className="text-[var(--accent-primary)] font-semibold shrink-0">→</span>
+              <div className="rounded-lg bg-accent-secondary/[0.06] border border-[var(--border-muted)] p-4 text-sm text-text-primary flex items-start gap-2">
+                <span className="text-accent-primary font-semibold shrink-0">→</span>
                 <span>{result.competitiveness.theirAdvantage}</span>
               </div>
             </CardBody>

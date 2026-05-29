@@ -23,9 +23,9 @@ type Analysis = {
 function ProficiencyBadge({ level }: { level: ProficiencyLevel }) {
   if (level === "unspecified") return null;
   const styles = {
-    beginner: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-    moderate: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-    expert: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    beginner: "bg-accent-tertiary/10 text-text-secondary border-accent-tertiary/20",
+    moderate: "bg-warning/10 text-warning border-warning/20",
+    expert: "bg-success/10 text-success border-success/20",
   };
   return (
     <span
