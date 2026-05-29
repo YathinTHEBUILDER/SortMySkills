@@ -49,7 +49,7 @@ function VerifyContent() {
         <div className="absolute inset-0 dot-grid-overlay opacity-20 pointer-events-none" />
         <CardHeader
           title="Verify Email"
-          description={`We sent an 8-digit verification code to ${email}`}
+          description={`We sent a 6-digit verification code to ${email}`}
           className="relative z-10 text-center pb-2"
         />
         <CardBody className="pt-0 relative z-10">
