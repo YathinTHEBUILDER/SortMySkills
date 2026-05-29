@@ -14,7 +14,16 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) — use **Open dashboard** or go to `/dashboard`.
+
+### Supabase (optional)
+
+```bash
+cp .env.example .env.local
+# Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+```
+
+See [supabase/README.md](./supabase/README.md).
 
 ```bash
 npm run build   # production build
