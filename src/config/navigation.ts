@@ -1,7 +1,6 @@
 import {
   BookOpen,
   Briefcase,
-  Compass,
   Languages,
   LayoutDashboard,
   ScanSearch,
@@ -11,7 +10,6 @@ import {
 
 export const mainNav = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/skill-development", label: "Skill planner", icon: Compass },
   { href: "/job-match", label: "Job match", icon: Briefcase },
   { href: "/tools/parser", label: "Skill parser", icon: ScanSearch },
   { href: "/jd-translator", label: "JD Translator", icon: Languages },
