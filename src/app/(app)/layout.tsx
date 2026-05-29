@@ -1,5 +1,6 @@
 import DashboardShell from "@/components/dashboard/DashboardShell";
 import { getCurrentUser } from "@/lib/auth/get-user";
+import { ResumeProvider } from "@/context/ResumeContext";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       roleText={roleText}
       maskedEmail={maskedEmail}
     >
-      {children}
+      <ResumeProvider>
+        {children}
+      </ResumeProvider>
     </DashboardShell>
   );
 }

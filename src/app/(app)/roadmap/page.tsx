@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useResume } from "@/context/ResumeContext";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -55,8 +56,7 @@ type PageState = "input" | "loading" | "results";
 
 export default function CareerRoadmapPage() {
   const [pageState, setPageState] = useState<PageState>("input");
-  const [resume, setResume] = useState("");
-  const [jd, setJd] = useState("");
+  const { resume, setResume, jd, setJd } = useResume();
   const [targetDate, setTargetDate] = useState("");
   const [focus, setFocus] = useState("");
 
@@ -244,6 +244,13 @@ export default function CareerRoadmapPage() {
       {pageState === "input" && (
         <Card>
           <CardBody className="pt-6 space-y-5">
+            {resume.trim() && jd.trim() && (
+              <div className="flex justify-start animate-fade-in">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--success)]/20 bg-[var(--success)]/10 text-[var(--success)] text-xs font-mono">
+                  <span>✓ Resume & JD carried over</span>
+                </div>
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label htmlFor="roadmap-resume" className="block text-[11px] font-mono uppercase tracking-widest text-text-muted mb-2">
