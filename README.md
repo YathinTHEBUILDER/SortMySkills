@@ -110,4 +110,4 @@ Preferences saved in `localStorage`.
 
 SortMySkills platform · Structured study directory · 2026
 
-Made in pair programming.
+Made in pair programming...
