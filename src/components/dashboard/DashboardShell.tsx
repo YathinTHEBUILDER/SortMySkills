@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 import ThemeControls from "@/components/ThemeControls";
-import UserMenu from "@/components/auth/UserMenu";
 
 export default function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,10 +25,7 @@ export default function DashboardShell({ children }: { children: React.ReactNode
 
           <div className="flex-1 lg:flex-none" />
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <ThemeControls />
-            <UserMenu />
-          </div>
+          <ThemeControls />
         </header>
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto">{children}</main>

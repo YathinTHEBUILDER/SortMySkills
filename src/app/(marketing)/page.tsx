@@ -11,15 +11,7 @@ export default function LandingPage() {
           <Logo className="w-8 h-8" />
           <span className="font-semibold text-text-primary">SortMySkills</span>
         </Link>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="text-sm text-text-secondary hover:text-text-primary"
-          >
-            Sign in
-          </Link>
-          <ButtonLink href="/dashboard">Open dashboard</ButtonLink>
-        </div>
+        <ButtonLink href="/dashboard">Open dashboard</ButtonLink>
       </header>
 
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-20 max-w-3xl mx-auto text-center">
@@ -30,12 +22,9 @@ export default function LandingPage() {
           Normalize skills from resumes and job posts, measure gaps, plan study paths,
           and practice with curated interview questions — in one workspace.
         </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-4">
+        <div className="mt-10">
           <ButtonLink href="/dashboard" className="px-6 py-3">
             Go to dashboard <ArrowRight className="w-4 h-4" />
-          </ButtonLink>
-          <ButtonLink href="/login" variant="secondary" className="px-6 py-3">
-            Sign in
           </ButtonLink>
         </div>
 
@@ -56,7 +45,7 @@ export default function LandingPage() {
             {
               icon: BookOpen,
               title: "Interview packs",
-              desc: "600 questions across six technical roles.",
+              desc: "900 questions across six technical roles.",
               href: "/interview-packs",
             },
           ].map(({ icon: Icon, title, desc, href }) => (

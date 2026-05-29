@@ -9,7 +9,7 @@ export default function InterviewPacksPage() {
     <>
       <PageHeader
         title="Interview packs"
-        description="100 questions per role — easy, medium, and hard — for mock interviews and self-study."
+        description="150 questions per role (50 easy, 50 medium, 50 hard) — sorted and ready for mock interviews."
       />
 
       <div className="grid sm:grid-cols-2 gap-4">

@@ -16,15 +16,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) — use **Open dashboard** or go to `/dashboard`.
 
-### Supabase (optional)
-
-```bash
-cp .env.example .env.local
-# Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
-```
-
-See [supabase/README.md](./supabase/README.md).
-
 ```bash
 npm run build   # production build
 npm start       # serve production build
@@ -39,7 +30,7 @@ npm start       # serve production build
 | See the product story + try the parser | `/` | Rule-based skill normalization from pasted text |
 | Plan learning for a target role | `/skill-development` | Check off skills → readiness % → Coursera gaps |
 | Compare resume vs a job post | `/job-match` | Same parser on both texts → match % + missing skills |
-| Practice interview questions | `/interview-packs` | 6 roles × 100 questions (Easy / Medium / Hard) |
+| Practice interview questions | `/interview-packs` | 6 roles × 150 questions (50 Easy / Medium / Hard each) |
 | Switch look & accent colors | Navbar | Light/dark + 4 color packs |
 
 **Parser in one line:** messy text → tokenize → lookup aliases in `SKILL_MAP` → return canonical tags like `React`, `AWS`, `DevOps`.  

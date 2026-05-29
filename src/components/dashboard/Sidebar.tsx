@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
-import { mainNav, secondaryNav } from "@/config/navigation";
+import { mainNav } from "@/config/navigation";
 import { X } from "lucide-react";
 
 export default function Sidebar({
@@ -75,11 +75,6 @@ export default function Sidebar({
             Workspace
           </p>
           {mainNav.map(({ href, label, icon }) => navLink(href, label, icon))}
-
-          <p className="px-3 pt-6 pb-2 text-[11px] font-medium uppercase tracking-wider text-text-secondary/80">
-            Account
-          </p>
-          {secondaryNav.map(({ href, label, icon }) => navLink(href, label, icon))}
         </nav>
 
         <div className="p-4 border-t border-[var(--border-muted)]">

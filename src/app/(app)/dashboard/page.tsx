@@ -1,7 +1,6 @@
 import Link from "next/link";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody } from "@/components/ui/Card";
-import { ButtonLink } from "@/components/ui/Button";
 import {
   ArrowRight,
   BookOpen,
@@ -32,14 +31,14 @@ const tools = [
   {
     href: "/interview-packs",
     title: "Interview packs",
-    description: "100 questions per role, by difficulty.",
+    description: "150 questions per role, sorted by difficulty.",
     icon: BookOpen,
   },
 ];
 
 const stats = [
   { label: "Skill aliases", value: "60+" },
-  { label: "Interview questions", value: "600" },
+  { label: "Interview questions", value: "900" },
   { label: "Role packs", value: "6" },
   { label: "Planner roles", value: "5" },
 ];
@@ -82,20 +81,6 @@ export default function DashboardPage() {
           </Link>
         ))}
       </div>
-
-      <Card className="mt-10">
-        <CardBody className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-6">
-          <div>
-            <h3 className="font-medium text-text-primary">Save progress with Supabase</h3>
-            <p className="text-sm text-text-secondary mt-1">
-              Connect your project to persist analyses, profiles, and history.
-            </p>
-          </div>
-          <ButtonLink href="/settings" variant="secondary">
-            Settings
-          </ButtonLink>
-        </CardBody>
-      </Card>
     </>
   );
 }

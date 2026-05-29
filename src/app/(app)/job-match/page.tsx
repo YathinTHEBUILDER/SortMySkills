@@ -4,7 +4,7 @@ import { useState } from "react";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { extractSkillsFromText } from "@/lib/skill-map";
+import { parseSkills, type DetectedSkill, type ProficiencyLevel } from "@/lib/skill-map";
 import { COURSERA_COURSES } from "@/data/coursera-courses";
 import { CheckCircle2, AlertTriangle, RotateCcw } from "lucide-react";
 
@@ -14,10 +14,35 @@ const SAMPLE_JD = `Frontend Engineer — React, TypeScript, Tailwind CSS, Git re
 
 type Analysis = {
   score: number;
-  matched: string[];
-  missing: string[];
-  supplementary: string[];
+  matched: DetectedSkill[];
+  missing: DetectedSkill[];
+  supplementary: DetectedSkill[];
 };
+
+function ProficiencyBadge({ level }: { level: ProficiencyLevel }) {
+  if (level === "unspecified") return null;
+  const styles = {
+    beginner: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+    moderate: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+    expert: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  };
+  return (
+    <span
+      className={`text-[9px] uppercase tracking-wide px-1 py-0.5 rounded border ml-1 ${styles[level]}`}
+    >
+      {level}
+    </span>
+  );
+}
+
+function SkillTag({ skill }: { skill: DetectedSkill }) {
+  return (
+    <span className="inline-flex items-center text-xs px-2 py-1 rounded-md bg-[var(--background)] border border-[var(--border-muted)]">
+      {skill.canonical}
+      <ProficiencyBadge level={skill.level} />
+    </span>
+  );
+}
 
 export default function JobMatchPage() {
   const [resume, setResume] = useState("");
@@ -30,19 +55,31 @@ export default function JobMatchPage() {
     if (!resume.trim() || !jd.trim()) return;
     setLoading(true);
     setTimeout(() => {
-      const resumeSkills = extractSkillsFromText(resume);
-      const jdSkills = extractSkillsFromText(jd);
-      const matched = jdSkills.filter((s) => resumeSkills.includes(s));
-      const missing = jdSkills.filter((s) => !resumeSkills.includes(s));
-      const supplementary = resumeSkills.filter((s) => !jdSkills.includes(s));
-      const score = jdSkills.length ? Math.round((matched.length / jdSkills.length) * 100) : 0;
+      const resumeParsed = parseSkills(resume, "resume");
+      const jdParsed = parseSkills(jd, "jd");
+
+      const jdByCanonical = new Map(jdParsed.skills.map((s) => [s.canonical, s]));
+
+      const jdCanonicals = jdParsed.skills.map((s) => s.canonical);
+      const resumeCanonicals = new Set(resumeParsed.skills.map((s) => s.canonical));
+
+      const matched = jdParsed.skills.filter((s) => resumeCanonicals.has(s.canonical));
+      const missing = jdParsed.skills.filter((s) => !resumeCanonicals.has(s.canonical));
+      const supplementary = resumeParsed.skills.filter(
+        (s) => !jdByCanonical.has(s.canonical)
+      );
+
+      const score = jdCanonicals.length
+        ? Math.round((matched.length / jdCanonicals.length) * 100)
+        : 0;
+
       setResult({ score, matched, missing, supplementary });
       setLoading(false);
     }, 800);
   };
 
   const bridges = result
-    ? COURSERA_COURSES.filter((c) => c.skills.some((s) => result.missing.includes(s)))
+    ? COURSERA_COURSES.filter((c) => c.skills.some((s) => result.missing.some((m) => m.canonical === s)))
     : [];
 
   return (
@@ -111,9 +148,9 @@ export default function JobMatchPage() {
                 <p className="text-sm text-text-secondary mt-1">Match score</p>
               </CardBody>
             </Card>
-            <SkillColumn title="Aligned" items={result.matched} variant="ok" />
-            <SkillColumn title="Missing" items={result.missing} variant="gap" />
-            <SkillColumn title="Extra on resume" items={result.supplementary} variant="muted" />
+            <SkillColumn title="Aligned" skills={result.matched} variant="ok" />
+            <SkillColumn title="Missing" skills={result.missing} variant="gap" />
+            <SkillColumn title="Extra on resume" skills={result.supplementary} variant="muted" />
           </div>
 
           {result.missing.length > 0 && (
@@ -160,11 +197,11 @@ export default function JobMatchPage() {
 
 function SkillColumn({
   title,
-  items,
+  skills,
   variant,
 }: {
   title: string;
-  items: string[];
+  skills: DetectedSkill[];
   variant: "ok" | "gap" | "muted";
 }) {
   const colors = {
@@ -179,20 +216,13 @@ function SkillColumn({
         <p className={`text-sm font-medium flex items-center gap-1.5 ${colors[variant]}`}>
           {variant === "ok" && <CheckCircle2 className="w-4 h-4" />}
           {variant === "gap" && <AlertTriangle className="w-4 h-4" />}
-          {title} ({items.length})
+          {title} ({skills.length})
         </p>
         <div className="flex flex-wrap gap-1.5 mt-3">
-          {items.length === 0 ? (
+          {skills.length === 0 ? (
             <span className="text-xs text-text-secondary">None</span>
           ) : (
-            items.map((s) => (
-              <span
-                key={s}
-                className="text-xs px-2 py-1 rounded-md bg-[var(--background)] border border-[var(--border-muted)]"
-              >
-                {s}
-              </span>
-            ))
+            skills.map((s) => <SkillTag key={s.canonical} skill={s} />)
           )}
         </div>
       </CardBody>
