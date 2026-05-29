@@ -15,6 +15,8 @@ import {
   Sparkles,
   CheckCircle2,
   AlertTriangle,
+  Cpu,
+  Globe,
 } from "lucide-react";
 
 export default async function LandingPage() {
@@ -26,13 +28,13 @@ export default async function LandingPage() {
     "Resume to roadmap",
     "Role-fit scoring",
     "900+ interview questions",
-    "Local skill parser",
+    "Skill parser",
     "Job-match engine",
     "Career Twin simulator",
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--background)] warm-noise-bg overflow-x-hidden relative">
+    <div className="min-h-screen flex flex-col bg-[var(--background)] warm-noise-bg overflow-x-hidden relative font-sans text-text-primary">
       {/* Dynamic Glowing Mesh Orbs (Torivo-Style) */}
       <div className="orb-bg w-[500px] h-[500px] bg-accent-primary/10 top-[-150px] left-[-150px] opacity-70" />
       <div className="orb-bg w-[600px] h-[600px] bg-accent-secondary/5 top-[350px] right-[-150px] opacity-50" />
@@ -49,37 +51,37 @@ export default async function LandingPage() {
         {/* Left Hero Details */}
         <div className="lg:col-span-7 flex flex-col text-left">
           <div className="hero-reveal-eyebrow opacity-0 flex items-center gap-2 mb-4">
-            <span className="eyebrow">A Career Operating System for Students</span>
+            <span className="eyebrow text-[#EF7A5F] dark:text-[#E36B4F]">Career intelligence for students</span>
             <span className="w-1.5 h-1.5 rounded-full bg-accent-primary animate-pulse" />
           </div>
 
-          <h1 className="hero-reveal-title opacity-0 hero-display text-text-primary leading-[1.05] tracking-tight">
+          <h1 className="hero-reveal-title opacity-0 hero-display text-text-primary leading-[1.05] tracking-tight text-3xl sm:text-5xl font-extrabold">
             Turn scattered skills <br />
-            into a structured <br />
-            <span className="text-serif font-normal italic text-accent-primary">career path.</span>
+            into a clear <br />
+            <span className="text-serif font-normal italic text-accent-primary">career roadmap.</span>
           </h1>
 
-          <p className="hero-reveal-sub opacity-0 mt-6 text-base md:text-lg text-text-secondary leading-relaxed max-w-xl">
-            SortMySkills analyzes your resume, compares it against real job descriptions, detects critical gaps, and builds the fastest placement-ready learning roadmap.
+          <p className="hero-reveal-sub opacity-0 mt-6 text-base md:text-lg text-text-secondary leading-relaxed max-w-xl font-sans normal-case">
+            SortMySkills analyzes your resume, compares it with real job descriptions, detects skill gaps, and shows the fastest path to become placement-ready.
           </p>
 
           <div className="hero-reveal-ctas opacity-0 mt-10 flex flex-wrap gap-4 items-center">
             {user ? (
               <ButtonLink
                 href="/dashboard"
-                className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md"
+                className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
               >
                 <span>Open Dashboard</span>
-                <ArrowRight className="w-4 h-4 ml-1.5" />
+                <ArrowRight className="w-4 h-4" />
               </ButtonLink>
             ) : (
               <>
                 <ButtonLink
                   href="/signup"
-                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md"
+                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
                 >
-                  <span>Start Career Audit</span>
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                  <span>Start Skill Audit</span>
+                  <ArrowRight className="w-4 h-4" />
                 </ButtonLink>
                 <ButtonLink
                   href="/login"
@@ -94,7 +96,7 @@ export default async function LandingPage() {
               href="#career-twin-sandbox"
               className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-accent-primary transition-colors flex items-center gap-1.5 ml-2"
             >
-              <span>Simulate Career Twin</span>
+              <span>Explore Career Twin</span>
               <span className="w-1.5 h-1.5 rounded-full bg-accent-secondary animate-ping" />
             </a>
           </div>
@@ -102,14 +104,14 @@ export default async function LandingPage() {
           {/* Core Signals Strip */}
           <div className="hero-reveal-pills opacity-0 mt-12 grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
             {[
-              "Local skill parser",
-              "900 interview questions",
-              "Role-based roadmaps",
-              "Supabase DB synced",
+              "Built for students",
+              "Resume to roadmap",
+              "Role-fit scoring",
+              "900+ questions Mapped",
             ].map((text) => (
               <div
                 key={text}
-                className="flex items-center gap-2 rounded-full border border-[var(--border-muted)] bg-[var(--surface-soft)]/50 px-3.5 py-1.5 text-xs text-text-secondary font-medium tracking-tight"
+                className="flex items-center gap-2 rounded-full border border-[var(--border-muted)] bg-[var(--surface-soft)]/50 px-3.5 py-1.5 text-xs text-text-secondary font-medium tracking-tight font-sans"
               >
                 <CheckCircle2 className="w-3.5 h-3.5 text-accent-primary shrink-0" />
                 <span>{text}</span>
@@ -131,7 +133,7 @@ export default async function LandingPage() {
                 <span className="w-2.5 h-2.5 rounded-full bg-accent-tertiary/60" />
               </div>
               <span className="font-mono text-[9px] text-text-muted uppercase tracking-widest">
-                SKILL_RADAR_V1
+                NORMALIZER_SANDBOX_V1
               </span>
             </div>
 
@@ -141,7 +143,7 @@ export default async function LandingPage() {
                 Chaotic Resume Input
               </span>
               <div className="rounded-xl bg-[var(--surface-soft)]/60 border border-[var(--border-muted)] p-3 text-[11px] text-text-secondary font-mono leading-relaxed select-none">
-                {"\"Proficient in React, python coding, styling with TailwindCSS, deployed to AWS S3...\""}
+                {"\"Have experience styling with css/tailwind, coding in python, react.js components, deployed basic docker on AWS...\""}
               </div>
             </div>
 
@@ -155,15 +157,15 @@ export default async function LandingPage() {
             {/* Simulated Normalized tags */}
             <div className="relative z-10 mb-5 text-left">
               <span className="block font-mono text-[9px] text-text-muted uppercase tracking-wider mb-2">
-                Normalized Skills
+                Normalized Standard Skills
               </span>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { text: "React.js", bg: "rgba(124, 124, 255, 0.12)", textCol: "var(--accent-primary)", cl: "floating-chip-1" },
-                  { text: "Python", bg: "rgba(169, 169, 254, 0.15)", textCol: "var(--accent-secondary)", cl: "floating-chip-2" },
-                  { text: "Tailwind CSS", bg: "rgba(25, 25, 96, 0.12)", textCol: "var(--accent-tertiary)", cl: "floating-chip-3" },
-                  { text: "AWS Cloud", bg: "rgba(124, 124, 255, 0.12)", textCol: "var(--accent-primary)", cl: "visual-tag-stagger opacity-0" },
-                  { text: "Data Science", bg: "rgba(169, 169, 254, 0.15)", textCol: "var(--accent-secondary)", cl: "visual-tag-stagger opacity-0" },
+                  { text: "React.js", bg: "rgba(227, 107, 79, 0.1)", textCol: "var(--accent-primary)", cl: "floating-chip-1" },
+                  { text: "Python", bg: "rgba(217, 166, 111, 0.1)", textCol: "var(--accent-secondary)", cl: "floating-chip-2" },
+                  { text: "Tailwind CSS", bg: "rgba(126, 159, 130, 0.1)", textCol: "var(--accent-tertiary)", cl: "floating-chip-3" },
+                  { text: "Docker", bg: "rgba(227, 107, 79, 0.1)", textCol: "var(--accent-primary)", cl: "visual-tag-stagger opacity-0" },
+                  { text: "AWS Cloud", bg: "rgba(217, 166, 111, 0.1)", textCol: "var(--accent-secondary)", cl: "visual-tag-stagger opacity-0" },
                 ].map((chip, idx) => (
                   <span
                     key={idx}
@@ -179,7 +181,7 @@ export default async function LandingPage() {
             {/* Stats dials */}
             <div className="relative z-10 grid grid-cols-2 gap-4 border-t border-[var(--border-muted)] pt-4 mt-2">
               <div className="rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/45 p-3 text-left">
-                <span className="block font-mono text-[9px] text-text-muted uppercase">Match Score</span>
+                <span className="block font-mono text-[9px] text-text-muted uppercase">JD Match Score</span>
                 <p className="text-xl font-bold text-accent-primary mt-1">87%</p>
                 <div className="w-full bg-[var(--surface-soft)] h-1 rounded-full mt-2 overflow-hidden">
                   <div className="bg-accent-primary h-full rounded-full" style={{ width: "87%" }} />
@@ -205,7 +207,7 @@ export default async function LandingPage() {
                 </div>
                 <div>
                   <span className="block font-mono text-[8px] text-text-muted uppercase">Readiness</span>
-                  <p className="text-[10px] font-semibold text-text-primary mt-0.5">Role Ready</p>
+                  <p className="text-[10px] font-semibold text-text-primary mt-0.5">Placement Ready</p>
                 </div>
               </div>
             </div>
@@ -230,31 +232,31 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* 4. Product Preview Showcase Section */}
+      {/* 4. Product Preview Showcase Section (Features) */}
       <section id="product-showcase" className="section-shell reveal-section">
         <div className="container-shell text-center">
-          <span className="eyebrow reveal-item opacity-0">Product Showcase</span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary mt-2 reveal-item opacity-0">
+          <span className="eyebrow reveal-item opacity-0">Unified Career Operating System</span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
             A cohesive career intelligence engine
           </h2>
           <p className="text-sm text-text-secondary mt-3 max-w-md mx-auto reveal-item opacity-0">
             Everything you need to move from scattered tech keywords to clear placement readiness.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
-            {/* Feature 1 */}
-            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 text-left">
+            {/* Feature 1: Skill DNA */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
                   <Compass className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight">Skill Audit & Plan</h3>
-                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                  Map your current competencies against standardized industry requirements. View your readiness percentage and bridge technical gaps instantly using tailored Coursera pathing algorithms.
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Skill DNA</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Map and normalize your unstructured tech credentials against standardized industry taxonomies using our local alias translation registry.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">READY TO PLOT</span>
+                <span className="text-text-muted">NORMALIZE STACK</span>
                 <Link href="/skill-development" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
                   <span>Open Planner</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -262,19 +264,19 @@ export default async function LandingPage() {
               </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0">
+            {/* Feature 2: Job Match Engine */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-secondary/10 border border-accent-secondary/20 flex items-center justify-center text-accent-secondary mb-5">
                   <Briefcase className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight">Job Match Engine</h3>
-                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                  Dual-panel comparison laboratory. Paste your resume and target placement posts to compute instant matching weights, missing keywords, and supplementary assets securely in your workspace.
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Job Match Engine</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Dual-panel comparison laboratory. Paste your resume and target placement posts to compute instant matching weights, missing keywords, and supplementary assets.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">MATCH ANALYSIS</span>
+                <span className="text-text-muted">MATCH LAB</span>
                 <Link href="/job-match" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
                   <span>Run Comparison</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -282,41 +284,81 @@ export default async function LandingPage() {
               </div>
             </div>
 
-            {/* Feature 3 */}
-            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0">
+            {/* Feature 3: Career Twin */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-tertiary/10 border border-accent-tertiary/20 flex items-center justify-center text-accent-tertiary mb-5">
-                  <BookOpen className="w-5 h-5" />
+                  <Cpu className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight">Placement Prep packs</h3>
-                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                  Practice 900+ high-end placement evaluation questions across 6 core technical role families, categorized by junior, mid, and senior levels to structure your interview readiness.
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Career Twin</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Simulate your digital profile. See which roles are realistic, what your risks of rejection are, and what changes if you learn a new target skill.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">900+ QUESTIONS MAPPED</span>
-                <Link href="/interview-packs" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Browse Catalog</span>
+                <span className="text-text-muted">PROFILE SIMULATION</span>
+                <a href="#career-twin-sandbox" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Explore Sandbox</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Feature 4: Skill Gap Roadmap */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Skill Gap Roadmap</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Generate personal step-by-step learning structures paired directly with specific Coursera bridges to close target placement skill gaps fast.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
+                <span className="text-text-muted">ROADMAP MAPPED</span>
+                <Link href="/skill-development" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Build Roadmap</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Feature 4 */}
-            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0">
+            {/* Feature 5: Interview Packs */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-accent-secondary/10 border border-accent-secondary/20 flex items-center justify-center text-accent-secondary mb-5">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Interview Prep Packs</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Practice 900+ curated placement evaluation questions across 6 core technical role families, sorted systematically by easy, medium, and hard levels.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
+                <span className="text-text-muted">900+ QUESTIONS</span>
+                <Link href="/interview-packs" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Browse Prep Catalog</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Feature 6: Parser Tool */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
                   <Code className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight">Skill Normalization Engine</h3>
-                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                  Standardizes raw and messy CV terms (e.g. `k8s`, `py`, `react.js`) into clean, canonical competency taxonomies locally to ensure resume checks match what employers scan for.
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Parser Tool</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Standardizes unstructured tech terms (e.g. `k8s`, `py`, `react.js`) into clean, standard canonical competency taxonomies locally to match employer scanners.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">LOCAL PARSER PLAYGROUND</span>
+                <span className="text-text-muted">NORMALIZATION PLAYGROUND</span>
                 <Link href="/tools/parser" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Test Parser</span>
+                  <span>Normalize Skills</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -325,12 +367,12 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* 5. Process Clarity Flow Timeline */}
+      {/* 5. Process Section */}
       <section className="section-shell border-t border-[var(--border-muted)] bg-[var(--surface-card-warm)]/15 reveal-section">
         <div className="container-shell text-center">
-          <span className="eyebrow reveal-item opacity-0">Your Career Clarity Flow</span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary mt-2 reveal-item opacity-0">
-            A linear path from confusion to placement
+          <span className="eyebrow reveal-item opacity-0">Clarity Workflow</span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
+            Your career clarity flow
           </h2>
           <p className="text-sm text-text-secondary mt-3 max-w-md mx-auto reveal-item opacity-0">
             Skip complex steps. SortMySkills normalizes your background and charts your preparation in real-time.
@@ -340,23 +382,23 @@ export default async function LandingPage() {
             {[
               {
                 num: "01",
-                title: "Import Profile",
-                desc: "Paste raw resume text, skills, or portfolio terms. The local parser structures your technical details instantly.",
+                title: "Import your skills",
+                desc: "Paste your resume, skills, or project description. Our parser reads it securely.",
               },
               {
                 num: "02",
-                title: "Normalize Skills",
-                desc: "Messy aliases are normalized into canonical taxonomies, structuring your digital credentials.",
+                title: "Decode your profile",
+                desc: "SortMySkills normalizes messy skills and unstructured keywords into standard structured signals.",
               },
               {
                 num: "03",
-                title: "Evaluate Readiness",
-                desc: "Compare your normalized profile against live target roles to calculate matching rates and gaps.",
+                title: "Compare with real roles",
+                desc: "See your match score, critical missing skills, placement-readiness ratings, and rejection risks.",
               },
               {
                 num: "04",
-                title: "Action the Roadmap",
-                desc: "Audited gaps pair directly with specific Coursera bridges and placement mock prep sets.",
+                title: "Follow the roadmap",
+                desc: "Get instant tailored learning actions, Coursera study bridges, interview packs, and actionable next steps.",
               },
             ].map((step) => (
               <div
@@ -364,11 +406,11 @@ export default async function LandingPage() {
                 className="soft-card p-6 flex flex-col justify-between h-full relative group hover:border-accent-primary/30 transition-all reveal-item opacity-0"
               >
                 <div>
-                  <span className="font-mono text-3xl font-bold text-accent-primary/20 group-hover:text-accent-primary/30 block mb-4 transition-colors">
+                  <span className="font-mono text-3xl font-bold text-accent-primary/20 group-hover:text-accent-primary/35 block mb-4 transition-colors">
                     {step.num}
                   </span>
-                  <h3 className="font-bold text-text-primary text-sm tracking-tight">{step.title}</h3>
-                  <p className="text-xs text-text-secondary mt-3 leading-relaxed">{step.desc}</p>
+                  <h3 className="font-bold text-text-primary text-sm tracking-tight font-sans">{step.title}</h3>
+                  <p className="text-xs text-text-secondary mt-3 leading-relaxed font-sans">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -376,43 +418,43 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* 6. Results / Stats Board Section */}
+      {/* 6. Stats Section */}
       <section className="section-shell border-t border-[var(--border-muted)] reveal-section">
         <div className="container-shell text-center">
-          <span className="eyebrow reveal-item opacity-0">Platform Statistics</span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary mt-2 reveal-item opacity-0">
+          <span className="eyebrow reveal-item opacity-0">Real System Metrics</span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
             Workspace Intelligence Metrics
           </h2>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
             {[
-              { stat: "900+", label: "Prep Questions", desc: "Across Junior & Senior levels" },
-              { stat: "6 Tracks", label: "Career Paths", desc: "Frontend, UX, Analyst & ML" },
-              { stat: "60+", label: "Skill Categories", desc: "Normalized canonical tags" },
-              { stat: "3-Min", label: "Skill Audit", desc: "Average setup time" },
+              { stat: "900+", label: "Interview Questions", desc: "Mapped across 6 Tracks" },
+              { stat: "6 Tracks", label: "Role Tracks", desc: "Frontend, UX, Analyst & ML" },
+              { stat: "20+", label: "Skill Categories", desc: "Normalized canonical tags" },
+              { stat: "3-Minute", label: "Career Audit", desc: "Average setup time" },
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="premium-card p-6 text-center hover:border-accent-primary/30 transition-all reveal-item opacity-0"
+                className="premium-card p-6 text-center hover:border-accent-primary/30 transition-all reveal-item opacity-0 hover-lift"
               >
                 <p className="text-3xl font-bold text-accent-primary font-mono">{item.stat}</p>
-                <p className="text-xs font-semibold text-text-primary mt-2">{item.label}</p>
-                <p className="text-[10px] text-text-muted mt-1 leading-snug">{item.desc}</p>
+                <p className="text-xs font-semibold text-text-primary mt-2 font-sans">{item.label}</p>
+                <p className="text-[10px] text-text-muted mt-1 leading-snug font-sans">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 7. Career Twin Sandbox client component highlight */}
+      {/* 7. Career Twin Highlight Sandbox */}
       <section id="career-twin-sandbox" className="section-shell border-t border-[var(--border-muted)] bg-[var(--surface-card-warm)]/15 reveal-section">
         <div className="container-shell text-center">
-          <span className="eyebrow reveal-item opacity-0">Interactive Simulator</span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary mt-2 reveal-item opacity-0">
+          <span className="eyebrow reveal-item opacity-0">Interactive Twin Simulator</span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
             Meet your Career Twin.
           </h2>
           <p className="text-sm text-text-secondary mt-3 max-w-xl mx-auto mb-16 reveal-item opacity-0">
-            A live simulation of your technical identity. Toggle the What-If Sandbox to see where you might trigger placement risks, what your match scores represent, and what changes when you bridge missing components.
+            A live simulation of your current career profile. See which roles are realistic, where you might get rejected, what changes if you learn a new skill, and toggle the Sandbox to bridge gaps.
           </p>
 
           <div className="reveal-item opacity-0">
@@ -421,11 +463,11 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* 8. Connected Skill Ecosystem Orbit Graphic */}
+      {/* 8. Skill Ecosystem Section (Orbit) */}
       <section className="section-shell border-t border-[var(--border-muted)] reveal-section overflow-hidden">
         <div className="container-shell text-center relative z-10 flex flex-col items-center">
           <span className="eyebrow reveal-item opacity-0">Skill Taxonomy</span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary mt-2 reveal-item opacity-0">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
             Map your skills into one unified orbit
           </h2>
           <p className="text-sm text-text-secondary mt-3 max-w-md mx-auto mb-16 reveal-item opacity-0">
@@ -446,42 +488,47 @@ export default async function LandingPage() {
               <span className="text-[8px] font-mono font-bold mt-1 text-text-primary uppercase tracking-wider">SMS CORE</span>
             </div>
 
-            {/* Inner Ring Orbit Nodes */}
+            {/* Orbiting standard skill nodes */}
             <div className="absolute translate-y-[-90px] sm:translate-y-[-120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
-              React.js
+              React
             </div>
             <div className="absolute translate-y-[90px] sm:translate-y-[120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
               Python
             </div>
             <div className="absolute translate-x-[-90px] sm:translate-x-[-120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
-              SQL DB
+              SQL
             </div>
             <div className="absolute translate-x-[90px] sm:translate-x-[120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
-              DevOps
+              TypeScript
             </div>
 
-            {/* Outer Ring Orbit Nodes */}
             <div className="absolute translate-y-[-140px] translate-x-[-100px] sm:translate-y-[-200px] sm:translate-x-[-140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
-              TypeScript
+              Git
             </div>
             <div className="absolute translate-y-[-140px] translate-x-[100px] sm:translate-y-[-200px] sm:translate-x-[140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Figma
             </div>
             <div className="absolute translate-y-[140px] translate-x-[-100px] sm:translate-y-[200px] sm:translate-x-[-140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
-              REST APIs
+              Node.js
             </div>
             <div className="absolute translate-y-[140px] translate-x-[100px] sm:translate-y-[200px] sm:translate-x-[140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
-              Git
+              Machine Learning
+            </div>
+            <div className="absolute translate-y-[-60px] translate-x-[-150px] sm:translate-y-[-90px] sm:translate-x-[-200px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+              Product
+            </div>
+            <div className="absolute translate-y-[-60px] translate-x-[150px] sm:translate-y-[-90px] sm:translate-x-[200px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+              Cloud
             </div>
           </div>
         </div>
       </section>
 
-      {/* 9. Testimonial / Sample Before After Outcome Section */}
+      {/* 9. Sample Outcome Section */}
       <section className="section-shell border-t border-[var(--border-muted)] bg-[var(--surface-card-warm)]/15 reveal-section">
         <div className="container-shell text-center">
-          <span className="eyebrow reveal-item opacity-0">Clarity Metric</span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary mt-2 reveal-item opacity-0">
+          <span className="eyebrow reveal-item opacity-0">Outcome Profile</span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2 reveal-item opacity-0 font-sans">
             A Typical Student Outcome
           </h2>
 
@@ -491,12 +538,12 @@ export default async function LandingPage() {
               <div>
                 <div className="flex items-center justify-between border-b border-[var(--border-muted)] pb-3 mb-4">
                   <span className="font-mono text-xs font-bold text-red-400 uppercase tracking-widest">
-                    Pre-Evaluation State
+                    Before SortMySkills
                   </span>
                   <AlertTriangle className="w-4 h-4 text-red-400" />
                 </div>
                 <p className="text-xs text-text-secondary leading-relaxed font-mono select-none">
-                  “I know basic JavaScript and Python but don&apos;t know where I fit. I&apos;ve sent 50 generic applications out and received 0 replies. Gaps are completely invisible to me.”
+                  “I know React and Python but don’t know where I fit. I’ve sent out dozens of generic CVs and have no visibility over critical missing skills.”
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] text-[10px] text-text-muted">
@@ -509,15 +556,15 @@ export default async function LandingPage() {
               <div>
                 <div className="flex items-center justify-between border-b border-[var(--border-muted)] pb-3 mb-4">
                   <span className="font-mono text-xs font-bold text-success uppercase tracking-widest">
-                    Post-SortMySkills State
+                    After SortMySkills
                   </span>
                   <CheckCircle2 className="w-4 h-4 text-success" />
                 </div>
                 <div className="text-xs space-y-2.5 text-text-secondary leading-relaxed font-mono">
-                  <p>✔ <strong>Best-fit role:</strong> Junior Frontend Engineer</p>
+                  <p>✔ <strong>Best-fit role:</strong> Frontend Intern</p>
                   <p>✔ <strong>Readiness rating:</strong> 72% computed</p>
                   <p>✔ <strong>Audited Gaps:</strong> TypeScript, API Integration</p>
-                  <p>✔ <strong>Fastest fix:</strong> Complete Course 3 (Coursera) & build 1 dynamic typed repo.</p>
+                  <p>✔ <strong>Fastest fix:</strong> Build one typed React dashboard</p>
                 </div>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] text-[10px] text-accent-primary font-bold">
@@ -537,36 +584,36 @@ export default async function LandingPage() {
 
             <span className="eyebrow">placement intelligence</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-primary mt-3 font-serif italic">
-              Ready to stop guessing your path?
+              Ready to stop guessing your career path?
             </h2>
-            <p className="text-sm text-text-secondary mt-4 max-w-md mx-auto leading-relaxed">
-              Analyze your current skillset, compare your profile against actual job posts, detect gaps, and map a clean placement preparation strategy.
+            <p className="text-sm text-text-secondary mt-4 max-w-md mx-auto leading-relaxed font-sans">
+              Create your skill profile, compare it with real roles, and get a roadmap you can act on today.
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               {user ? (
                 <ButtonLink
                   href="/dashboard"
-                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md"
+                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
                 >
                   <span>Open Dashboard</span>
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </ButtonLink>
               ) : (
                 <>
                   <ButtonLink
                     href="/signup"
-                    className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md"
+                    className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
                   >
                     <span>Get Started Free</span>
-                    <ArrowRight className="w-4 h-4 ml-1.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </ButtonLink>
                   <ButtonLink
                     href="/login"
                     variant="secondary"
                     className="px-6 py-3 text-xs font-mono uppercase tracking-widest border border-[var(--border-strong)] rounded-full hover:bg-surface-hover"
                   >
-                    Sign In
+                    Open Dashboard
                   </ButtonLink>
                 </>
               )}
@@ -587,17 +634,17 @@ export default async function LandingPage() {
               </span>
             </Link>
             <p className="text-xs text-text-secondary leading-relaxed max-w-sm">
-              An offline-first, client-synchronized career operating system built to help technical students evaluate, map, and prepare their competency portfolios for modern developer placements.
+              An offline-first, client-synchronized career operating system built to help students evaluate, map, and prepare modern developer placements.
             </p>
           </div>
 
           {/* Col 2 Utilities */}
           <div className="space-y-3">
-            <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-widest">Workspace</h4>
+            <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-widest font-bold">Workspace</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="/skill-development" className="hover:text-accent-primary transition-colors">
-                  Skill Planner
+                  Skill Roadmap
                 </Link>
               </li>
               <li>
@@ -607,12 +654,12 @@ export default async function LandingPage() {
               </li>
               <li>
                 <Link href="/interview-packs" className="hover:text-accent-primary transition-colors">
-                  Interview Packs
+                  Interview Prep
                 </Link>
               </li>
               <li>
                 <Link href="/tools/parser" className="hover:text-accent-primary transition-colors">
-                  Parser Playground
+                  Skill Parser
                 </Link>
               </li>
             </ul>
@@ -620,7 +667,7 @@ export default async function LandingPage() {
 
           {/* Col 3 Account */}
           <div className="space-y-3">
-            <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-widest">Account</h4>
+            <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-widest font-bold">Account</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="/login" className="hover:text-accent-primary transition-colors">

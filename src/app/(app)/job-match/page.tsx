@@ -140,7 +140,7 @@ export default function JobMatchPage() {
                 placeholder="Paste required skills and qualifications here..."
               />
               <Button type="submit" className="mt-4 w-full h-11 font-mono uppercase tracking-widest text-[#F6F1E8] bg-accent-primary cursor-pointer" disabled={loading}>
-                {loading ? "Analyzing Matrix…" : "Analyze Match Matrix"}
+                {loading ? "Comparing Gaps…" : "Compare Resume with Target JD"}
               </Button>
             </CardBody>
           </Card>
@@ -152,7 +152,7 @@ export default function JobMatchPage() {
             <Card className="col-span-2 lg:col-span-1 premium-card relative overflow-hidden animated-border">
               <div className="absolute inset-0 dot-grid-overlay opacity-20 pointer-events-none" />
               <CardBody className="py-6 px-6 text-center flex flex-col justify-center h-full relative z-10">
-                <span className="block font-mono text-[9px] text-text-muted uppercase tracking-wider">Evaluation Score</span>
+                <span className="block font-mono text-[9px] text-text-muted uppercase tracking-wider">Role Match Rating</span>
                 <p className="text-4xl font-bold text-accent-primary mt-1 tracking-tight">{result.score}%</p>
                 <div className="w-full bg-[var(--surface-muted)] h-1 rounded-full mt-3 overflow-hidden max-w-[120px] mx-auto">
                   <div className="bg-accent-primary h-full" style={{ width: `${result.score}%` }} />
@@ -160,9 +160,9 @@ export default function JobMatchPage() {
               </CardBody>
             </Card>
             
-            <SkillColumn title="Aligned" skills={result.matched} variant="ok" />
-            <SkillColumn title="Missing Gaps" skills={result.missing} variant="gap" />
-            <SkillColumn title="Supplementary" skills={result.supplementary} variant="muted" />
+            <SkillColumn title="Matched Skills" skills={result.matched} variant="ok" />
+            <SkillColumn title="Skill Gaps" skills={result.missing} variant="gap" />
+            <SkillColumn title="Extra Skills" skills={result.supplementary} variant="muted" />
           </div>
 
           {/* Recommended Course Bridges */}

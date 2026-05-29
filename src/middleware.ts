@@ -51,9 +51,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/auth/verify") ||
     pathname.startsWith("/forgot-password");
 
-  const bypassAuth = request.cookies.get("bypass_auth")?.value === "true";
-
-  if (!user && isProtectedPath && !bypassAuth) {
+  if (!user && isProtectedPath) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirectedFrom", pathname);

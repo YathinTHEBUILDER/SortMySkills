@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+
 
 
 // Custom type for Server Action Responses
@@ -360,8 +360,6 @@ export async function signOutAction(): Promise<never> {
   try {
     const supabase = await createServerSupabaseClient();
     await supabase.auth.signOut();
-    const cookieStore = await cookies();
-    cookieStore.delete("bypass_auth");
   } catch (error) {
     console.error("Signout error:", error);
   }

@@ -171,18 +171,6 @@ function LoginForm() {
             Need an account? Sign up
           </button>
 
-          <button
-            type="button"
-            className="mt-4 text-xs font-mono uppercase tracking-widest text-accent-green hover:underline w-full text-center cursor-pointer transition-all font-semibold"
-            onClick={() => {
-              document.cookie = "bypass_auth=true; path=/; max-age=86400";
-              router.push("/dashboard");
-              router.refresh();
-            }}
-          >
-            ⚡ Demo Guest Access (Bypass Auth)
-          </button>
-
           <Link
             href="/"
             className="block mt-6 text-center text-xs text-text-muted hover:text-text-primary transition-colors"

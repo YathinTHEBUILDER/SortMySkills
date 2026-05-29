@@ -100,15 +100,15 @@ export default function SkillDevelopmentPage() {
           <Card className="premium-card relative overflow-hidden">
             <div className="absolute inset-0 dot-grid-overlay opacity-10 pointer-events-none" />
             <CardHeader
-              title="Competency Audit"
-              description="Toggle the baseline skills you can confidently demonstrate."
+              title="Skill Audit"
+              description="Mark the baseline skills you can confidently demonstrate today."
               className="border-b border-[var(--border-muted)] pb-3"
             />
             <CardBody className="pt-5 px-6">
               <div className="grid sm:grid-cols-2 gap-8">
                 {/* Skill Toggles */}
                 <div className="space-y-2">
-                  <span className="block font-mono text-[9px] text-text-muted uppercase tracking-wider mb-3">Audited Skillset</span>
+                  <span className="block font-mono text-[9px] text-text-muted uppercase tracking-wider mb-3">Your Skills checklist</span>
                   {selectedRole.skills.map((skill) => {
                     const on = userSkills.includes(skill);
                     return (

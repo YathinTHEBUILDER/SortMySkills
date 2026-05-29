@@ -26,7 +26,7 @@ export default function Sidebar({
       key={href}
       href={href}
       onClick={onClose}
-      className={`flex items-center gap-3.5 px-5 py-4 text-[10px] font-mono uppercase tracking-wider border-b border-[var(--border-muted)] transition-all duration-150 relative ${
+      className={`flex items-center gap-3.5 px-5 py-3.5 text-xs font-sans font-semibold tracking-wide border-b border-[var(--border-muted)] transition-all duration-150 relative ${
         isActive(href)
           ? "bg-surface-card-warm text-accent-primary font-bold"
           : "text-text-secondary hover:text-text-primary hover:bg-surface-hover/60"
@@ -35,7 +35,7 @@ export default function Sidebar({
       {isActive(href) && (
         <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-accent-primary" />
       )}
-      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive(href) ? "text-accent-primary" : "text-text-muted"}`} />
+      <Icon className={`w-4 h-4 shrink-0 ${isActive(href) ? "text-accent-primary" : "text-text-muted"}`} />
       <span>{label}</span>
     </Link>
   );

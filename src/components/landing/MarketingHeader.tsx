@@ -33,36 +33,42 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-6 font-sans">
             <a
               href="#product-showcase"
-              className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-accent-primary transition-colors"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
               Product
             </a>
             <a
               href="#tools-preview"
-              className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-accent-primary transition-colors"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
               Tools
             </a>
             <a
               href="#career-twin-sandbox"
-              className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-accent-primary transition-colors"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
               Career Twin
             </a>
             <Link
               href="/interview-packs"
-              className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-accent-primary transition-colors"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
-              Packs
+              Interview Packs
+            </Link>
+            <Link
+              href="/skill-development"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              Roadmap
             </Link>
           </nav>
         </div>
 
         {/* Right side controls */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 font-sans">
           <div className="hidden sm:block">
             <ThemeControls />
           </div>
@@ -73,14 +79,14 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
               <>
                 <Link
                   href="/dashboard"
-                  className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors"
+                  className="text-xs font-semibold tracking-wide text-text-secondary hover:text-text-primary transition-colors"
                 >
                   Dashboard
                 </Link>
                 <form action={signOutAction} className="inline-flex">
                   <button
                     type="submit"
-                    className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-red-400 cursor-pointer transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-text-secondary hover:text-red-400 cursor-pointer transition-colors"
                   >
                     <LogOut className="w-3.5 h-3.5" />
                     <span>Sign out</span>
@@ -91,13 +97,13 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
               <>
                 <Link
                   href="/login"
-                  className="text-xs font-mono uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors"
+                  className="text-xs font-semibold tracking-wide text-text-secondary hover:text-text-primary transition-colors"
                 >
                   Sign In
                 </Link>
                 <ButtonLink
                   href="/signup"
-                  className="h-9 px-4 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full"
+                  className="h-9 px-4 text-xs font-semibold tracking-wide text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full"
                 >
                   Get Started
                 </ButtonLink>
@@ -120,39 +126,46 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
       {/* Mobile Drawer Menu Overlay */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-[var(--background)]/98 backdrop-blur-lg border-t border-[var(--border-muted)] flex flex-col justify-between p-6 z-50 animate-fade-in-up">
-          <nav className="flex flex-col gap-5 pt-4">
+          <nav className="flex flex-col gap-5 pt-4 font-sans">
             <a
               href="#product-showcase"
               onClick={closeMobileMenu}
-              className="text-sm font-mono uppercase tracking-wider text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
               Product
             </a>
             <a
               href="#tools-preview"
               onClick={closeMobileMenu}
-              className="text-sm font-mono uppercase tracking-wider text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
               Tools
             </a>
             <a
               href="#career-twin-sandbox"
               onClick={closeMobileMenu}
-              className="text-sm font-mono uppercase tracking-wider text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
               Career Twin
             </a>
             <Link
               href="/interview-packs"
               onClick={closeMobileMenu}
-              className="text-sm font-mono uppercase tracking-wider text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
-              Interview Packs
+              Interview Prep
+            </Link>
+            <Link
+              href="/skill-development"
+              onClick={closeMobileMenu}
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+            >
+              Roadmap
             </Link>
             <Link
               href="/dashboard"
               onClick={closeMobileMenu}
-              className="text-sm font-mono uppercase tracking-wider text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
               Dashboard
             </Link>
