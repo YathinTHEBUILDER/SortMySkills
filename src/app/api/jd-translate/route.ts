@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { callGroqAIWithRepair } from "@/lib/ai/groq-router";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-// ── POST handler ─────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   // Rate-limit check: 3 requests per 10 minutes
   const ip = await getClientIp();
-  const limitResult = rateLimit(`jd-translate:${ip}`, 3, 10 * 60 * 1000);
+  const limitResult = await rateLimit(`jd-translate:${ip}`, 3, 10 * 60 * 1000);
 
   if (!limitResult.success) {
     const resetSeconds = Math.ceil((limitResult.resetTime - Date.now()) / 1000);
@@ -39,88 +40,44 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Groq API key check
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      {
-        error:
-          "GROQ_API_KEY is not configured. Add it to your .env.local file to enable JD translation.",
-      },
-      { status: 500 }
-    );
-  }
-
-  // Call Groq API
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 25_000);
-
   try {
-    const groqRes = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        signal: controller.signal,
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          temperature: 0.7,
-          max_tokens: 2000,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a brutally honest senior engineer who has hired people for 10 years. You have zero tolerance for corporate nonsense. You translate job descriptions into exactly what the company actually means. You are direct, specific, and always useful. You respond only in valid JSON with no markdown, no explanation.",
-            },
-            {
-              role: "user",
-              content: `Translate this job description into plain honest English for a college student.\n\nJob Description:\n${jobDescription}\n\nRespond ONLY with valid JSON matching this schema exactly:\n{\n  "roleTitle": "string",\n  "whatTheyActuallyWant": "string",\n  "whatYouWillActuallyDo": ["string array of 4 to 6 items"],\n  "experienceTranslation": "string",\n  "theMustHaveSkill": "string",\n  "theNiceToHaves": ["string array of 2 to 4 items"],\n  "salaryHonesty": "string",\n  "companyVibe": "string",\n  "redFlags": ["string array of 0 to 3 items"],\n  "greenFlags": ["string array of 0 to 3 items"],\n  "shouldYouApply": "yes | no | maybe",\n  "shouldYouApplyReason": "string",\n  "theHonestSummary": "string"\n}`,
-            },
-          ],
-        }),
-      }
-    );
+    const systemPrompt = "You are a brutally honest senior engineer who has hired people for 10 years. You have zero tolerance for corporate nonsense. You translate job descriptions into exactly what the company actually means. You are direct, specific, and always useful. You respond only in valid JSON with no markdown, no explanation.";
+    const userPrompt = `Translate this job description into plain honest English for a college student.\n\nJob Description:\n${jobDescription}\n\nRespond ONLY with valid JSON matching this schema exactly:\n{\n  "roleTitle": "string",\n  "whatTheyActuallyWant": "string",\n  "whatYouWillActuallyDo": ["string array of 4 to 6 items"],\n  "experienceTranslation": "string",\n  "theMustHaveSkill": "string",\n  "theNiceToHaves": ["string array of 2 to 4 items"],\n  "salaryHonesty": "string",\n  "companyVibe": "string",\n  "redFlags": ["string array of 0 to 3 items"],\n  "greenFlags": ["string array of 0 to 3 items"],\n  "shouldYouApply": "yes | no | maybe",\n  "shouldYouApplyReason": "string",\n  "theHonestSummary": "string"\n}`;
 
-    clearTimeout(timeout);
+    const aiResult = await callGroqAIWithRepair({
+      featureName: "jd-translate",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.7,
+      maxTokens: 2000,
+      jsonMode: true,
+    });
 
-    if (!groqRes.ok) {
-      const errText = await groqRes.text().catch(() => "Unknown error");
-      console.error("[jd-translate] Groq API error:", groqRes.status, errText);
+    if (!aiResult.success) {
       return NextResponse.json(
-        { error: "Translation service returned an error. Try again." },
+        { error: aiResult.error || "Translation service returned an error. Try again." },
         { status: 500 }
       );
     }
 
-    const data = await groqRes.json();
-    let rawContent: string = data?.choices?.[0]?.message?.content ?? "";
+    const parsed = aiResult.data as Record<string, unknown>;
 
-    // Strip markdown code fences if present
-    rawContent = rawContent.replace(/```(?:json)?\s*/gi, "").replace(/```/g, "").trim();
-
-    let parsed;
-    try {
-      parsed = JSON.parse(rawContent);
-    } catch {
-      console.error("[jd-translate] JSON parse failed. Raw:", rawContent);
-      return NextResponse.json(
-        { error: "Failed to parse response. Try again." },
-        { status: 500 }
-      );
+    // Supabase Persistence (Step 8)
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from("ai_generations").insert({
+        user_id: user.id,
+        feature_name: "jd-translate",
+        prompt_inputs: { jobDescription },
+        generated_output: parsed,
+      });
     }
 
     return NextResponse.json({ translation: parsed });
   } catch (err: unknown) {
-    clearTimeout(timeout);
-    if (err instanceof DOMException && err.name === "AbortError") {
-      return NextResponse.json(
-        { error: "Request timed out. The AI took too long to respond." },
-        { status: 504 }
-      );
-    }
     console.error("[jd-translate] Unexpected error:", err);
     return NextResponse.json(
       { error: "Something went wrong. Try again." },
@@ -128,3 +85,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+

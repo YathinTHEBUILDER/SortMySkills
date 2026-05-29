@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { callGroqAIWithRepair } from "@/lib/ai/groq-router";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(req: NextRequest) {
-  // Rate limiting check: 3 requests per 15 minutes
+  // 1. Rate limiting check: 3 requests per 15 minutes
   const ip = await getClientIp();
-  const limitResult = rateLimit(`roadmap:${ip}`, 3, 15 * 60 * 1000);
+  const limitResult = await rateLimit(`roadmap:${ip}`, 3, 15 * 60 * 1000);
   if (!limitResult.success) {
-    // Calculate remaining seconds if possible, or just send general message
     const resetSeconds = Math.ceil((limitResult.resetTime - Date.now()) / 1000);
     return NextResponse.json(
       { 
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Parse body
+  // 2. Parse body
   let body: { resume?: string; jd?: string; date?: string; focus?: string };
   try {
     body = await req.json();
@@ -54,25 +55,12 @@ export async function POST(req: NextRequest) {
   // Calculate weeks available
   const targetDate = new Date(date);
   const today = new Date();
-  // Set to midnight for date-only comparison
   today.setHours(0, 0, 0, 0);
   targetDate.setHours(0, 0, 0, 0);
 
   const diffTime = targetDate.getTime() - today.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   const weeksAvailable = Math.max(1, Math.ceil(diffDays / 7));
-
-  // Groq API key check
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "GROQ_API_KEY is not configured. Please add it to your environment." },
-      { status: 500 }
-    );
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 45_000); // 45 seconds timeout for roadmap generation
 
   try {
     const systemPrompt = `You are a ruthlessly honest career coach specializing in tech and design roles. You identify exactly why a resume isn't getting replies and build a rigorous improvement roadmap. Use web search to find real, currently available free resources — Coursera free audit, YouTube (freeCodeCamp, Fireship, Traversy Media, Kevin Powell), GitHub repos, official docs, roadmap.sh, The Odin Project, CS50. Never invent resource names or URLs. Respond ONLY in valid JSON. No markdown, no preamble, no backticks.`;
@@ -109,64 +97,74 @@ Generate this exact JSON structure:
 }
 Distribute phases across ${weeksAvailable} weeks. Group into logical phases: Fix Resume → Build Skills → Build Projects → Apply & Network. Milestones must be measurable.`;
 
-    const groqRes = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        signal: controller.signal,
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          temperature: 0.7,
-          max_tokens: 4000,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-        }),
+    const aiResult = await callGroqAIWithRepair({
+      featureName: "roadmap",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.7,
+      maxTokens: 4000,
+      jsonMode: true,
+    });
+
+    if (!aiResult.success) {
+      return NextResponse.json(
+        { error: aiResult.error || "Failed to generate roadmap. Please try again." },
+        { status: 500 }
+      );
+    }
+
+    const parsed = aiResult.data as Record<string, unknown>;
+
+    // Supabase Persistence (Step 8)
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    let savedSessionId: string | null = null;
+
+    if (user) {
+      const { data: existingSessions } = await supabase
+        .from("analysis_sessions")
+        .select("id")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      const latestSession = existingSessions?.[0];
+
+      if (latestSession) {
+        savedSessionId = latestSession.id;
+        await supabase
+          .from("analysis_sessions")
+          .update({
+            resume_text: resume,
+            jd_text: jd,
+            target_date: date,
+            focus_areas: focus || null,
+            roadmap_result: parsed,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", latestSession.id);
+      } else {
+        const { data: inserted } = await supabase
+          .from("analysis_sessions")
+          .insert({
+            user_id: user.id,
+            resume_text: resume,
+            jd_text: jd,
+            target_date: date,
+            focus_areas: focus || null,
+            roadmap_result: parsed,
+          })
+          .select()
+          .single();
+        
+        savedSessionId = inserted?.id || null;
       }
-    );
-
-    clearTimeout(timeout);
-
-    if (!groqRes.ok) {
-      const errText = await groqRes.text().catch(() => "Unknown error");
-      console.error("[roadmap-api] Groq error:", groqRes.status, errText);
-      return NextResponse.json(
-        { error: `Roadmap service returned an error (${groqRes.status}). Try again.`, raw: errText },
-        { status: 500 }
-      );
     }
 
-    const data = await groqRes.json();
-    let rawContent: string = data?.choices?.[0]?.message?.content ?? "";
-
-    // Strip markdown code fences if present
-    rawContent = rawContent.replace(/```(?:json)?\s*/gi, "").replace(/```/g, "").trim();
-
-    let parsed;
-    try {
-      parsed = JSON.parse(rawContent);
-    } catch {
-      console.error("[roadmap-api] JSON parse failed. Raw content:", rawContent);
-      return NextResponse.json(
-        { error: "Failed to parse roadmap output. The model returned invalid JSON.", raw: rawContent },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ result: parsed });
+    return NextResponse.json({ result: parsed, sessionId: savedSessionId });
   } catch (err: unknown) {
-    clearTimeout(timeout);
-    if (err instanceof DOMException && err.name === "AbortError") {
-      return NextResponse.json(
-        { error: "Request timed out. Generating the roadmap took longer than 45 seconds." },
-        { status: 504 }
-      );
-    }
     console.error("[roadmap-api] Unexpected error:", err);
     return NextResponse.json(
       { error: "Something went wrong generating the roadmap. Please try again." },
@@ -174,3 +172,4 @@ Distribute phases across ${weeksAvailable} weeks. Group into logical phases: Fix
     );
   }
 }
+

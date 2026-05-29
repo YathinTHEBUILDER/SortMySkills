@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
+import { createClient } from "@/lib/supabase/client";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -28,6 +29,27 @@ import {
   Info,
   Sparkles,
 } from "lucide-react";
+
+// --- Tooltip Component -------------------------------------------------------
+function Tooltip({ content, children }: { content: string; children: React.ReactNode }) {
+  return (
+    <span className="relative group inline-flex items-center">
+      {children}
+      <span
+        role="tooltip"
+        className="
+          pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50
+          w-56 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-card)]
+          px-3 py-2 text-[11px] leading-relaxed text-text-secondary shadow-lg
+          opacity-0 scale-95 transition-all duration-150
+          group-hover:opacity-100 group-hover:scale-100
+        "
+      >
+        {content}
+      </span>
+    </span>
+  );
+}
 
 // --- Action Verbs for ATS Scoring -------------------------------------------
 const ACTION_VERBS = [
@@ -158,6 +180,122 @@ export default function CareerAnalyserPage() {
   // Copied & checked milestones
   const [copied, setCopied] = useState(false);
   const [milestones, setMilestones] = useState<Record<string, boolean>>({});
+
+  // Supabase Persistent Session States (Step 8 & 9)
+  const [sessionId, setSessionId] = useState<string | null>(null);
+
+  // Load latest Supabase session if authenticated (Step 8 & 9)
+  useEffect(() => {
+    const loadSession = async () => {
+      try {
+        const supabaseClient = createClient();
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) return;
+
+        const { data: sessions } = await supabaseClient
+          .from("analysis_sessions")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1);
+
+        const latest = sessions?.[0];
+        if (latest) {
+          setSessionId(latest.id);
+          // Only pre-populate if currently empty
+          if (latest.resume_text && !resume) setResume(latest.resume_text);
+          if (latest.jd_text && !jd) setJd(latest.jd_text);
+          if (latest.target_date) setTargetDate(latest.target_date);
+          if (latest.focus_areas) setFocus(latest.focus_areas);
+          
+          if (latest.ats_result) setAtsResult(latest.ats_result);
+          if (latest.job_match_result) setJobMatchResult(latest.job_match_result);
+          if (latest.roadmap_result) setRoadmapResult(latest.roadmap_result);
+        }
+      } catch (err) {
+        console.error("Failed to load active session from Supabase:", err);
+      }
+    };
+    loadSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const saveAtsResultToSupabase = async (ats: ATSAnalysis) => {
+    try {
+      const supabaseClient = createClient();
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) return;
+
+      if (sessionId) {
+        await supabaseClient
+          .from("analysis_sessions")
+          .update({
+            resume_text: resume,
+            jd_text: jd,
+            target_date: targetDate || null,
+            focus_areas: focus || null,
+            ats_result: ats,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", sessionId);
+      } else {
+        const { data: newSession } = await supabaseClient
+          .from("analysis_sessions")
+          .insert({
+            user_id: user.id,
+            resume_text: resume,
+            jd_text: jd,
+            target_date: targetDate || null,
+            focus_areas: focus || null,
+            ats_result: ats,
+          })
+          .select()
+          .single();
+        if (newSession) setSessionId(newSession.id);
+      }
+    } catch (e) {
+      console.error("Failed to sync ATS result to Supabase:", e);
+    }
+  };
+
+  const saveJobMatchResultToSupabase = async (match: JobMatchAnalysis) => {
+    try {
+      const supabaseClient = createClient();
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) return;
+
+      if (sessionId) {
+        await supabaseClient
+          .from("analysis_sessions")
+          .update({
+            resume_text: resume,
+            jd_text: jd,
+            target_date: targetDate || null,
+            focus_areas: focus || null,
+            job_match_result: match,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", sessionId);
+      } else {
+        const { data: newSession } = await supabaseClient
+          .from("analysis_sessions")
+          .insert({
+            user_id: user.id,
+            resume_text: resume,
+            jd_text: jd,
+            target_date: targetDate || null,
+            focus_areas: focus || null,
+            job_match_result: match,
+          })
+          .select()
+          .single();
+        if (newSession) setSessionId(newSession.id);
+      }
+    } catch (e) {
+      console.error("Failed to sync Job Match result to Supabase:", e);
+    }
+  };
+
 
   // Today string for roadmap minimum date limit
   const todayStr = useMemo(() => {
@@ -408,13 +546,16 @@ export default function CareerAnalyserPage() {
         const sorted = [...subscores].sort((a, b) => a.score - b.score);
         const quickWins = sorted.slice(0, 3).flatMap((s) => s.wins).slice(0, 3);
 
-        setAtsResult({
+        const parsedAts = {
           finalScore,
           subscores,
           quickWins,
           missingSkills,
           wordCount
-        });
+        };
+
+        setAtsResult(parsedAts);
+        saveAtsResultToSupabase(parsedAts);
       } catch (err) {
         console.error("ATS calculation failed", err);
         setAtsError("ATS scan failed. Check console or try again.");
@@ -445,12 +586,15 @@ export default function CareerAnalyserPage() {
 
         const score = jdCanonicals.length ? Math.round((matched.length / jdCanonicals.length) * 100) : 0;
 
-        setJobMatchResult({
+        const parsedMatch = {
           score,
           matched,
           missing,
           supplementary,
-        });
+        };
+
+        setJobMatchResult(parsedMatch);
+        saveJobMatchResultToSupabase(parsedMatch);
       } catch (err) {
         console.error("Job Match calculation failed", err);
         setJobMatchError("Job match calculation failed. Check console.");
@@ -482,6 +626,9 @@ export default function CareerAnalyserPage() {
       }
 
       setRoadmapResult(data.result);
+      if (data.sessionId) {
+        setSessionId(data.sessionId);
+      }
     } catch (err: unknown) {
       setRoadmapError("Failed to fetch roadmap service.");
       const errMsg = err instanceof Error ? err.message : String(err);
@@ -566,14 +713,22 @@ export default function CareerAnalyserPage() {
     <div className="space-y-8 animate-fade-in relative z-10 font-sans text-left">
       <PageHeader
         title="Career Analyser"
-        description="One unified analysis workspace. Paste your resume and target job requirements once to verify ATS weights, compare match gaps, and map out your path."
+        description="Your all-in-one job-readiness workspace. Paste your resume and a job description once — then run ATS checks, skill gap analysis, and generate a personalised study plan."
       />
+
+      {/* Beginner hint banner */}
+      <div className="flex items-start gap-3 rounded-xl border border-accent-primary/20 bg-accent-primary/[0.03] px-4 py-3">
+        <Info className="w-4 h-4 text-accent-primary shrink-0 mt-0.5" />
+        <p className="text-xs text-text-secondary leading-relaxed">
+          <span className="font-semibold text-text-primary">New here?</span> Start by pasting your resume and the job description below. Then use the three tools — ATS Scan, Job Match, and Roadmap — in order for the best experience.
+        </p>
+      </div>
 
       {/* Workspace Loaded Helper alert */}
       {hasInputs && (
         <div className="flex justify-start animate-fade-in">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--border-strong)] bg-[var(--surface-soft)] text-xs text-text-secondary font-mono">
-            <span>✓ Resume & JD loaded from workspace logs</span>
+            <span>✓ Resume & JD loaded — ready to analyse</span>
           </div>
         </div>
       )}
@@ -581,44 +736,69 @@ export default function CareerAnalyserPage() {
       {/* --- Unified Shared Input Panel --- */}
       <Card className="premium-card">
         <CardHeader
-          title="Shared Input Workspace"
-          description="Specify your history and target job details. These fields feed every launcher below without duplicate typing."
+          title="Your Resume & Job Description"
+          description="Paste your details here once. Every analysis tool below will use these inputs automatically — no re-typing needed."
           className="border-b border-[var(--border-muted)] pb-3 px-6 pt-5"
         />
         <CardBody className="py-5 px-6 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Resume Input */}
             <div className="space-y-2">
-              <label htmlFor="resume-textarea" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
-                Your Resume Text
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="resume-textarea" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
+                  Your Resume
+                </label>
+                <Tooltip content="Copy your resume as plain text (Ctrl+A, Ctrl+C from a text editor or Google Docs). Avoid uploading a PDF — paste the text directly.">
+                  <Info className="w-3 h-3 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
               <textarea
                 id="resume-textarea"
                 value={resume}
                 onChange={(e) => setResume(e.target.value)}
-                placeholder="Paste plain text from your resume..."
+                placeholder="Paste the plain text of your resume here..."
                 className="w-full h-48 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-4 text-xs font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary/50 resize-y transition-all"
               />
+              <p className="text-[10px] text-text-muted">
+                💡 Tip: Use <span className="font-semibold">Load Sample</span> below to see how a real resume looks.
+              </p>
             </div>
+
+            {/* JD Input */}
             <div className="space-y-2">
-              <label htmlFor="jd-textarea" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
-                Target Job Description
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="jd-textarea" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
+                  Job Description
+                </label>
+                <Tooltip content="A Job Description (JD) is the posting from the company listing skills, responsibilities, and requirements. Copy it from LinkedIn, Naukri, or any job board.">
+                  <Info className="w-3 h-3 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
               <textarea
                 id="jd-textarea"
                 value={jd}
                 onChange={(e) => setJd(e.target.value)}
-                placeholder="Paste the target job posting details..."
+                placeholder="Paste the job posting here — copy from LinkedIn, Naukri, or any job site..."
                 className="w-full h-48 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-4 text-xs font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary/50 resize-y transition-all"
               />
+              <p className="text-[10px] text-text-muted">
+                💡 Tip: Include the full posting — skills, responsibilities, and qualifications.
+              </p>
             </div>
           </div>
 
           {/* Roadmap dates preferences inside the panel */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-[var(--border-muted)] pt-5">
+            {/* Target Date */}
             <div className="space-y-2">
-              <label htmlFor="target-date" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
-                Target Ready Date (Roadmap requirement)
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="target-date" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
+                  Target Ready Date
+                </label>
+                <Tooltip content="The date you want to be job-ready. This is used only for the Roadmap tool to calculate how many weeks you have to prepare.">
+                  <Info className="w-3 h-3 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
               <div className="relative">
                 <input
                   id="target-date"
@@ -630,26 +810,35 @@ export default function CareerAnalyserPage() {
                 />
                 <Calendar className="w-3.5 h-3.5 text-text-muted absolute left-3.5 top-3.5 pointer-events-none" />
               </div>
-              {targetDate && (
+              {targetDate ? (
                 <p className="text-[10px] text-text-muted font-mono">
-                  Calculated Duration: <span className="font-semibold text-accent-primary">{weeksAvailable} Weeks</span>
+                  You have <span className="font-semibold text-accent-primary">{weeksAvailable} weeks</span> to prepare.
                 </p>
+              ) : (
+                <p className="text-[10px] text-text-muted">Required only for generating the Study Roadmap.</p>
               )}
             </div>
 
+            {/* Focus Input */}
             <div className="space-y-2">
-              <label htmlFor="focus-input" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
-                Action focus areas (Optional roadmap focus)
-              </label>
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="focus-input" className="block text-[10px] font-mono uppercase tracking-widest text-text-muted">
+                  Focus Areas <span className="text-[9px] normal-case tracking-normal">(optional)</span>
+                </label>
+                <Tooltip content="Tell the AI what you most want to focus on in your roadmap. For example: 'I want to learn system design' or 'focus on frontend projects'.">
+                  <Info className="w-3 h-3 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
               <input
                 id="focus-input"
                 type="text"
                 maxLength={180}
                 value={focus}
                 onChange={(e) => handleFocusChange(e.target.value)}
-                placeholder="e.g., Focus on backend systems, system design projects, frontend styling..."
+                placeholder="e.g., system design, backend APIs, frontend projects..."
                 className="w-full rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-3 text-xs text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary/50"
               />
+              <p className="text-[10px] text-text-muted">Optional — skip if you want the AI to decide.</p>
             </div>
           </div>
 
@@ -659,12 +848,12 @@ export default function CareerAnalyserPage() {
                 Load Sample
               </Button>
               <Button variant="ghost" onClick={handleClearInputs} className="text-[10px] font-mono uppercase tracking-widest px-3 h-9 text-text-muted hover:text-danger hover:bg-danger/[0.04]">
-                Clear Workspace
+                Clear All
               </Button>
             </div>
             {hasInputs && (
               <span className="text-[10px] text-accent-green font-mono uppercase font-bold self-center">
-                ● Inputs Synced
+                ● Inputs Ready
               </span>
             )}
           </div>
@@ -672,79 +861,105 @@ export default function CareerAnalyserPage() {
       </Card>
 
       {/* --- Action Launchers Grid (Disabled without inputs) --- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        {/* Launcher 1: ATS Compatibility */}
-        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[200px]">
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-4">
-              <FileCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">ATS Compatibility</h3>
-            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
-              Verify your keyword density, layout sections, word count sweetspots, action verb frequencies, and contact completeness.
-            </p>
-          </div>
-          <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
-            <Button
-              onClick={runATSScan}
-              disabled={!hasInputs || atsLoading}
-              className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
-            >
-              {atsLoading ? "Scanning Structure..." : "Scan ATS Structure"}
-            </Button>
-          </div>
-        </div>
+      <div>
+        <p className="text-[10px] font-mono uppercase tracking-widest text-text-muted mb-3">Step 2 — Run Your Analyses</p>
+        {!hasInputs && (
+          <p className="text-xs text-text-muted mb-4">
+            ⬆️ Paste your resume and job description above to unlock the tools below.
+          </p>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        {/* Launcher 2: Job Match */}
-        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[200px]">
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-[#AFD275]/10 border border-[#AFD275]/20 flex items-center justify-center text-[#AFD275] mb-4">
-              <Briefcase className="w-5 h-5" />
+          {/* Launcher 1: ATS Compatibility */}
+          <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-4">
+                <FileCheck className="w-5 h-5" />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">ATS Score</h3>
+                <Tooltip content="ATS stands for Applicant Tracking System — the software companies use to filter resumes before a human ever reads them. This scan checks if your resume passes those filters.">
+                  <Info className="w-3.5 h-3.5 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
+              <p className="text-xs text-text-secondary mt-2 leading-relaxed">
+                Checks your resume's structure, keyword density, action verbs, and contact details for recruiter software compatibility.
+              </p>
+              <p className="text-[10px] text-text-muted mt-2">⏱ Instant — no AI needed.</p>
             </div>
-            <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">Job Match Gaps</h3>
-            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
-              Deep analysis comparing resume credentials with target roles. Isolates matching tags, skill gap deficits, and course recommendations.
-            </p>
-          </div>
-          <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
-            <Button
-              onClick={runJobMatch}
-              disabled={!hasInputs || jobMatchLoading}
-              className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
-            >
-              {jobMatchLoading ? "Matching Deficits..." : "Compare Match Gaps"}
-            </Button>
-          </div>
-        </div>
-
-        {/* Launcher 3: Learning Roadmap */}
-        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[200px]">
-          <div>
-            <div className="w-10 h-10 rounded-xl bg-[#C2CAD0]/10 border border-[#C2CAD0]/20 flex items-center justify-center text-text-secondary mb-4">
-              <Calendar className="w-5 h-5" />
+            <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
+              <Button
+                onClick={runATSScan}
+                disabled={!hasInputs || atsLoading}
+                className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
+              >
+                {atsLoading ? "Scanning..." : "Scan ATS Score"}
+              </Button>
             </div>
-            <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">Time-Bound Roadmap</h3>
-            <p className="text-xs text-text-secondary mt-2 leading-relaxed">
-              Translate target profile skill gaps into a structured, week-by-week curriculum with milestones, tasks, and Coursera links.
-            </p>
           </div>
-          <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
-            {!targetDate && hasInputs && (
-              <span className="text-[9px] font-mono text-danger font-semibold block mb-2 text-center">
-                ⚠️ Input target ready date above
-              </span>
-            )}
-            <Button
-              onClick={runGenerateRoadmap}
-              disabled={!hasInputs || !targetDate || roadmapLoading}
-              className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
-            >
-              {roadmapLoading ? "Compiling Syllabus..." : "Generate Syllabus Plan"}
-            </Button>
-          </div>
-        </div>
 
+          {/* Launcher 2: Job Match */}
+          <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-[#AFD275]/10 border border-[#AFD275]/20 flex items-center justify-center text-[#AFD275] mb-4">
+                <Briefcase className="w-5 h-5" />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">Skill Gap Check</h3>
+                <Tooltip content="Compares the skills listed in your resume against what the job requires. Shows what you already have, what's missing, and suggests free courses to close the gap.">
+                  <Info className="w-3.5 h-3.5 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
+              <p className="text-xs text-text-secondary mt-2 leading-relaxed">
+                Finds exactly which skills the job wants that your resume doesn't mention — and recommends Coursera courses to fill those gaps.
+              </p>
+              <p className="text-[10px] text-text-muted mt-2">⏱ Instant — no AI needed.</p>
+            </div>
+            <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
+              <Button
+                onClick={runJobMatch}
+                disabled={!hasInputs || jobMatchLoading}
+                className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
+              >
+                {jobMatchLoading ? "Comparing..." : "Check Skill Gaps"}
+              </Button>
+            </div>
+          </div>
+
+          {/* Launcher 3: Learning Roadmap */}
+          <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-[#C2CAD0]/10 border border-[#C2CAD0]/20 flex items-center justify-center text-text-secondary mb-4">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">Study Roadmap</h3>
+                <Tooltip content="An AI-powered week-by-week study plan tailored to your skill gaps and target date. It tells you exactly what to learn, in what order, with real free resources.">
+                  <Info className="w-3.5 h-3.5 text-text-muted cursor-help" />
+                </Tooltip>
+              </div>
+              <p className="text-xs text-text-secondary mt-2 leading-relaxed">
+                AI generates a personalised week-by-week learning plan with tasks, milestones, and free study resources to get you job-ready.
+              </p>
+              <p className="text-[10px] text-text-muted mt-2">🤖 Uses AI — takes 10–20 seconds.</p>
+            </div>
+            <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
+              {!targetDate && hasInputs && (
+                <p className="text-[9px] font-mono text-warning font-semibold block mb-2">
+                  ⚠️ Set a target date above first.
+                </p>
+              )}
+              <Button
+                onClick={runGenerateRoadmap}
+                disabled={!hasInputs || !targetDate || roadmapLoading}
+                className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
+              >
+                {roadmapLoading ? "Generating Plan..." : "Generate Study Plan"}
+              </Button>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       {/* --- PROGRESSIVE RESULTS SECTION --- */}
@@ -754,7 +969,7 @@ export default function CareerAnalyserPage() {
           {/* Section Indicator */}
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-accent-primary animate-pulse" />
-            <h2 className="text-lg font-bold tracking-tight text-text-primary">Progressive Career Profile Results</h2>
+            <h2 className="text-lg font-bold tracking-tight text-text-primary">Your Results</h2>
           </div>
 
           {/* Skeletons/Loaders display during triggers */}
@@ -837,8 +1052,8 @@ export default function CareerAnalyserPage() {
           {atsResult && (
             <Card className="premium-card">
               <CardHeader
-                title="ATS Compatibility Scorecard"
-                description={`Structural scorecard. Checked word densities and parsed layout weights. Total Word Count: ${atsResult.wordCount} words.`}
+                title="ATS Score Breakdown"
+                description={`Your resume was scanned across 5 factors that recruiters' software checks. Total word count: ${atsResult.wordCount} words. Higher scores = more likely to pass automated filters.`}
                 className="border-b border-[var(--border-muted)] pb-3 px-6 pt-5"
               />
               <CardBody className="py-5 px-6 space-y-6">
@@ -894,6 +1109,12 @@ export default function CareerAnalyserPage() {
 
           {/* --- Job Match Details Section --- */}
           {jobMatchResult && (
+            <>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-text-muted leading-relaxed">
+                <span className="font-semibold text-text-primary">Skill Gap Results:</span> Green = skills you already have ✅. Orange = skills the job wants but you&apos;re missing ⚠️. Blue = extra skills on your resume not mentioned in the job.
+              </p>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               
               {/* Matched Signals */}
@@ -901,7 +1122,7 @@ export default function CareerAnalyserPage() {
                 <CardBody className="py-5 px-6 flex flex-col justify-between h-full">
                   <p className="text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 font-bold text-accent-green">
                     <Check className="w-4 h-4 text-accent-green shrink-0" />
-                    <span>Matched Signals ({jobMatchResult.matched.length})</span>
+                    <span>Skills You Have ({jobMatchResult.matched.length})</span>
                   </p>
                   <div className="flex flex-wrap gap-1.5 mt-4 flex-1 items-start content-start">
                     {jobMatchResult.matched.length === 0 ? (
@@ -925,7 +1146,7 @@ export default function CareerAnalyserPage() {
                 <CardBody className="py-5 px-6 flex flex-col justify-between h-full">
                   <p className="text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 font-bold text-accent-primary">
                     <AlertTriangle className="w-4 h-4 text-accent-primary shrink-0" />
-                    <span>Requirement Gaps ({jobMatchResult.missing.length})</span>
+                    <span>Missing Skills ({jobMatchResult.missing.length})</span>
                   </p>
                   <div className="flex flex-wrap gap-1.5 mt-4 flex-1 items-start content-start">
                     {jobMatchResult.missing.length === 0 ? (
@@ -949,7 +1170,7 @@ export default function CareerAnalyserPage() {
                 <CardBody className="py-5 px-6 flex flex-col justify-between h-full">
                   <p className="text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 font-bold text-text-secondary">
                     <Info className="w-4 h-4 text-text-muted shrink-0" />
-                    <span>Resume Signals ({jobMatchResult.supplementary.length})</span>
+                    <span>Bonus Skills ({jobMatchResult.supplementary.length})</span>
                   </p>
                   <div className="flex flex-wrap gap-1.5 mt-4 flex-1 items-start content-start">
                     {jobMatchResult.supplementary.length === 0 ? (
@@ -1008,6 +1229,7 @@ export default function CareerAnalyserPage() {
               )}
 
             </div>
+            </>
           )}
 
           {/* --- Learning Roadmap Section --- */}
@@ -1227,9 +1449,10 @@ export default function CareerAnalyserPage() {
 
       {/* --- CONTEXTUAL NEXT STEP CTAS --- */}
       <div className="border-t border-[var(--border-strong)] pt-8">
-        <span className="eyebrow block text-[10px] tracking-widest text-text-muted font-mono uppercase mb-4">
-          Next study steps
+        <span className="eyebrow block text-[10px] tracking-widest text-text-muted font-mono uppercase mb-1">
+          More Tools
         </span>
+        <p className="text-xs text-text-muted mb-4">Other tools that work alongside your analysis results.</p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1: Resume Builder (shown if ATS score is low or absent) */}

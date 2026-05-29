@@ -90,7 +90,7 @@ export async function signUpAction(formData: z.infer<typeof signUpSchema>): Prom
 
     // 2. Rate Limiting (10 signups / hour / IP)
     const ip = await getClientIp();
-    const signupLimit = rateLimit(`signup:${ip}`, 10, 60 * 60 * 1000);
+    const signupLimit = await rateLimit(`signup:${ip}`, 10, 60 * 60 * 1000);
     if (!signupLimit.success) {
       return {
         success: false,
@@ -145,12 +145,12 @@ export async function signInAction(formData: z.infer<typeof signInSchema>): Prom
     // 2. Rate Limiting
     const ip = await getClientIp();
     // Max 10 attempts / minute / IP
-    const ipLimit = rateLimit(`signin:ip:${ip}`, 10, 60 * 1000);
+    const ipLimit = await rateLimit(`signin:ip:${ip}`, 10, 60 * 1000);
     if (!ipLimit.success) {
       return { success: false, error: "Too many login attempts. Please wait a minute." };
     }
     // Max 5 attempts / 5 minutes / Email
-    const emailLimit = rateLimit(`signin:email:${email}`, 5, 5 * 60 * 1000);
+    const emailLimit = await rateLimit(`signin:email:${email}`, 5, 5 * 60 * 1000);
     if (!emailLimit.success) {
       return {
         success: false,
@@ -197,7 +197,7 @@ export async function verifyEmailOtpAction(
 
     // 2. Rate Limiting (5 verification attempts / 5 minutes / email+IP)
     const ip = await getClientIp();
-    const verifyLimit = rateLimit(`verify:${email}:${ip}`, 5, 5 * 60 * 1000);
+    const verifyLimit = await rateLimit(`verify:${email}:${ip}`, 5, 5 * 60 * 1000);
     if (!verifyLimit.success) {
       return {
         success: false,
@@ -240,7 +240,7 @@ export async function resendOtpAction(formData: z.infer<typeof resendOtpSchema>)
 
     // 2. Rate Limiting (3 resends / 10 minutes / email+IP)
     const ip = await getClientIp();
-    const resendLimit = rateLimit(`resend:${email}:${ip}`, 3, 10 * 60 * 1000);
+    const resendLimit = await rateLimit(`resend:${email}:${ip}`, 3, 10 * 60 * 1000);
     if (!resendLimit.success) {
       return {
         success: false,
@@ -292,7 +292,7 @@ export async function forgotPasswordAction(
 
     // 2. Rate Limiting (3 requests / hour / email+IP)
     const ip = await getClientIp();
-    const forgotLimit = rateLimit(`forgot:${email}:${ip}`, 3, 60 * 60 * 1000);
+    const forgotLimit = await rateLimit(`forgot:${email}:${ip}`, 3, 60 * 60 * 1000);
     if (!forgotLimit.success) {
       return {
         success: false,

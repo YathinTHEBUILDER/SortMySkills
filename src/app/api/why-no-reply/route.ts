@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { callGroqAIWithRepair } from "@/lib/ai/groq-router";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-// ── POST handler ─────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   // Rate-limit check: 3 requests per 15 minutes
   const ip = await getClientIp();
-  const limitResult = rateLimit(`why-no-reply:${ip}`, 3, 15 * 60 * 1000);
+  const limitResult = await rateLimit(`why-no-reply:${ip}`, 3, 15 * 60 * 1000);
 
   if (!limitResult.success) {
     const resetSeconds = Math.ceil((limitResult.resetTime - Date.now()) / 1000);
@@ -43,42 +44,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Groq API key check
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "GROQ_API_KEY not configured." },
-      { status: 500 }
-    );
-  }
-
-  // Call Groq API
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 25_000);
-
   try {
-    const groqRes = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        signal: controller.signal,
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          temperature: 0.7,
-          max_tokens: 2000,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a senior recruiter and hiring manager who has reviewed over 15000 resumes across tech companies in India and globally. You are direct, specific, and honest. You have seen every mistake students make. You know exactly why resumes get ignored. You do not give generic advice. You look at the specific resume against the specific job and tell the truth. You respond only in valid JSON with no markdown fences.",
-            },
-            {
-              role: "user",
-              content: `A college student applied for this job and got no reply. Diagnose exactly why.
+    const systemPrompt = "You are a senior recruiter and hiring manager who has reviewed over 15000 resumes across tech companies in India and globally. You are direct, specific, and honest. You have seen every mistake students make. You know exactly why resumes get ignored. You do not give generic advice. You look at the specific resume against the specific job and tell the truth. You respond only in valid JSON with no markdown fences.";
+    const userPrompt = `A college student applied for this job and got no reply. Diagnose exactly why.
 
 JOB DESCRIPTION:
 ---
@@ -112,50 +80,42 @@ Respond ONLY with valid JSON matching this exact schema:
     "theirAdvantage": "string — one genuine thing this resume has going for it, or honest statement if nothing"
   },
   "oneMoreThing": "string — one additional specific observation a recruiter would notice, one sentence only"
-}`,
-            },
-          ],
-        }),
-      }
-    );
+}`;
 
-    clearTimeout(timeout);
+    const aiResult = await callGroqAIWithRepair({
+      featureName: "why-no-reply",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.7,
+      maxTokens: 2000,
+      jsonMode: true,
+    });
 
-    if (!groqRes.ok) {
-      const errText = await groqRes.text().catch(() => "Unknown error");
-      console.error("[why-no-reply] Groq API error:", groqRes.status, errText);
+    if (!aiResult.success) {
       return NextResponse.json(
-        { error: "Diagnosis service returned an error. Try again." },
+        { error: aiResult.error || "Failed to generate diagnosis. Please try again." },
         { status: 500 }
       );
     }
 
-    const data = await groqRes.json();
-    let rawContent: string = data?.choices?.[0]?.message?.content ?? "";
+    const parsed = aiResult.data as Record<string, unknown>;
 
-    // Strip markdown code fences if present
-    rawContent = rawContent.replace(/```(?:json)?\s*/gi, "").replace(/```/g, "").trim();
-
-    let parsed;
-    try {
-      parsed = JSON.parse(rawContent);
-    } catch {
-      console.error("[why-no-reply] JSON parse failed. Raw:", rawContent);
-      return NextResponse.json(
-        { error: "Failed to parse response. Try again." },
-        { status: 500 }
-      );
+    // Supabase Persistence (Step 8)
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from("ai_generations").insert({
+        user_id: user.id,
+        feature_name: "why-no-reply",
+        prompt_inputs: { jobDescription, resumeText },
+        generated_output: parsed,
+      });
     }
 
     return NextResponse.json({ result: parsed });
   } catch (err: unknown) {
-    clearTimeout(timeout);
-    if (err instanceof DOMException && err.name === "AbortError") {
-      return NextResponse.json(
-        { error: "Request timed out. The AI took too long to respond." },
-        { status: 504 }
-      );
-    }
     console.error("[why-no-reply] Unexpected error:", err);
     return NextResponse.json(
       { error: "Something went wrong. Try again." },
@@ -163,3 +123,4 @@ Respond ONLY with valid JSON matching this exact schema:
     );
   }
 }
+
