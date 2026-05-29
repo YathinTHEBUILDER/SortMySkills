@@ -197,13 +197,13 @@ export default function CareerRoadmapPage() {
   const getTaskIcon = (type: string) => {
     switch (type) {
       case "learn":
-        return <BookOpen className="w-4 h-4 text-accent-cyan" />;
+        return <BookOpen className="w-4 h-4 text-accent-secondary" />;
       case "build":
-        return <Code className="w-4 h-4 text-green-500" />;
+        return <Code className="w-4 h-4 text-success" />;
       case "apply":
-        return <Briefcase className="w-4 h-4 text-blue-500" />;
+        return <Briefcase className="w-4 h-4 text-accent-primary" />;
       case "fix":
-        return <Wrench className="w-4 h-4 text-amber-500" />;
+        return <Wrench className="w-4 h-4 text-warning" />;
       default:
         return <Wrench className="w-4 h-4 text-text-muted" />;
     }
@@ -220,12 +220,12 @@ export default function CareerRoadmapPage() {
 
       {/* ── Error Box with debugging ── */}
       {error && pageState === "input" && (
-        <Card className="mb-6 border-red-500/30 bg-red-500/[0.04]">
+        <Card className="mb-6 border-danger/30 bg-danger/[0.04]">
           <CardBody className="pt-6 space-y-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-red-600 dark:text-red-400">{error}</p>
+                <p className="text-sm font-medium text-danger">{error}</p>
                 {debugRaw && (
                   <details className="mt-2 text-xs text-text-secondary cursor-pointer">
                     <summary className="font-semibold select-none hover:text-text-primary">View debug log details</summary>
@@ -261,7 +261,7 @@ export default function CareerRoadmapPage() {
                   value={resume}
                   onChange={(e) => setResume(e.target.value)}
                   placeholder="Paste your complete resume as plain text here."
-                  className="w-full min-h-[200px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all"
+                  className="w-full min-h-[200px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all"
                 />
               </div>
 
@@ -274,7 +274,7 @@ export default function CareerRoadmapPage() {
                   value={jd}
                   onChange={(e) => setJd(e.target.value)}
                   placeholder="Paste the target job description here."
-                  className="w-full min-h-[200px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all"
+                  className="w-full min-h-[200px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all"
                 />
               </div>
             </div>
@@ -291,7 +291,7 @@ export default function CareerRoadmapPage() {
                     min={todayStr}
                     value={targetDate}
                     onChange={(e) => setTargetDate(e.target.value)}
-                    className="w-full rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-3 pl-10 text-sm font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all cursor-pointer"
+                    className="w-full rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-3 pl-10 text-sm font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all cursor-pointer"
                   />
                   <Calendar className="w-4 h-4 text-text-muted absolute left-3 top-3.5 pointer-events-none" />
                 </div>
@@ -313,7 +313,7 @@ export default function CareerRoadmapPage() {
                   value={focus}
                   onChange={(e) => setFocus(e.target.value)}
                   placeholder="e.g. Focus on portfolio projects, system design, etc."
-                  className="w-full rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all"
+                  className="w-full rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all"
                 />
               </div>
             </div>
@@ -385,7 +385,7 @@ export default function CareerRoadmapPage() {
             >
               {copied ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-green-500" />
+                  <Check className="w-3.5 h-3.5 text-success" />
                   <span>Copied ✓</span>
                 </>
               ) : (
@@ -398,9 +398,9 @@ export default function CareerRoadmapPage() {
           </div>
 
           {/* Recruiter Assessment / Why No Reply Diagnosis (Amber Warning styling) */}
-          <Card className="border-amber-500/40 bg-amber-500/[0.03]">
+          <Card className="border-warning/40 bg-warning/[0.03]">
             <CardBody className="pt-6 space-y-4">
-              <span className="block text-[10px] font-mono uppercase tracking-widest text-amber-600 dark:text-amber-400 font-semibold">
+              <span className="block text-[10px] font-mono uppercase tracking-widest text-warning font-semibold">
                 Why you got no reply - Recruiter Assessment
               </span>
               <p className="text-[15px] font-medium text-text-primary leading-[1.6]">
@@ -408,7 +408,7 @@ export default function CareerRoadmapPage() {
               </p>
 
               {/* Gap Badges */}
-              <div className="space-y-2 pt-2 border-t border-amber-500/10">
+              <div className="space-y-2 pt-2 border-t border-warning/10">
                 <span className="block text-[9px] font-mono uppercase tracking-widest text-text-muted">
                   Detected Competency Gaps:
                 </span>
@@ -416,10 +416,10 @@ export default function CareerRoadmapPage() {
                   {result.why_no_reply.top_gaps.map((g, idx) => {
                     const badgeColor = 
                       g.severity === "critical" 
-                        ? "border-red-500/30 text-red-500 bg-red-500/[0.02]" 
+                        ? "border-danger/30 text-danger bg-danger/[0.02]" 
                         : g.severity === "moderate"
-                          ? "border-amber-500/30 text-amber-500 bg-amber-500/[0.02]"
-                          : "border-gray-500/30 text-text-secondary bg-transparent";
+                          ? "border-warning/30 text-warning bg-warning/[0.02]"
+                          : "border-[var(--border-muted)] text-text-secondary bg-transparent";
                     return (
                       <div key={idx} className="flex flex-col sm:flex-row sm:items-start gap-2 text-xs">
                         <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider border shrink-0 ${badgeColor}`}>
@@ -514,12 +514,12 @@ export default function CareerRoadmapPage() {
                         <div 
                           onClick={() => toggleMilestone(milestoneId)}
                           className={`mt-4 pt-3 border-t border-[var(--border-muted)] flex items-center gap-2.5 cursor-pointer select-none transition-colors ${
-                            isMilestoneChecked ? "text-green-500" : "text-text-secondary hover:text-text-primary"
+                            isMilestoneChecked ? "text-success" : "text-text-secondary hover:text-text-primary"
                           }`}
                         >
                           <div className="shrink-0">
                             {isMilestoneChecked ? (
-                              <CheckSquare className="w-4 h-4 text-green-500" />
+                              <CheckSquare className="w-4 h-4 text-success" />
                             ) : (
                               <Square className="w-4 h-4 text-text-muted" />
                             )}
@@ -553,9 +553,9 @@ export default function CareerRoadmapPage() {
           </Card>
 
           {/* Honest Recruiter Warning callout */}
-          <Card className="border-red-500/20 bg-red-500/[0.02]">
+          <Card className="border-danger/20 bg-danger/[0.02]">
             <CardBody className="pt-6 space-y-2.5">
-              <span className="block text-[10px] font-mono uppercase tracking-widest text-red-500 font-semibold">
+              <span className="block text-[10px] font-mono uppercase tracking-widest text-danger font-semibold">
                 ⚠️ Don&apos;t skip this
               </span>
               <p className="text-xs text-text-secondary leading-relaxed font-mono">

@@ -260,25 +260,25 @@ export default function ATSScorerPage() {
     const score = analysis.finalScore;
     if (score >= 75) {
       return {
-        colorClass: "text-green-500",
-        strokeClass: "stroke-green-500",
-        bgClass: "bg-green-500/[0.04]",
-        borderClass: "border-green-500/20"
+        colorClass: "text-success",
+        strokeClass: "stroke-success",
+        bgClass: "bg-success/[0.04]",
+        borderClass: "border-success/20"
       };
     }
     if (score >= 50) {
       return {
-        colorClass: "text-amber-500",
-        strokeClass: "stroke-amber-500",
-        bgClass: "bg-amber-500/[0.04]",
-        borderClass: "border-amber-500/20"
+        colorClass: "text-warning",
+        strokeClass: "stroke-warning",
+        bgClass: "bg-warning/[0.04]",
+        borderClass: "border-warning/20"
       };
     }
     return {
-      colorClass: "text-red-500",
-      strokeClass: "stroke-red-500",
-      bgClass: "bg-red-500/[0.04]",
-      borderClass: "border-red-500/20"
+      colorClass: "text-danger",
+      strokeClass: "stroke-danger",
+      bgClass: "bg-danger/[0.04]",
+      borderClass: "border-danger/20"
     };
   }, [analysis]);
 
@@ -317,7 +317,7 @@ export default function ATSScorerPage() {
                   value={resume}
                   onChange={(e) => setResume(e.target.value)}
                   placeholder="Paste your complete resume as plain text here."
-                  className="w-full min-h-[220px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all"
+                  className="w-full min-h-[220px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all"
                 />
               </div>
 
@@ -330,7 +330,7 @@ export default function ATSScorerPage() {
                   value={jd}
                   onChange={(e) => setJd(e.target.value)}
                   placeholder="Paste the target job description here."
-                  className="w-full min-h-[220px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-green/30 focus:border-accent-green/50 transition-all"
+                  className="w-full min-h-[220px] rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)] p-4 text-sm font-mono text-text-primary placeholder:text-text-muted resize-y focus:outline-none focus:ring-2 focus:ring-accent-primary/30 focus:border-accent-primary/50 transition-all"
                 />
               </div>
             </div>
@@ -461,10 +461,10 @@ export default function ATSScorerPage() {
                         <div
                           className={`h-full rounded-full transition-all duration-700 ${
                             sub.score >= 75 
-                              ? "bg-green-500" 
+                              ? "bg-success" 
                               : sub.score >= 50 
-                                ? "bg-amber-500" 
-                                : "bg-red-500"
+                                ? "bg-warning" 
+                                : "bg-danger"
                           }`}
                           style={{ width: `${sub.score}%` }}
                         />
@@ -485,7 +485,7 @@ export default function ATSScorerPage() {
               <Card>
                 <CardBody className="pt-6 space-y-4">
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-500" />
+                    <AlertTriangle className="w-4 h-4 text-danger" />
                     <span className="text-[10px] font-mono uppercase tracking-widest text-text-muted">
                       What hurt your score
                     </span>
@@ -494,7 +494,7 @@ export default function ATSScorerPage() {
                   <div className="space-y-2.5 pt-1">
                     {analysis.allHurtPoints.length > 0 ? (
                       analysis.allHurtPoints.map((point, index) => (
-                        <div key={index} className="text-xs text-text-secondary leading-relaxed pl-3 border-l border-red-500/30">
+                        <div key={index} className="text-xs text-text-secondary leading-relaxed pl-3 border-l border-danger/30">
                           {point}
                         </div>
                       ))
