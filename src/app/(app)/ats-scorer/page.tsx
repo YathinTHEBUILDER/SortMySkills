@@ -56,6 +56,7 @@ export default function ATSScorerPage() {
   const { resume, setResume, jd, setJd } = useResume();
   const [hasScored, setHasScored] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   // Load sample data
   const handleLoadSample = () => {
@@ -66,6 +67,7 @@ export default function ATSScorerPage() {
 
   // Run ATS scan
   const handleRunScan = () => {
+    setAnalysisError(null);
     setLoading(true);
     // Simulate short scanning time for visual satisfaction
     setTimeout(() => {
@@ -78,11 +80,13 @@ export default function ATSScorerPage() {
     setResume("");
     setJd("");
     setHasScored(false);
+    setAnalysisError(null);
   };
 
   // ── ATS SCORING LOGIC ──
   const analysis = useMemo(() => {
     if (!resume || !jd) return null;
+    try {
 
     // 1. Keyword match (35%)
     const resumeSkills = extractSkillsFromText(resume);
@@ -252,6 +256,13 @@ export default function ATSScorerPage() {
       matchedSkills,
       missingSkills
     };
+    } catch (err) {
+      console.error("[ATS Scorer] Analysis error:", err);
+      setAnalysisError(
+        err instanceof Error ? err.message : "An unexpected error occurred during analysis."
+      );
+      return null;
+    }
   }, [resume, jd]);
 
   // Circular score styling
@@ -363,6 +374,22 @@ export default function ATSScorerPage() {
                 )}
               </Button>
             </div>
+          </CardBody>
+        </Card>
+      ) : analysisError ? (
+        <Card className="border-danger/20 bg-danger/[0.04]">
+          <CardBody className="pt-6 space-y-4 flex flex-col items-center text-center">
+            <AlertTriangle className="w-10 h-10 text-danger" />
+            <div>
+              <p className="text-sm font-semibold text-text-primary">Analysis Failed</p>
+              <p className="text-xs text-text-secondary mt-1 max-w-sm mx-auto leading-relaxed font-mono">
+                {analysisError}
+              </p>
+            </div>
+            <Button variant="secondary" onClick={handleReset} className="flex items-center gap-2 mt-2">
+              <RefreshCw className="w-4 h-4" />
+              Try Again
+            </Button>
           </CardBody>
         </Card>
       ) : (
