@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { useResume } from "@/context/ResumeContext";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -45,8 +46,7 @@ function SkillTag({ skill }: { skill: DetectedSkill }) {
 }
 
 export default function JobMatchPage() {
-  const [resume, setResume] = useState("");
-  const [jd, setJd] = useState("");
+  const { resume, setResume, jd, setJd } = useResume();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Analysis | null>(null);
 
@@ -117,6 +117,13 @@ export default function JobMatchPage() {
 
       {!result ? (
         <form onSubmit={runAnalysis} className="grid lg:grid-cols-2 gap-6">
+          {resume.trim() && jd.trim() && (
+            <div className="lg:col-span-2 flex justify-start animate-fade-in">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--success)]/20 bg-[var(--success)]/10 text-[var(--success)] text-xs font-mono">
+                <span>✓ Resume & JD carried over</span>
+              </div>
+            </div>
+          )}
           <Card className="premium-card">
             <CardHeader title="Your Resume" description="Paste plain text from your resume." className="border-b border-[var(--border-muted)] pb-3" />
             <CardBody className="pt-5 px-6">
