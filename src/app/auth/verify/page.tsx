@@ -22,11 +22,12 @@ function VerifyContent() {
 
   if (!email) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-[var(--background)]">
-        <Card className="w-full max-w-md text-center py-8">
+      <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-[var(--background)] warm-noise-bg relative">
+        <div className="warm-glow-effect top-[10%] left-[20%] opacity-80" />
+        <Card className="w-full max-w-md premium-card text-center py-8 relative z-10 overflow-hidden">
           <CardBody>
-            <p className="text-text-primary font-medium mb-4">Missing email parameter.</p>
-            <Link href="/login" className="text-accent-green hover:underline text-sm font-medium">
+            <p className="text-text-primary font-semibold mb-4 text-sm font-mono uppercase tracking-wider">Missing email parameter.</p>
+            <Link href="/login" className="text-xs font-mono uppercase tracking-widest text-accent-primary hover:underline font-bold">
               Return to Login
             </Link>
           </CardBody>
@@ -36,18 +37,22 @@ function VerifyContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-[var(--background)]">
-      <Link href="/" className="flex items-center gap-2 mb-10">
-        <Logo className="w-8 h-8" />
-        <span className="font-semibold text-text-primary">SortMySkills</span>
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-[var(--background)] warm-noise-bg relative">
+      <div className="warm-glow-effect top-[10%] left-[20%] opacity-80" />
+
+      <Link href="/" className="flex items-center gap-2 mb-8 relative z-10 group">
+        <Logo className="w-8 h-8 group-hover:rotate-6 transition-transform duration-300" />
+        <span className="font-semibold text-text-primary text-base tracking-tight font-serif italic">SortMySkills</span>
       </Link>
 
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md premium-card shadow-lg relative z-10 overflow-hidden animated-border">
+        <div className="absolute inset-0 dot-grid-overlay opacity-20 pointer-events-none" />
         <CardHeader
-          title="Verify your email"
+          title="Verify Email"
           description={`We sent a 6-digit verification code to ${email}`}
+          className="relative z-10 text-center pb-2"
         />
-        <CardBody className="pt-0">
+        <CardBody className="pt-0 relative z-10">
           <OtpForm email={email} type={type} />
         </CardBody>
       </Card>
@@ -59,8 +64,8 @@ export default function VerifyPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)]">
-          <p className="text-sm text-text-secondary">Loading...</p>
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)] warm-noise-bg">
+          <p className="text-xs font-mono uppercase tracking-widest text-text-muted animate-pulse">Initializing Security...</p>
         </div>
       }
     >

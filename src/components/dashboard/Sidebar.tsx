@@ -26,14 +26,14 @@ export default function Sidebar({
       key={href}
       href={href}
       onClick={onClose}
-      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+      className={`flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-xs font-mono uppercase tracking-wider border transition-all duration-200 ${
         isActive(href)
-          ? "bg-accent-green/10 text-accent-green font-medium"
-          : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+          ? "bg-[var(--surface-soft)] border-[var(--border-muted)] text-accent-primary font-bold shadow-xs"
+          : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover/85"
       }`}
     >
       <Icon className="w-4 h-4 shrink-0" />
-      {label}
+      <span>{label}</span>
     </Link>
   );
 
@@ -43,44 +43,50 @@ export default function Sidebar({
         <button
           type="button"
           aria-label="Close menu"
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden backdrop-blur-xs"
           onClick={onClose}
         />
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-[260px] flex flex-col border-r border-[var(--border-muted)] bg-[var(--surface-card)] transition-transform duration-200 lg:translate-x-0 lg:static lg:z-auto ${
+        className={`fixed top-0 left-0 z-50 h-full w-[260px] flex flex-col border-r border-[var(--border-muted)] bg-surface-card transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
+        {/* Header Logo Area */}
         <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--border-muted)]">
           <Link href="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
             <Logo className="w-7 h-7" />
-            <span className="font-semibold text-sm text-text-primary tracking-tight">
+            <span className="font-semibold text-sm text-text-primary tracking-tight font-serif italic">
               SortMySkills
             </span>
           </Link>
           <button
             type="button"
-            className="lg:hidden p-1 text-text-secondary hover:text-text-primary"
+            className="lg:hidden p-1 text-text-secondary hover:text-text-primary border border-[var(--border-muted)] rounded-md transition-colors"
             onClick={onClose}
             aria-label="Close sidebar"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-          <p className="px-3 pb-2 text-[11px] font-medium uppercase tracking-wider text-text-secondary/80">
+        {/* Navigation list */}
+        <nav className="flex-1 overflow-y-auto p-4 space-y-1.5">
+          <p className="px-3 pb-2 text-[10px] font-mono text-text-muted uppercase tracking-widest">
             Workspace
           </p>
           {mainNav.map(({ href, label, icon }) => navLink(href, label, icon))}
         </nav>
 
-        <div className="p-4 border-t border-[var(--border-muted)]">
-          <p className="text-xs text-text-secondary leading-relaxed">
-            Career intelligence — skills, gaps, and interview prep in one place.
-          </p>
+        {/* Sidebar Footer details */}
+        <div className="p-5 border-t border-[var(--border-muted)] bg-[var(--surface-soft)]/20">
+          <div className="rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-3.5">
+            <span className="eyebrow block text-[8px] tracking-widest text-accent-primary">SortMySkills SaaS</span>
+            <p className="text-[11px] text-text-secondary leading-relaxed mt-2">
+              Auditing technical readiness and mapping placement gaps locally.
+            </p>
+          </div>
         </div>
       </aside>
     </>

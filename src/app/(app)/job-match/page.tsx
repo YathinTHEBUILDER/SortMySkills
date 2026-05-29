@@ -6,7 +6,7 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { parseSkills, type DetectedSkill, type ProficiencyLevel } from "@/lib/skill-map";
 import { COURSERA_COURSES } from "@/data/coursera-courses";
-import { CheckCircle2, AlertTriangle, RotateCcw } from "lucide-react";
+import { CheckCircle2, AlertTriangle, RotateCcw, ArrowRight, HelpCircle } from "lucide-react";
 
 const SAMPLE_RESUME = `Frontend engineer with JavaScript, React, HTML, CSS. Version control with Git.`;
 
@@ -22,13 +22,13 @@ type Analysis = {
 function ProficiencyBadge({ level }: { level: ProficiencyLevel }) {
   if (level === "unspecified") return null;
   const styles = {
-    beginner: "bg-blue-500/15 text-blue-400 border-blue-500/30",
-    moderate: "bg-amber-500/15 text-amber-400 border-amber-500/30",
-    expert: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+    beginner: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    moderate: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    expert: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   };
   return (
     <span
-      className={`text-[9px] uppercase tracking-wide px-1 py-0.5 rounded border ml-1 ${styles[level]}`}
+      className={`text-[8px] font-mono uppercase tracking-wider px-1 py-0.5 rounded border ml-1.5 ${styles[level]}`}
     >
       {level}
     </span>
@@ -37,7 +37,7 @@ function ProficiencyBadge({ level }: { level: ProficiencyLevel }) {
 
 function SkillTag({ skill }: { skill: DetectedSkill }) {
   return (
-    <span className="inline-flex items-center text-xs px-2 py-1 rounded-md bg-[var(--background)] border border-[var(--border-muted)]">
+    <span className="inline-flex items-center text-xs px-2.5 py-1 rounded border border-[var(--border-muted)] bg-[var(--surface-soft)]/50 font-mono text-[10px] text-text-secondary uppercase">
       {skill.canonical}
       <ProficiencyBadge level={skill.level} />
     </span>
@@ -83,26 +83,32 @@ export default function JobMatchPage() {
     : [];
 
   return (
-    <>
+    <div className="space-y-8 animate-fade-in relative z-10">
       <PageHeader
-        title="Job match"
+        title="Job Match"
         description="Compare your resume to a job description. We extract skills from both and highlight gaps."
         action={
           <div className="flex gap-2">
             <Button
               variant="secondary"
               type="button"
+              className="text-xs font-mono uppercase tracking-widest px-3 border-[var(--border-muted)] hover:bg-surface-hover/80 cursor-pointer"
               onClick={() => {
                 setResume(SAMPLE_RESUME);
                 setJd(SAMPLE_JD);
                 setResult(null);
               }}
             >
-              Load sample
+              Load Sample
             </Button>
             {result && (
-              <Button variant="ghost" type="button" onClick={() => setResult(null)}>
-                <RotateCcw className="w-4 h-4" /> Reset
+              <Button 
+                variant="ghost" 
+                type="button" 
+                className="text-xs font-mono uppercase tracking-widest px-3 hover:bg-surface-hover/80 text-text-secondary cursor-pointer"
+                onClick={() => setResult(null)}
+              >
+                <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset
               </Button>
             )}
           </div>
@@ -111,73 +117,84 @@ export default function JobMatchPage() {
 
       {!result ? (
         <form onSubmit={runAnalysis} className="grid lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader title="Resume" description="Paste plain text from your resume." />
-            <CardBody className="pt-0">
+          <Card className="premium-card">
+            <CardHeader title="Your Resume" description="Paste plain text from your resume." className="border-b border-[var(--border-muted)] pb-3" />
+            <CardBody className="pt-5 px-6">
               <textarea
                 value={resume}
                 onChange={(e) => setResume(e.target.value)}
                 required
-                className="w-full h-56 rounded-lg border border-[var(--border-muted)] bg-[var(--background)] px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent-green/30"
-                placeholder="Your experience and skills…"
+                className="w-full h-56 rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)]/50 px-4 py-3 text-sm text-text-primary resize-none focus:border-accent-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 transition-all duration-200"
+                placeholder="Paste experience and baseline capabilities here..."
               />
             </CardBody>
           </Card>
-          <Card>
-            <CardHeader title="Job description" description="Paste requirements from the posting." />
-            <CardBody className="pt-0 flex flex-col h-full">
+          <Card className="premium-card">
+            <CardHeader title="Job Description" description="Paste requirements from the posting." className="border-b border-[var(--border-muted)] pb-3" />
+            <CardBody className="pt-5 px-6 flex flex-col h-full justify-between">
               <textarea
                 value={jd}
                 onChange={(e) => setJd(e.target.value)}
                 required
-                className="w-full h-56 rounded-lg border border-[var(--border-muted)] bg-[var(--background)] px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent-green/30"
-                placeholder="Required skills and qualifications…"
+                className="w-full h-56 rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)]/50 px-4 py-3 text-sm text-text-primary resize-none focus:border-accent-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 transition-all duration-200"
+                placeholder="Paste required skills and qualifications here..."
               />
-              <Button type="submit" className="mt-4 w-full" disabled={loading}>
-                {loading ? "Analyzing…" : "Analyze match"}
+              <Button type="submit" className="mt-4 w-full h-11 font-mono uppercase tracking-widest text-[#F6F1E8] bg-accent-primary cursor-pointer" disabled={loading}>
+                {loading ? "Analyzing Matrix…" : "Analyze Match Matrix"}
               </Button>
             </CardBody>
           </Card>
         </form>
       ) : (
         <div className="space-y-6">
+          {/* Analysis Metrics */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="col-span-2 lg:col-span-1">
-              <CardBody className="py-6 text-center">
-                <p className="text-4xl font-semibold text-text-primary">{result.score}%</p>
-                <p className="text-sm text-text-secondary mt-1">Match score</p>
+            <Card className="col-span-2 lg:col-span-1 premium-card relative overflow-hidden animated-border">
+              <div className="absolute inset-0 dot-grid-overlay opacity-20 pointer-events-none" />
+              <CardBody className="py-6 px-6 text-center flex flex-col justify-center h-full relative z-10">
+                <span className="block font-mono text-[9px] text-text-muted uppercase tracking-wider">Evaluation Score</span>
+                <p className="text-4xl font-bold text-accent-primary mt-1 tracking-tight">{result.score}%</p>
+                <div className="w-full bg-[var(--surface-muted)] h-1 rounded-full mt-3 overflow-hidden max-w-[120px] mx-auto">
+                  <div className="bg-accent-primary h-full" style={{ width: `${result.score}%` }} />
+                </div>
               </CardBody>
             </Card>
+            
             <SkillColumn title="Aligned" skills={result.matched} variant="ok" />
-            <SkillColumn title="Missing" skills={result.missing} variant="gap" />
-            <SkillColumn title="Extra on resume" skills={result.supplementary} variant="muted" />
+            <SkillColumn title="Missing Gaps" skills={result.missing} variant="gap" />
+            <SkillColumn title="Supplementary" skills={result.supplementary} variant="muted" />
           </div>
 
+          {/* Recommended Course Bridges */}
           {result.missing.length > 0 && (
-            <Card>
-              <CardHeader title="Recommended courses" description="Coursera paths that cover your gaps." />
-              <CardBody className="pt-0 space-y-3">
+            <Card className="premium-card">
+              <CardHeader title="Recommended Course Bridges" description="Coursera pathways targeted directly at closing your identified gaps." className="border-b border-[var(--border-muted)] pb-3" />
+              <CardBody className="pt-5 px-6 space-y-3">
                 {bridges.length === 0 ? (
-                  <p className="text-sm text-text-secondary">No curated course mapped to these tags yet.</p>
+                  <div className="text-center py-6 text-text-secondary">
+                    <HelpCircle className="w-5 h-5 text-text-muted mx-auto mb-2" />
+                    <p className="text-xs font-mono">No direct course bridges found for these specific tags.</p>
+                  </div>
                 ) : (
                   bridges.map((course) => (
                     <div
                       key={course.title}
-                      className="flex flex-col sm:flex-row sm:justify-between gap-2 rounded-lg border border-[var(--border-muted)] p-4"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-xl border border-[var(--border-muted)] p-4 hover:border-accent-primary/30 transition-colors"
                     >
                       <div>
-                        <p className="font-medium text-text-primary">{course.title}</p>
-                        <p className="text-sm text-text-secondary">
-                          {course.duration} · {course.provider}
+                        <p className="font-semibold text-text-primary text-xs font-mono uppercase tracking-wider">{course.title}</p>
+                        <p className="text-[11px] text-text-secondary mt-1.5">
+                          Duration: {course.duration} · Provider: {course.provider}
                         </p>
                       </div>
                       <a
                         href={`https://www.coursera.org/search?query=${encodeURIComponent(course.title)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-accent-green hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-widest text-accent-primary hover:underline shrink-0"
                       >
-                        Search Coursera
+                        <span>Study Course</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </a>
                     </div>
                   ))
@@ -186,12 +203,12 @@ export default function JobMatchPage() {
             </Card>
           )}
 
-          <Button variant="secondary" onClick={() => setResult(null)}>
-            Analyze another job
+          <Button variant="secondary" className="font-mono uppercase tracking-widest text-xs border-[var(--border-muted)] hover:bg-surface-hover/80 cursor-pointer" onClick={() => setResult(null)}>
+            Analyze Another Job
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
@@ -206,21 +223,21 @@ function SkillColumn({
 }) {
   const colors = {
     ok: "text-accent-green",
-    gap: "text-accent-cyan",
+    gap: "text-accent-primary",
     muted: "text-text-secondary",
   };
 
   return (
-    <Card>
-      <CardBody className="py-5">
-        <p className={`text-sm font-medium flex items-center gap-1.5 ${colors[variant]}`}>
-          {variant === "ok" && <CheckCircle2 className="w-4 h-4" />}
-          {variant === "gap" && <AlertTriangle className="w-4 h-4" />}
-          {title} ({skills.length})
+    <Card className="premium-card">
+      <CardBody className="py-5 px-6 flex flex-col justify-between h-full">
+        <p className={`text-xs font-mono uppercase tracking-wider flex items-center gap-1.5 font-bold ${colors[variant]}`}>
+          {variant === "ok" && <CheckCircle2 className="w-4 h-4 text-accent-green shrink-0" />}
+          {variant === "gap" && <AlertTriangle className="w-4 h-4 text-accent-primary shrink-0" />}
+          <span>{title} ({skills.length})</span>
         </p>
-        <div className="flex flex-wrap gap-1.5 mt-3">
+        <div className="flex flex-wrap gap-1.5 mt-4">
           {skills.length === 0 ? (
-            <span className="text-xs text-text-secondary">None</span>
+            <span className="text-xs text-text-muted font-mono uppercase">None</span>
           ) : (
             skills.map((s) => <SkillTag key={s.canonical} skill={s} />)
           )}
