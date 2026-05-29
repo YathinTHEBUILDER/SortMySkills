@@ -2,27 +2,45 @@ import Link from "next/link";
 import React from "react";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-green/40 disabled:opacity-50 disabled:pointer-events-none";
+  "inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/40 disabled:opacity-50 disabled:pointer-events-none";
 
-const variants = {
-  primary: "bg-accent-green text-bg-dark hover:opacity-90 px-4 py-2.5",
-  secondary:
-    "border border-[var(--border-muted)] bg-transparent text-text-primary hover:bg-surface-hover px-4 py-2.5",
-  ghost: "text-text-secondary hover:text-text-primary hover:bg-surface-hover px-3 py-2",
-};
+const ghostStyle = "text-text-secondary hover:text-text-primary hover:bg-surface-hover px-3 py-2 text-xs font-mono uppercase tracking-widest";
 
-type Variant = keyof typeof variants;
+type Variant = "primary" | "secondary" | "ghost";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: Variant;
+}
 
 export function Button({
   variant = "primary",
   className = "",
   children,
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
+}: ButtonProps) {
+  if (variant === "ghost") {
+    return (
+      <button
+        className={`${base} ${ghostStyle} ${className}`}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+
+  const wrapperClass = variant === "primary" ? "torivo-btn-primary" : "torivo-btn-secondary";
+
   return (
-    <button className={`${base} ${variants[variant]} ${className}`} {...props}>
-      {children}
-    </button>
+    <div className={`torivo-btn-wrapper ${wrapperClass} ${className}`}>
+      <div className="torivo-btn-shadow" />
+      <button
+        className="torivo-btn-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/40 disabled:opacity-50 disabled:pointer-events-none"
+        {...props}
+      >
+        {children}
+      </button>
+    </div>
   );
 }
 
@@ -39,9 +57,31 @@ export function ButtonLink({
   onClick?: () => void;
   children: React.ReactNode;
 }) {
+  if (variant === "ghost") {
+    return (
+      <Link
+        href={href}
+        onClick={onClick}
+        className={`${base} ${ghostStyle} ${className}`}
+      >
+        {children}
+      </Link>
+    );
+  }
+
+  const wrapperClass = variant === "primary" ? "torivo-btn-primary" : "torivo-btn-secondary";
+
   return (
-    <Link href={href} onClick={onClick} className={`${base} ${variants[variant]} ${className}`}>
-      {children}
-    </Link>
+    <div className={`torivo-btn-wrapper ${wrapperClass} ${className}`}>
+      <div className="torivo-btn-shadow" />
+      <Link
+        href={href}
+        onClick={onClick}
+        className="torivo-btn-content focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/40"
+      >
+        {children}
+      </Link>
+    </div>
   );
 }
+

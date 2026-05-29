@@ -26,13 +26,16 @@ export default function Sidebar({
       key={href}
       href={href}
       onClick={onClose}
-      className={`flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-xs font-mono uppercase tracking-wider border transition-all duration-200 ${
+      className={`flex items-center gap-3.5 px-5 py-4 text-[10px] font-mono uppercase tracking-wider border-b border-[var(--border-muted)] transition-all duration-150 relative ${
         isActive(href)
-          ? "bg-[var(--surface-soft)] border-[var(--border-muted)] text-accent-primary font-bold shadow-xs"
-          : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover/85"
+          ? "bg-surface-card-warm text-accent-primary font-bold"
+          : "text-text-secondary hover:text-text-primary hover:bg-surface-hover/60"
       }`}
     >
-      <Icon className="w-4 h-4 shrink-0" />
+      {isActive(href) && (
+        <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-accent-primary" />
+      )}
+      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive(href) ? "text-accent-primary" : "text-text-muted"}`} />
       <span>{label}</span>
     </Link>
   );
@@ -49,15 +52,15 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-[260px] flex flex-col border-r border-[var(--border-muted)] bg-surface-card transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto ${
+        className={`fixed top-0 left-0 z-50 h-full w-[260px] flex flex-col border-r border-[var(--border-strong)] bg-surface-card transition-transform duration-300 lg:translate-x-0 lg:static lg:z-auto ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header Logo Area */}
-        <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--border-muted)]">
+        <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--border-strong)]">
           <Link href="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
             <Logo className="w-7 h-7" />
-            <span className="font-semibold text-sm text-text-primary tracking-tight font-serif italic">
+            <span className="font-bold text-sm text-text-primary tracking-tight font-serif italic">
               SortMySkills
             </span>
           </Link>
@@ -72,19 +75,22 @@ export default function Sidebar({
         </div>
 
         {/* Navigation list */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1.5">
-          <p className="px-3 pb-2 text-[10px] font-mono text-text-muted uppercase tracking-widest">
-            Workspace
-          </p>
+        <nav className="flex-1 overflow-y-auto">
+          <div className="px-5 pt-5 pb-2.5 border-b border-[var(--border-muted)] bg-[var(--surface-soft)]/20">
+            <p className="text-[9px] font-mono text-text-muted uppercase tracking-widest">
+              Workspace Platform
+            </p>
+          </div>
           {mainNav.map(({ href, label, icon }) => navLink(href, label, icon))}
         </nav>
 
         {/* Sidebar Footer details */}
-        <div className="p-5 border-t border-[var(--border-muted)] bg-[var(--surface-soft)]/20">
-          <div className="rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-3.5">
-            <span className="eyebrow block text-[8px] tracking-widest text-accent-primary">SortMySkills SaaS</span>
-            <p className="text-[11px] text-text-secondary leading-relaxed mt-2">
-              Auditing technical readiness and mapping placement gaps locally.
+        <div className="p-4 border-t border-[var(--border-strong)] bg-[var(--surface-soft)]/20">
+          <div className="border border-[var(--border-strong)] bg-surface-card p-4 shadow-xs relative overflow-hidden rounded-xl">
+            <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
+            <span className="eyebrow block text-[8px] tracking-widest text-accent-primary">SortMySkills Core</span>
+            <p className="text-[9px] text-text-secondary leading-relaxed mt-2 font-mono uppercase tracking-tight">
+              Design Inspired by <span className="font-serif italic text-accent-primary lowercase font-semibold">torivo</span>
             </p>
           </div>
         </div>

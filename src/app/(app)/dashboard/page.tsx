@@ -1,6 +1,6 @@
 import Link from "next/link";
 import PageHeader from "@/components/dashboard/PageHeader";
-import { Card, CardBody, CardHeader } from "@/components/ui/Card";
+import { ButtonLink } from "@/components/ui/Button";
 import { getCurrentUser } from "@/lib/auth/get-user";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { ROLES_DATABASE } from "@/data/roles";
@@ -100,26 +100,31 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-10 animate-fade-in relative z-10">
-      {/* 1. Frosted Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-[var(--border-muted)]">
+      {/* 1. Technical Header Grid */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-[var(--border-strong)]">
         <PageHeader
-          title={`Welcome back, ${displayName}`}
+          title={
+            <>
+              Welcome back, <span className="font-serif italic font-normal text-accent-primary">{displayName}</span>
+            </>
+          }
           description="Your premium workspace for structured career intelligence."
         />
 
         {user && (
-          <div className="shrink-0 rounded-2xl border border-[var(--border-muted)] bg-surface-card p-3 shadow-xs flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-accent-primary/10 flex items-center justify-center text-accent-primary border border-accent-primary/20">
-              <User className="w-4 h-4" />
+          <div className="shrink-0 border border-[var(--border-strong)] bg-surface-card p-3 shadow-xs flex items-center gap-3 rounded-xl relative overflow-hidden">
+            <div className="absolute inset-0 dot-grid-overlay opacity-10 pointer-events-none" />
+            <div className="w-8 h-8 rounded-lg bg-accent-primary/10 flex items-center justify-center text-accent-primary border border-accent-primary/20 relative z-10">
+              <User className="w-3.5 h-3.5" />
             </div>
-            <div className="text-left leading-tight pr-2">
+            <div className="text-left leading-tight pr-2 relative z-10">
               <span className="eyebrow block text-[8px] tracking-widest">{roleText}</span>
               <p className="text-[10px] text-text-secondary mt-0.5">{user.email}</p>
             </div>
-            <div className="border-l border-[var(--border-muted)] pl-3">
+            <div className="border-l border-[var(--border-strong)] pl-3 relative z-10">
               <Link
                 href="/profile"
-                className="text-[10px] font-mono uppercase tracking-widest text-accent-primary hover:underline"
+                className="text-[9px] font-mono uppercase tracking-widest text-accent-primary hover:underline font-bold"
               >
                 Settings
               </Link>
@@ -130,134 +135,139 @@ export default async function DashboardPage() {
 
       {/* 2. Career Readiness Twin Snapshot Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="premium-card lg:col-span-2 relative overflow-hidden animated-border">
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden lg:col-span-2 relative flex flex-col justify-between">
           <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
-          <CardHeader
-            title="Career Readiness Twin"
-            description="Live simulation of your placement readiness."
-            className="border-b border-[var(--border-muted)] relative z-10"
-          />
-          <CardBody className="pt-5 relative z-10 space-y-4 text-left">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--surface-soft)]/30 border border-[var(--border-muted)] rounded-2xl p-4">
+          <div className="px-6 py-5 border-b border-[var(--border-strong)] relative z-10 flex justify-between items-center bg-[var(--surface-soft)]/10">
+            <div>
+              <h2 className="text-sm font-mono uppercase tracking-widest text-text-primary font-bold">Career Readiness Twin</h2>
+              <p className="text-[10px] font-mono uppercase tracking-wider text-text-muted mt-0.5">Live simulation of your placement readiness</p>
+            </div>
+            <Award className="w-5 h-5 text-accent-primary" />
+          </div>
+          
+          <div className="p-6 relative z-10 space-y-4 text-left flex-1 flex flex-col justify-between">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[var(--surface-soft)]/30 border border-[var(--border-strong)] rounded-xl p-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary">
-                  <Award className="w-5 h-5" />
+                <div className="w-9 h-9 rounded-lg bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary shrink-0">
+                  <Zap className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="font-mono text-[9px] text-text-muted uppercase">Target Placement</span>
-                  <p className="text-sm font-bold text-text-primary mt-0.5">{targetRoleTitle}</p>
+                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-wider">Target Placement</span>
+                  <p className="text-xs font-bold text-text-primary mt-0.5">{targetRoleTitle}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <span className="font-mono text-[8px] text-text-muted uppercase">Match strength</span>
-                  <p className="text-sm font-bold text-accent-primary mt-0.5">
+                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-wider">Match strength</span>
+                  <p className="text-xs font-bold text-accent-primary mt-0.5">
                     {targetRoleKey ? (auditsCount > 0 ? "Roadmap Engaged" : "Audit Pending") : "Not Set"}
                   </p>
                 </div>
-                <Link
+                <ButtonLink
                   href="/profile"
-                  className="px-3.5 py-1.5 rounded-full border border-[var(--border-strong)] bg-surface-card hover:bg-surface-hover transition-all text-[9px] font-mono uppercase tracking-wider font-bold text-text-primary"
+                  variant="secondary"
+                  className="py-1 px-3 text-[8px]"
                 >
                   Configure
-                </Link>
+                </ButtonLink>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-              <div className="p-3.5 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/20">
-                <span className="block font-mono text-[8px] text-text-muted uppercase">Audits Logs</span>
-                <p className="text-lg font-bold text-text-primary mt-1">{auditsCount} run</p>
+              <div className="p-3.5 rounded-lg border border-[var(--border-strong)] bg-[var(--surface-soft)]/20">
+                <span className="block font-mono text-[8px] text-text-muted uppercase tracking-wider">Audits Logs</span>
+                <p className="text-base font-bold text-text-primary mt-1 font-mono">{auditsCount} run</p>
               </div>
-              <div className="p-3.5 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/20">
-                <span className="block font-mono text-[8px] text-text-muted uppercase">Resume Matches</span>
-                <p className="text-lg font-bold text-text-primary mt-1">{jobMatchesCount} compiled</p>
+              <div className="p-3.5 rounded-lg border border-[var(--border-strong)] bg-[var(--surface-soft)]/20">
+                <span className="block font-mono text-[8px] text-text-muted uppercase tracking-wider">Resume Matches</span>
+                <p className="text-base font-bold text-text-primary mt-1 font-mono">{jobMatchesCount} compiled</p>
               </div>
-              <div className="p-3.5 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/20">
-                <span className="block font-mono text-[8px] text-text-muted uppercase">Parsed CVs</span>
-                <p className="text-lg font-bold text-text-primary mt-1">{parserCount} tags</p>
+              <div className="p-3.5 rounded-lg border border-[var(--border-strong)] bg-[var(--surface-soft)]/20">
+                <span className="block font-mono text-[8px] text-text-muted uppercase tracking-wider">Parsed CVs</span>
+                <p className="text-base font-bold text-text-primary mt-1 font-mono">{parserCount} tags</p>
               </div>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+        </div>
 
         {/* Recommended Actions */}
-        <Card className="premium-card lg:col-span-1 relative overflow-hidden flex flex-col justify-between">
-          <CardHeader
-            title="Next Step Recommendation"
-            description="Recommended task to optimize your readiness."
-            className="border-b border-[var(--border-muted)]"
-          />
-          <CardBody className="pt-5 flex flex-col justify-between flex-1 text-left space-y-4">
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden lg:col-span-1 relative flex flex-col justify-between">
+          <div className="px-6 py-5 border-b border-[var(--border-strong)] bg-[var(--surface-soft)]/10">
+            <h2 className="text-sm font-mono uppercase tracking-widest text-text-primary font-bold">Recommendations</h2>
+            <p className="text-[10px] font-mono uppercase tracking-wider text-text-muted mt-0.5">Next actionable learning bridge</p>
+          </div>
+          
+          <div className="p-6 flex flex-col justify-between flex-1 text-left space-y-4">
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-xs font-semibold text-text-primary">
-                <AlertTriangle className="w-4 h-4 text-accent-primary" />
-                <span>Optimize Your Skill DNA</span>
+              <div className="flex items-center gap-2 text-xs font-semibold text-text-primary font-mono uppercase tracking-wider">
+                <AlertTriangle className="w-3.5 h-3.5 text-accent-primary" />
+                <span>Optimize Skill DNA</span>
               </div>
-              <p className="text-xs text-text-secondary leading-relaxed">
+              <p className="text-[11px] text-text-secondary leading-relaxed font-mono uppercase tracking-tight">
                 {targetRoleKey 
-                  ? `Bridge gaps for your target role "${targetRoleTitle}" by running a comprehensive Skill Audit.`
-                  : "Go to your Profile settings to select a target engineering role. This connects your planner and preparation kits."}
+                  ? `Bridge stacks for your target role "${targetRoleTitle}" by running a comprehensive Skill Audit in your planner dashboard.`
+                  : "Select a target developer role inside settings. This dynamically updates and activates your learning planner metrics."}
               </p>
             </div>
             
-            <Link
+            <ButtonLink
               href={targetRoleKey ? "/skill-development" : "/profile"}
-              className="w-full py-2.5 rounded-xl bg-accent-primary hover:bg-accent-primary-dark transition-all text-xs font-mono uppercase tracking-widest text-[#F8F3EA] font-semibold text-center flex items-center justify-center gap-2 mt-4"
+              variant="primary"
+              className="w-full mt-4"
             >
               <span>{targetRoleKey ? "Go to Skill Planner" : "Set Target Role"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </CardBody>
-        </Card>
+            </ButtonLink>
+          </div>
+        </div>
       </div>
 
-      {/* 3. Platform Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* 3. Platform Stats Unified Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden divide-x divide-y lg:divide-y-0 divide-[var(--border-strong)]">
         {stats.map((s) => (
-          <Card key={s.label} className="premium-card relative overflow-hidden group">
-            <CardBody className="py-5 px-6 flex flex-col justify-between h-full relative z-10 text-left">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-[9px] font-mono text-text-muted uppercase tracking-wider">{s.label}</span>
-                <s.icon className={`w-4 h-4 ${s.color}`} />
-              </div>
-              <p className="text-xl font-bold text-text-primary tracking-tight font-mono">{s.value}</p>
-            </CardBody>
-          </Card>
+          <div key={s.label} className="p-5 flex flex-col justify-between h-full relative group bg-surface-card hover:bg-surface-card-warm/50 transition-colors">
+            <div className="absolute inset-0 dot-grid-overlay opacity-[0.08] pointer-events-none" />
+            <div className="flex justify-between items-center mb-4 relative z-10">
+              <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">{s.label}</span>
+              <s.icon className={`w-3.5 h-3.5 ${s.color}`} />
+            </div>
+            <p className="text-xl font-bold text-text-primary tracking-tight font-mono relative z-10">{s.value}</p>
+          </div>
         ))}
       </div>
 
       {/* 4. Core Placement Utilities Section */}
-      <div className="space-y-5 text-left">
-        <h2 className="text-xs font-mono uppercase tracking-widest text-text-muted">Core Workspace Utilities</h2>
-        <div className="grid md:grid-cols-3 gap-6">
+      <div className="space-y-4 text-left">
+        <h2 className="text-[10px] font-mono uppercase tracking-widest text-text-muted">Core Workspace Utilities</h2>
+        
+        <div className="grid md:grid-cols-3 border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden divide-y md:divide-y-0 md:divide-x divide-[var(--border-strong)]">
           {tools.map(({ href, title, description, icon: Icon, badge }) => (
-            <Link key={href} href={href} className="group">
-              <Card className="premium-card h-full transition-all duration-300 group-hover:border-accent-primary relative overflow-hidden flex flex-col justify-between">
-                <CardBody className="flex flex-col h-full p-6 relative z-10">
-                  <div className="flex items-center justify-between border-b border-[var(--border-muted)] pb-4 mb-5">
-                    <div className="w-9 h-9 rounded-xl bg-[var(--surface-soft)]/50 border border-[var(--border-muted)] flex items-center justify-center text-accent-primary group-hover:text-[#F8F3EA] group-hover:bg-accent-primary transition-all duration-300">
-                      <Icon className="w-4 h-4 shrink-0" />
-                    </div>
-                    <span className="font-mono text-[9px] text-text-muted uppercase tracking-wider px-2 py-0.5 rounded-lg border border-[var(--border-muted)] bg-[var(--surface-soft)]/40">
-                      {badge}
-                    </span>
+            <Link key={href} href={href} className="group flex flex-col justify-between p-6 relative hover:bg-surface-card-warm/50 transition-colors">
+              <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+              
+              <div>
+                <div className="flex items-center justify-between border-b border-[var(--border-muted)] pb-4 mb-5">
+                  <div className="w-8.5 h-8.5 rounded-lg bg-[var(--surface-soft)]/50 border border-[var(--border-strong)] flex items-center justify-center text-accent-primary group-hover:text-background group-hover:bg-accent-primary transition-all duration-200">
+                    <Icon className="w-4 h-4 shrink-0" />
                   </div>
-
-                  <h3 className="font-bold text-text-primary text-base group-hover:text-accent-primary transition-colors tracking-tight">
-                    {title}
-                  </h3>
-                  <p className="text-xs text-text-secondary mt-3 leading-relaxed flex-1">
-                    {description}
-                  </p>
-
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-widest text-accent-primary mt-6 pt-3 border-t border-[var(--border-muted)] font-bold">
-                    <span>Open Utility</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-widest px-2 py-0.5 rounded-md border border-[var(--border-muted)] bg-[var(--surface-soft)]/45 font-bold">
+                    {badge}
                   </span>
-                </CardBody>
-              </Card>
+                </div>
+
+                <h3 className="font-bold text-text-primary text-sm group-hover:text-accent-primary transition-colors tracking-tight font-mono uppercase">
+                  {title}
+                </h3>
+                <p className="text-[11px] text-text-secondary mt-3 leading-relaxed font-mono uppercase tracking-tight">
+                  {description}
+                </p>
+              </div>
+
+              <span className="inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest text-accent-primary mt-6 pt-4 border-t border-[var(--border-muted)] font-bold">
+                <span>Open Utility</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+              </span>
             </Link>
           ))}
         </div>
@@ -265,3 +275,4 @@ export default async function DashboardPage() {
     </div>
   );
 }
+

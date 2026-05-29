@@ -381,33 +381,142 @@ html.dark .glass-card {
   font-family: Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
-/* Dynamic glow button */
-.primary-cta {
-  background: var(--accent-primary);
-  color: var(--background);
-  font-weight: 600;
-  border-radius: 9999px;
-  box-shadow: 0 4px 14px rgba(227, 107, 79, 0.3);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+/* ==========================================================================
+   Torivo Signature Double-Border Tactile 3D Offset Buttons
+   ========================================================================== */
+.torivo-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
 }
 
+.torivo-btn-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1.5px solid var(--accent-ink);
+  background: var(--accent-ink);
+  transform: translate(3px, 3px);
+  z-index: 0;
+  transition: transform 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+html.dark .torivo-btn-shadow {
+  border-color: var(--accent-ink);
+  background: var(--accent-ink);
+}
+
+.torivo-btn-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.6rem 1.6rem;
+  transition: transform 0.12s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.12s ease;
+}
+
+/* Primary tactile variant */
+.torivo-btn-primary .torivo-btn-content {
+  background: var(--accent-primary);
+  color: var(--background);
+}
+.torivo-btn-primary:hover .torivo-btn-content {
+  background: var(--accent-primary-dark);
+  transform: translate(1px, 1px);
+}
+.torivo-btn-primary:active .torivo-btn-content {
+  transform: translate(3px, 3px);
+}
+
+/* Secondary tactile variant */
+.torivo-btn-secondary .torivo-btn-content {
+  background: var(--surface-card);
+  color: var(--foreground);
+}
+.torivo-btn-secondary:hover .torivo-btn-content {
+  background: var(--surface-hover);
+  transform: translate(1px, 1px);
+}
+.torivo-btn-secondary:active .torivo-btn-content {
+  transform: translate(3px, 3px);
+}
+
+/* Tactile shadows transform shifts */
+.torivo-btn-primary:hover .torivo-btn-shadow,
+.torivo-btn-secondary:hover .torivo-btn-shadow {
+  transform: translate(2px, 2px);
+}
+.torivo-btn-primary:active .torivo-btn-shadow,
+.torivo-btn-secondary:active .torivo-btn-shadow {
+  transform: translate(3px, 3px);
+}
+
+/* Fallbacks for older cta reference definitions */
+.primary-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 9999px;
+  border: 1.5px solid var(--accent-ink);
+  background: var(--accent-primary);
+  color: var(--background);
+  box-shadow: 3px 3px 0px var(--accent-ink);
+  padding: 0.6rem 1.6rem;
+  transition: all 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
 .primary-cta:hover {
   background: var(--accent-primary-dark);
-  box-shadow: 0 6px 20px rgba(227, 107, 79, 0.45);
-  transform: translateY(-1.5px);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--accent-ink);
+}
+.primary-cta:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px var(--accent-ink);
 }
 
 .secondary-cta {
-  background: transparent;
-  border: 1px solid var(--border-strong);
-  color: var(--text-primary);
-  font-weight: 600;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   border-radius: 9999px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1.5px solid var(--accent-ink);
+  background: var(--surface-card);
+  color: var(--foreground);
+  box-shadow: 3px 3px 0px var(--accent-ink);
+  padding: 0.6rem 1.6rem;
+  transition: all 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-
 .secondary-cta:hover {
   background: var(--surface-hover);
-  border-color: var(--accent-primary);
-  transform: translateY(-1.5px);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--accent-ink);
 }
+.secondary-cta:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px var(--accent-ink);
+}
+
