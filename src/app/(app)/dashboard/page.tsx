@@ -37,13 +37,36 @@ export default async function DashboardPage() {
 
   // 2. Fetch parallel activity statistics
   let auditsCount = 0;
+  let jobMatchesCount = 0;
+  let parserCount = 0;
+  let latestReadiness = 0;
+  let uniqueSkillsCount = 0;
 
   if (user) {
-    const auditsRes = await supabase
-      .from("skill_audits")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id);
-    auditsCount = auditsRes.count || 0;
+    const [auditsRes, analysesRes, parserRes] = await Promise.all([
+      supabase.from("skill_audits").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      supabase.from("job_analyses").select("*", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("parser_history").select("*", { count: "exact", head: true }).eq("user_id", user.id),
+    ]);
+
+    const audits = auditsRes.data || [];
+    auditsCount = audits.length;
+    
+    if (auditsCount > 0) {
+      latestReadiness = audits[0].readiness || 0;
+      
+      // Calculate unique skills count
+      const allSkills = new Set<string>();
+      audits.forEach((audit) => {
+        if (Array.isArray(audit.skills)) {
+          audit.skills.forEach((skill: string) => allSkills.add(skill));
+        }
+      });
+      uniqueSkillsCount = allSkills.size;
+    }
+
+    jobMatchesCount = analysesRes.count || 0;
+    parserCount = parserRes.count || 0;
   }
 
   // Privacy Fix: Mask full email as requested (madeinruntime@gmail.com -> madeinruntime@...)
@@ -58,7 +81,11 @@ export default async function DashboardPage() {
       displayName={displayName}
       targetRoleTitle={targetRoleTitle}
       targetRoleKey={targetRoleKey}
-      realAuditsCount={auditsCount}
+      auditsCount={auditsCount}
+      jobMatchesCount={jobMatchesCount}
+      parserCount={parserCount}
+      latestReadiness={latestReadiness}
+      uniqueSkillsCount={uniqueSkillsCount}
       maskedEmail={maskedEmail}
       roleText={roleText}
     />

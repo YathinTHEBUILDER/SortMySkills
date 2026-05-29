@@ -1,28 +1,24 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { ButtonLink } from "@/components/ui/Button";
 import {
-  ArrowRight,
-  BookOpen,
   Briefcase,
-  Compass,
-  User,
-  Sparkles,
-  Zap,
-  TrendingUp,
-  AlertTriangle,
   Award,
-  CheckCircle2,
-  ScanSearch,
+  TrendingUp,
+  Compass,
+  FileText,
+  Terminal,
 } from "lucide-react";
 
 interface DashboardClientProps {
   displayName: string;
   targetRoleTitle: string;
   targetRoleKey: string;
-  realAuditsCount: number;
+  auditsCount: number;
+  jobMatchesCount: number;
+  parserCount: number;
+  latestReadiness: number;
+  uniqueSkillsCount: number;
   maskedEmail: string;
   roleText: string;
 }
@@ -31,295 +27,154 @@ export default function DashboardClient({
   displayName,
   targetRoleTitle,
   targetRoleKey,
-  realAuditsCount,
+  auditsCount,
+  jobMatchesCount,
+  parserCount,
+  latestReadiness,
+  uniqueSkillsCount,
   maskedEmail,
-  roleText,
 }: DashboardClientProps) {
   const name = displayName;
   const targetRole = targetRoleTitle;
   const hasTargetRole = !!(targetRoleKey && targetRoleTitle !== "Not Selected");
-  const auditsCount = realAuditsCount;
-
-  // Personal Progress Stats (Row 2)
-  const personalStats = [
-    {
-      label: "Target Role",
-      value: hasTargetRole ? targetRole : "Not Selected",
-      desc: hasTargetRole ? "Placement track active" : "Select target in Settings",
-      icon: Briefcase,
-      color: "text-[#EF7A5F] dark:text-[#E36B4F]",
-    },
-    {
-      label: "Readiness Score",
-      value: auditsCount > 0 ? "68%" : "Pending",
-      desc: auditsCount > 0 
-        ? "Calculated from recent audit" 
-        : "Run a skill audit to compute",
-      icon: Award,
-      color: "text-[#E0B178] dark:text-[#D9A66F]",
-    },
-    {
-      label: "Missing Skills",
-      value: auditsCount > 0 ? "2" : "—",
-      desc: auditsCount > 0 ? "Identified gaps" : "No gaps detected yet",
-      icon: AlertTriangle,
-      color: "text-red-400",
-    },
-    {
-      label: "Next Actions Mapped",
-      value: auditsCount > 0 ? "View roadmap" : "Run skill audit",
-      desc: "Placement roadmap active",
-      icon: Zap,
-      color: "text-[#91B894] dark:text-[#7E9F82]",
-    },
-  ];
-
-  // Global platform stats
-  const globalStats = [
-    { label: "Standardized Skill Aliases", value: "60+", icon: Sparkles, color: "text-[#EF7A5F] dark:text-[#E36B4F]" },
-    { label: "Placement Prep Questions", value: "900+", icon: BookOpen, color: "text-[#E0B178] dark:text-[#D9A66F]" },
-    { label: "Standardized Role Tracks", value: "6 Profiles", icon: TrendingUp, color: "text-[#91B894] dark:text-[#7E9F82]" },
-    { label: "Active Learning Pathways", value: "5 Active", icon: Compass, color: "text-[#EF7A5F] dark:text-[#E36B4F]" },
-  ];
-
-  const tools = [
-    {
-      href: "/skill-development",
-      title: "Skill Planner & Roadmap",
-      description: "Audit target tech stacks, compute placement readiness ratings, and map Coursera learning pathways.",
-      icon: Compass,
-      badge: "Roadmap Builder",
-    },
-    {
-      href: "/job-match",
-      title: "Job Match Engine",
-      description: "Compare your resume tags against targeted job descriptions to identify exact keyword gaps.",
-      icon: Briefcase,
-      badge: "Gap Radar",
-    },
-    {
-      href: "/interview-packs",
-      title: "Interview Prep Packs",
-      description: "Practice 900+ high-end interview evaluation questions across 6 core technical role families.",
-      icon: BookOpen,
-      badge: "Placement Prep",
-    },
-    {
-      href: "/tools/parser",
-      title: "Skill Parser Playground",
-      description: "Normalize scattered tech terms (e.g. k8s, py, react) into structured career competency tags.",
-      icon: ScanSearch,
-      badge: "Skill DNA Engine",
-    },
-  ];
 
   return (
-    <div className="space-y-8 animate-fade-in relative z-10 font-sans">
+    <div className="space-y-8 animate-fade-in relative z-10 font-sans text-left">
       
-      {/* 1. Header starting block */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 pb-6 border-b border-[var(--border-strong)]">
-        <div className="text-left space-y-1.5">
-          <span className="eyebrow block text-xs tracking-widest text-[#EF7A5F] dark:text-[#E36B4F] font-mono">
-            PERSONAL DEVELOPMENT PLATFORM
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary leading-tight">
-            Welcome back, <span className="font-serif italic font-normal text-[#EF7A5F] dark:text-[#E36B4F]">{name}</span>.
-          </h1>
-          <p className="text-sm text-text-secondary max-w-xl">
-            Let’s build your placement roadmap. Start with a 3-minute skill audit to discover your best-fit role, missing skills, rejection risks, and what to do next.
-          </p>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-          {/* Settings / Profile card */}
-          {maskedEmail && (
-            <div className="shrink-0 border border-[var(--border-strong)] bg-surface-card p-3 shadow-xs flex items-center gap-3 rounded-xl relative overflow-hidden">
-              <div className="absolute inset-0 dot-grid-overlay opacity-10 pointer-events-none" />
-              <div className="w-8 h-8 rounded-lg bg-[#EF7A5F]/10 border border-[#EF7A5F]/20 flex items-center justify-center text-[#EF7A5F] dark:text-[#E36B4F] relative z-10 shrink-0">
-                <User className="w-3.5 h-3.5" />
-              </div>
-              <div className="text-left leading-tight pr-2 relative z-10 max-w-[120px] sm:max-w-none">
-                <span className="eyebrow block text-[8px] tracking-widest font-mono text-[#EF7A5F] dark:text-[#E36B4F]">{roleText}</span>
-                <p className="text-[10px] text-text-secondary mt-0.5 truncate">{maskedEmail}</p>
-              </div>
-              <div className="border-l border-[var(--border-strong)] pl-3 relative z-10">
-                <Link
-                  href="/profile"
-                  className="text-[9px] font-mono uppercase tracking-widest text-[#EF7A5F] dark:text-[#E36B4F] hover:underline font-bold"
-                >
-                  Settings
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Main CTAs starting block bar */}
-      <div className="bg-surface-card-warm/50 border border-[var(--border-strong)] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 text-left">
-        <div className="space-y-1">
-          <p className="text-xs font-semibold text-text-primary">What would you like to evaluate first?</p>
-          <p className="text-[11px] text-text-secondary">Initiate a skill audit, test a demo roadmap, or match with active job descriptions.</p>
-        </div>
-        <div className="flex flex-wrap gap-2.5">
-          <ButtonLink
-            href="/skill-development"
-            className="px-4 py-2 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-[#EF7A5F] hover:bg-[#D6674F] dark:bg-[#E36B4F] dark:hover:bg-[#C9573F] transition-all rounded-full flex items-center gap-1.5"
-          >
-            <span>Run Skill Audit</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </ButtonLink>
-          
-          <ButtonLink
-            href="/job-match"
-            variant="secondary"
-            className="px-4 py-2 text-xs font-mono uppercase tracking-widest border border-[var(--border-strong)] bg-surface-card hover:bg-surface-hover rounded-full transition-all"
-          >
-            Compare Resume with JD
-          </ButtonLink>
-        </div>
-      </div>
-
-      {/* Row 1: Career Twin Hero Card & Recommended next action */}
-      {/* Recommended Action Banner */}
-      <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden relative shadow-xs text-left">
-        <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
-        <div className="px-6 py-4.5 border-b border-[var(--border-strong)] bg-[var(--surface-soft)]/15">
-          <h2 className="text-sm font-bold tracking-tight text-text-primary">Recommended Action</h2>
-          <p className="text-[10px] font-mono uppercase tracking-wider text-text-muted mt-0.5">Your fastest path to placement readiness</p>
-        </div>
-
-        <div className="p-6">
-          {auditsCount > 0 ? (
-            /* Real audits active action recommendation (Horizontal Layout) */
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#EF7A5F] dark:text-[#E36B4F] font-mono uppercase tracking-wider">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Bridge Remaining Gaps</span>
-                </div>
-                <p className="text-xs text-text-secondary leading-relaxed max-w-xl">
-                  You have mapped skill gaps for target track &ldquo;{targetRole}&rdquo;. Complete your active Coursera course roadmap nodes to unlock 100% placement readiness.
-                </p>
-              </div>
-
-              <div className="shrink-0">
-                <ButtonLink
-                  href="/skill-development"
-                  className="px-6 h-10 font-mono uppercase tracking-widest text-xs text-[#F8F3EA] bg-[#EF7A5F] hover:bg-[#D6674F] dark:bg-[#E36B4F] dark:hover:bg-[#C9573F] transition-all rounded-full flex items-center justify-center gap-1.5"
-                >
-                  <span>Go to Skill Planner</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </ButtonLink>
-              </div>
-            </div>
-          ) : (
-            /* Empty state recommendation (Horizontal Layout) */
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#E0B178] dark:text-[#D9A66F] font-mono uppercase tracking-wider">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  <span>Run Your First Skill Audit</span>
-                </div>
-                <p className="text-xs text-text-secondary leading-relaxed max-w-xl">
-                  We will identify your current role fit, missing skills, and the fastest preparation roadmap to improve your overall student placement readiness rating.
-                </p>
-              </div>
-
-              <div className="shrink-0">
-                <ButtonLink
-                  href="/skill-development"
-                  className="px-6 h-10 font-mono uppercase tracking-widest text-xs text-[#F8F3EA] bg-[#EF7A5F] hover:bg-[#D6674F] dark:bg-[#E36B4F] dark:hover:bg-[#C9573F] transition-all rounded-full flex items-center justify-center gap-1.5"
-                >
-                  <span>Start Audit</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </ButtonLink>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Row 2: Personal Progress Stats Cards */}
-      <div className="space-y-3 text-left">
-        <h2 className="text-[10px] font-mono uppercase tracking-widest text-text-muted">Personal Placement readiness Overview</h2>
-        
-        <div className="grid grid-cols-2 lg:grid-cols-4 border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden divide-y divide-x divide-[var(--border-strong)] lg:divide-y-0 shadow-xs">
-          {personalStats.map((s, idx) => (
-            <div
-              key={idx}
-              className="p-5 flex flex-col justify-between h-full relative group bg-surface-card hover:bg-surface-card-warm/50 transition-colors"
-            >
-              <div className="absolute inset-0 dot-grid-overlay opacity-[0.08] pointer-events-none" />
-              <div className="flex justify-between items-center mb-3.5 relative z-10">
-                <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">{s.label}</span>
-                <s.icon className={`w-3.5 h-3.5 ${s.color}`} />
-              </div>
-              <div className="relative z-10 text-left space-y-1">
-                <p className="text-base sm:text-lg font-bold text-text-primary tracking-tight truncate leading-tight font-mono">{s.value}</p>
-                <p className="text-[10px] text-text-muted leading-tight truncate">{s.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Row 3: Core Workspace Utilities Grid */}
-      <div className="space-y-4 text-left">
-        <h2 className="text-[10px] font-mono uppercase tracking-widest text-text-muted">Core Workspace Utilities</h2>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 border border-[var(--border-strong)] bg-surface-card rounded-2xl overflow-hidden divide-y divide-x divide-[var(--border-strong)] md:divide-y-0 shadow-xs">
-          {tools.map(({ href, title, description, icon: Icon, badge }) => (
-            <Link
-              key={href}
-              href={href}
-              className="group flex flex-col justify-between p-6 relative hover:bg-surface-card-warm/50 transition-colors"
-            >
-              <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
-              
-              <div>
-                <div className="flex items-center justify-between border-b border-[var(--border-muted)] pb-4 mb-4">
-                  <div className="w-8.5 h-8.5 rounded-lg bg-[var(--surface-soft)]/50 border border-[var(--border-strong)] flex items-center justify-center text-[#EF7A5F] dark:text-[#E36B4F] group-hover:text-[#F8F3EA] group-hover:bg-[#EF7A5F] dark:group-hover:bg-[#E36B4F] transition-all duration-200">
-                    <Icon className="w-4 h-4 shrink-0" />
-                  </div>
-                  <span className="font-mono text-[8px] text-text-muted uppercase tracking-widest px-2 py-0.5 rounded-md border border-[var(--border-muted)] bg-[var(--surface-soft)]/45 font-bold">
-                    {badge}
-                  </span>
-                </div>
-
-                <h3 className="font-bold text-text-primary text-xs group-hover:text-[#EF7A5F] dark:group-hover:text-[#E36B4F] transition-colors tracking-tight uppercase font-mono">
-                  {title}
-                </h3>
-                <p className="text-[11px] text-text-secondary mt-2.5 leading-relaxed font-sans normal-case">
-                  {description}
-                </p>
-              </div>
-
-              <span className="inline-flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-widest text-[#EF7A5F] dark:text-[#E36B4F] mt-5 pt-3.5 border-t border-[var(--border-muted)] font-bold">
-                <span>Open Utility</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* Row 4: Platform statistics details */}
-      <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden text-left">
-        <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
-        <span className="eyebrow block text-[8px] tracking-widest text-[#EF7A5F] dark:text-[#E36B4F] font-mono uppercase mb-4">
-          SortMySkills Workspace Global Metrics
+      {/* 1. Welcome Banner */}
+      <div className="pb-6 border-b border-[var(--border-strong)]">
+        <span className="eyebrow block text-xs tracking-widest text-[#E7717D] dark:text-[#EE8590] font-mono">
+          CAREER OPERATING SYSTEM
         </span>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
-          {globalStats.map((item, idx) => (
-            <div key={idx} className="space-y-1 border-l border-[var(--border-muted)] pl-4">
-              <span className="block text-[9px] font-mono text-text-muted uppercase tracking-widest leading-none">{item.label}</span>
-              <p className="text-xl font-bold text-text-primary tracking-tight font-mono mt-1">{item.value}</p>
-            </div>
-          ))}
-        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2">
+          Welcome back, <span className="font-serif italic font-normal text-[#E7717D] dark:text-[#EE8590]">{name}</span>.
+        </h1>
+        <p className="text-sm text-text-secondary mt-2 max-w-xl">
+          Here is your real-time career development profile and actual placement preparation statistics synchronised with your workspace logs.
+        </p>
       </div>
-      
+
+      {/* 2. Core Statistics Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        {/* Metric 1: Target Career Track */}
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+          <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+          <div className="flex justify-between items-center relative z-10">
+            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Target Role Track</span>
+            <Briefcase className="w-4 h-4 text-[#E7717D]" />
+          </div>
+          <div className="mt-4 relative z-10">
+            <p className="text-base font-bold text-text-primary tracking-tight leading-tight">
+              {hasTargetRole ? targetRole : "Not Selected"}
+            </p>
+            <p className="text-[10px] text-text-muted mt-1 leading-snug">
+              {hasTargetRole ? "Active placement roadmap track" : "Select target role in Settings"}
+            </p>
+          </div>
+        </div>
+
+        {/* Metric 2: Latest Readiness Score */}
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+          <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+          <div className="flex justify-between items-center relative z-10">
+            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Readiness Quotient</span>
+            <Award className="w-4 h-4 text-[#AFD275]" />
+          </div>
+          <div className="mt-4 relative z-10">
+            <p className="text-xl font-bold text-text-primary tracking-tight font-mono">
+              {auditsCount > 0 ? `${latestReadiness}%` : "Pending"}
+            </p>
+            <div className="w-full bg-[var(--surface-muted)] h-1.5 rounded-full mt-2 overflow-hidden">
+              <div 
+                className="bg-[#AFD275] h-full rounded-full transition-all duration-500" 
+                style={{ width: auditsCount > 0 ? `${latestReadiness}%` : "0%" }} 
+              />
+            </div>
+            <p className="text-[10px] text-text-muted mt-1 leading-snug">
+              {auditsCount > 0 ? "Computed from latest skill audit" : "Run skill audit to calculate"}
+            </p>
+          </div>
+        </div>
+
+        {/* Metric 3: Unique Audited Skills */}
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+          <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+          <div className="flex justify-between items-center relative z-10">
+            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Unique Mapped Skills</span>
+            <TrendingUp className="w-4 h-4 text-[#C2CAD0]" />
+          </div>
+          <div className="mt-4 relative z-10">
+            <p className="text-xl font-bold text-text-primary tracking-tight font-mono">
+              {uniqueSkillsCount} Skills
+            </p>
+            <p className="text-[10px] text-text-muted mt-1 leading-snug">
+              {uniqueSkillsCount > 0 ? "Normalized canonical capabilities" : "No audited capabilities yet"}
+            </p>
+          </div>
+        </div>
+
+        {/* Metric 4: Total Roadmap Audits */}
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+          <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+          <div className="flex justify-between items-center relative z-10">
+            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Completed Audits</span>
+            <Compass className="w-4 h-4 text-[#E7717D]" />
+          </div>
+          <div className="mt-4 relative z-10">
+            <p className="text-xl font-bold text-text-primary tracking-tight font-mono">
+              {auditsCount} Completed
+            </p>
+            <p className="text-[10px] text-text-muted mt-1 leading-snug">
+              {auditsCount > 0 ? "Individual roadmap evaluations" : "Initiate your first skill audit"}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* 3. Utility Logs & Activity Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        
+        {/* Job Match Log Count */}
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-6 shadow-xs relative overflow-hidden flex items-center gap-4">
+          <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+          <div className="w-10 h-10 rounded-xl bg-[#E7717D]/10 border border-[#E7717D]/20 flex items-center justify-center text-[#E7717D] shrink-0">
+            <FileText className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest block">Resume Matching Matrix</span>
+            <p className="text-lg font-bold text-text-primary mt-1 font-mono">{jobMatchesCount} Comparisons</p>
+            <p className="text-[10px] text-text-muted mt-0.5">Actual Job Description parses and skill gap audits performed.</p>
+          </div>
+        </div>
+
+        {/* Skill Parser Playground Log Count */}
+        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-6 shadow-xs relative overflow-hidden flex items-center gap-4">
+          <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
+          <div className="w-10 h-10 rounded-xl bg-[#AFD275]/10 border border-[#AFD275]/20 flex items-center justify-center text-[#AFD275] shrink-0">
+            <Terminal className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest block">Skill Parser Submissions</span>
+            <p className="text-lg font-bold text-text-primary mt-1 font-mono">{parserCount} Playground runs</p>
+            <p className="text-[10px] text-text-muted mt-0.5">Actual local taxonomy alias normalization requests logged.</p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* 4. Footnote detailing RLS synchronization */}
+      <div className="border border-[var(--border-strong)] bg-[var(--surface-soft)]/20 rounded-2xl p-5 relative overflow-hidden">
+        <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
+        <span className="eyebrow block text-[8px] tracking-widest text-[#E7717D] dark:text-[#EE8590] font-mono uppercase mb-2">
+          Workspace Database Synchronisation
+        </span>
+        <p className="text-[11px] text-text-secondary leading-relaxed font-sans">
+          These metrics represent your authentic placement capability logs. All metrics are computed dynamically on the server from encrypted Postgres database transactions linked securely to your account profile <code className="font-mono text-[#E7717D] dark:text-[#EE8590]">{maskedEmail}</code>.
+        </p>
+      </div>
+
     </div>
   );
 }
