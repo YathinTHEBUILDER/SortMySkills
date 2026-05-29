@@ -2,8 +2,10 @@ import {
   BookOpen,
   Briefcase,
   Compass,
+  Languages,
   LayoutDashboard,
   ScanSearch,
+  MailX,
 } from "lucide-react";
 
 export const mainNav = [
@@ -11,5 +13,7 @@ export const mainNav = [
   { href: "/skill-development", label: "Skill planner", icon: Compass },
   { href: "/job-match", label: "Job match", icon: Briefcase },
   { href: "/tools/parser", label: "Skill parser", icon: ScanSearch },
+  { href: "/jd-translator", label: "JD Translator", icon: Languages },
+  { href: "/why-no-reply", label: "Why No Reply", icon: MailX },
   { href: "/interview-packs", label: "Interview packs", icon: BookOpen },
 ] as const;
