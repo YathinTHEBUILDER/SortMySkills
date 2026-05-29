@@ -78,7 +78,7 @@ Progress snapshot for reviewers and the team. Update this file as milestones shi
 
 | Item | Status | Notes |
 |------|--------|-------|
-| User accounts / auth | 📋 | |
+| User accounts / auth | ✅ | Implemented complete email OTP verification flow |
 | Save resume profiles & analyses | 📋 | |
 | Expand `SKILL_MAP` via admin or API | 📋 | |
 | Real Coursera or course API integration | 📋 | |
