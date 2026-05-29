@@ -1,15 +1,19 @@
 import React from "react";
 
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+  children: React.ReactNode;
+}
+
 export function Card({
   className = "",
   children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
+  ...props
+}: CardProps) {
   return (
     <div
       className={`rounded-xl border border-[var(--border-muted)] bg-[var(--surface-card)] ${className}`}
+      {...props}
     >
       {children}
     </div>
