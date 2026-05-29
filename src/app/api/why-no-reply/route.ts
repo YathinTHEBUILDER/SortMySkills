@@ -1,58 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// ── In-memory rate-limit store (resets on server restart) ────────────────────
-const rateLimitStore: Map<string, { count: number; resetAt: number }> =
-  new Map();
-
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-const MAX_REQUESTS = 3;
-
-function getClientIp(req: NextRequest): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  const realIp = req.headers.get("x-real-ip");
-  if (realIp) return realIp;
-  return "unknown";
-}
-
-function checkRateLimit(ip: string):
-  | { allowed: true }
-  | { allowed: false; remainingSeconds: number } {
-  const now = Date.now();
-  const entry = rateLimitStore.get(ip);
-
-  if (!entry) {
-    rateLimitStore.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return { allowed: true };
-  }
-
-  if (now > entry.resetAt) {
-    rateLimitStore.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return { allowed: true };
-  }
-
-  if (entry.count >= MAX_REQUESTS) {
-    return {
-      allowed: false,
-      remainingSeconds: Math.ceil((entry.resetAt - now) / 1000),
-    };
-  }
-
-  entry.count += 1;
-  return { allowed: true };
-}
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 // ── POST handler ─────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
-  // Rate-limit check
-  const ip = getClientIp(req);
-  const rl = checkRateLimit(ip);
+  // Rate-limit check: 3 requests per 15 minutes
+  const ip = await getClientIp();
+  const limitResult = rateLimit(`why-no-reply:${ip}`, 3, 15 * 60 * 1000);
 
-  if (!rl.allowed) {
+  if (!limitResult.success) {
+    const resetSeconds = Math.ceil((limitResult.resetTime - Date.now()) / 1000);
     return NextResponse.json(
       {
         error: "3 diagnoses per 15 minutes. Read the feedback you already have.",
-        remainingSeconds: rl.remainingSeconds,
+        remainingSeconds: resetSeconds > 0 ? resetSeconds : 900,
       },
       { status: 429 }
     );

@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  // Rate limiting check: 3 requests per 15 minutes
+  const ip = await getClientIp();
+  const limitResult = rateLimit(`roadmap:${ip}`, 3, 15 * 60 * 1000);
+  if (!limitResult.success) {
+    // Calculate remaining seconds if possible, or just send general message
+    const resetSeconds = Math.ceil((limitResult.resetTime - Date.now()) / 1000);
+    return NextResponse.json(
+      { 
+        error: "You have requested too many roadmaps. Limit is 3 requests per 15 minutes.",
+        remainingSeconds: resetSeconds > 0 ? resetSeconds : 900
+      },
+      { status: 429 }
+    );
+  }
+
   // Parse body
   let body: { resume?: string; jd?: string; date?: string; focus?: string };
   try {

@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  // Rate limiting check: 5 requests per 15 minutes
+  const ip = await getClientIp();
+  const limitResult = rateLimit(`resume-builder:${ip}`, 5, 15 * 60 * 1000);
+  if (!limitResult.success) {
+    const resetSeconds = Math.ceil((limitResult.resetTime - Date.now()) / 1000);
+    return NextResponse.json(
+      { 
+        error: "Too many requests. Limit is 5 resume builds/improvements per 15 minutes.",
+        remainingSeconds: resetSeconds > 0 ? resetSeconds : 900
+      },
+      { status: 429 }
+    );
+  }
+
   let body: {
     mode?: "build" | "improve";
     // Build mode fields
