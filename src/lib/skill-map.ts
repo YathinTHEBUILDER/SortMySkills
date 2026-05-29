@@ -498,12 +498,13 @@ export function detectProficiency(
 
   const lower = text.toLowerCase();
   const canonLower = skillCanonical.toLowerCase();
+  const escapedCanonLower = canonLower.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   if (/\(beginner\)/.test(lower) && lower.includes(canonLower)) return "beginner";
   if (/\(junior\)/.test(lower) && lower.includes(canonLower)) return "beginner";
-  if (new RegExp(`${canonLower}\\s*-\\s*\\d+\\s*years?`).test(lower)) return "moderate";
-  if (new RegExp(`\\d+\\+?\\s*years?\\s+${canonLower}`).test(lower)) return "expert";
-  if (new RegExp(`${canonLower}\\s+expert`).test(lower)) return "expert";
-  if (new RegExp(`expert\\s+${canonLower}`).test(lower)) return "expert";
+  if (new RegExp(`${escapedCanonLower}\\s*-\\s*\\d+\\s*years?`).test(lower)) return "moderate";
+  if (new RegExp(`\\d+\\+?\\s*years?\\s+${escapedCanonLower}`).test(lower)) return "expert";
+  if (new RegExp(`${escapedCanonLower}\\s+expert`).test(lower)) return "expert";
+  if (new RegExp(`expert\\s+${escapedCanonLower}`).test(lower)) return "expert";
 
   return "unspecified";
 }
