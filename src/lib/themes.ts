@@ -12,10 +12,10 @@ export interface ColorPack {
 export const COLOR_PACKS: ColorPack[] = [
   {
     id: "terracotta",
-    name: "Terracotta & Sand",
-    description: "Warm rust and sand-gold — premium editorial default",
-    accentPrimary: "#c45b37",
-    accentSecondary: "#d9b48f",
+    name: "Minimal Yet Warm",
+    description: "Rich warm coral and rose pink — premium editorial default",
+    accentPrimary: "#E85A4F",
+    accentSecondary: "#E98074",
   },
   {
     id: "neon",
