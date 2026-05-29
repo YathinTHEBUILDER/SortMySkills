@@ -8,6 +8,7 @@ import {
   User,
   FileCheck,
   Map,
+  FileText,
 } from "lucide-react";
 
 export const mainNav = [
@@ -15,6 +16,7 @@ export const mainNav = [
   { href: "/job-match", label: "Job match", icon: Briefcase },
   { href: "/ats-scorer", label: "ATS Scorer", icon: FileCheck },
   { href: "/roadmap", label: "Career Roadmap", icon: Map },
+  { href: "/resume-builder", label: "Resume Builder", icon: FileText },
   { href: "/tools/parser", label: "Skill parser", icon: ScanSearch },
   { href: "/jd-translator", label: "JD Translator", icon: Languages },
   { href: "/why-no-reply", label: "Why No Reply", icon: MailX },
