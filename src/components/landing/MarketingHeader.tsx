@@ -54,10 +54,10 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
               Interview Packs
             </Link>
             <Link
-              href="/skill-development"
+              href="/career-analyser"
               className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
-              Roadmap
+              Analyser
             </Link>
           </nav>
         </div>
@@ -145,11 +145,11 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
               Interview Prep
             </Link>
             <Link
-              href="/skill-development"
+              href="/career-analyser"
               onClick={closeMobileMenu}
               className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
-              Roadmap
+              Career Analyser
             </Link>
             <Link
               href="/dashboard"

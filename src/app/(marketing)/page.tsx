@@ -8,13 +8,12 @@ import MarketingHeader from "@/components/landing/MarketingHeader";
 import {
   ArrowRight,
   Compass,
-  Briefcase,
   BookOpen,
-  Code,
   Sparkles,
   CheckCircle2,
   AlertTriangle,
-  Globe,
+  MailX,
+  FileText,
 } from "lucide-react";
 
 export default async function LandingPage() {
@@ -234,104 +233,82 @@ export default async function LandingPage() {
             Everything you need to move from scattered tech keywords to clear placement readiness.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 text-left">
-            {/* Feature 1: Skill DNA */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
+            {/* Feature 1: Why No Reply */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
-                  <Compass className="w-5 h-5" />
+                  <MailX className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Skill DNA</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Why No Reply</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Map and normalize your unstructured tech credentials against standardized industry taxonomies using our local alias translation registry.
+                  The ultimate recruiter callback diagnosis. Isolate specific emotional, structure, or competency reasons why employers might be ignoring your applications.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">NORMALIZE STACK</span>
-                <Link href="/skill-development" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Open Planner</span>
+                <span className="text-text-muted">CALLBACK DIAGNOSIS</span>
+                <Link href="/why-no-reply" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Start Diagnosis</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Feature 2: Job Match Engine */}
+            {/* Feature 2: Career Analyser */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-secondary/10 border border-accent-secondary/20 flex items-center justify-center text-accent-secondary mb-5">
-                  <Briefcase className="w-5 h-5" />
+                  <Compass className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Job Match Engine</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Career Analyser</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Dual-panel comparison laboratory. Paste your resume and target placement posts to compute instant matching weights, missing keywords, and supplementary assets.
+                  Consolidated analysis workspace. Paste your target job and credentials once to check ATS compatibility, match keyword deficits, and compile dynamic study roadmaps.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">MATCH LAB</span>
-                <Link href="/job-match" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Run Comparison</span>
+                <span className="text-text-muted">UNIFIED WORKSPACE</span>
+                <Link href="/career-analyser" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Run Analysis</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-
-
-            {/* Feature 4: Skill Gap Roadmap */}
+            {/* Feature 3: Resume Builder */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
-                  <Globe className="w-5 h-5" />
+                  <FileText className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Skill Gap Roadmap</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Resume Builder</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Generate personal step-by-step learning structures paired directly with specific Coursera bridges to close target placement skill gaps fast.
+                  Revamp your bullets in real-time. Use active technical verbs, recruiter-ready language, and layout sweeps to score perfectly on automated ATS scanners.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">ROADMAP MAPPED</span>
-                <Link href="/skill-development" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Build Roadmap</span>
+                <span className="text-text-muted">PROFILE ENGINE</span>
+                <Link href="/resume-builder" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Open Builder</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Feature 5: Interview Packs */}
+            {/* Feature 4: Interview Packs */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-secondary/10 border border-accent-secondary/20 flex items-center justify-center text-accent-secondary mb-5">
                   <BookOpen className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Interview Prep Packs</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Interview Packs</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Practice 900+ curated placement evaluation questions across 6 core technical role families, sorted systematically by easy, medium, and hard levels.
+                  Practice 900+ curated placement questions across 6 core technical role families, sorted systematically by easy, medium, and hard levels.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">900+ QUESTIONS</span>
+                <span className="text-text-muted">PLACEMENT PREP</span>
                 <Link href="/interview-packs" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Browse Prep Catalog</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Feature 6: Parser Tool */}
-            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
-                  <Code className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Parser Tool</h3>
-                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Standardizes unstructured tech terms (e.g. `k8s`, `py`, `react.js`) into clean, standard canonical competency taxonomies locally to match employer scanners.
-                </p>
-              </div>
-              <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">NORMALIZATION PLAYGROUND</span>
-                <Link href="/tools/parser" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Normalize Skills</span>
+                  <span>Browse Packs</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -599,23 +576,23 @@ export default async function LandingPage() {
             <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-widest font-bold">Workspace</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/skill-development" className="hover:text-accent-primary transition-colors">
-                  Skill Roadmap
+                <Link href="/why-no-reply" className="hover:text-accent-primary transition-colors">
+                  Why No Reply
                 </Link>
               </li>
               <li>
-                <Link href="/job-match" className="hover:text-accent-primary transition-colors">
-                  Job Matcher
+                <Link href="/career-analyser" className="hover:text-accent-primary transition-colors">
+                  Career Analyser
+                </Link>
+              </li>
+              <li>
+                <Link href="/resume-builder" className="hover:text-accent-primary transition-colors">
+                  Resume Builder
                 </Link>
               </li>
               <li>
                 <Link href="/interview-packs" className="hover:text-accent-primary transition-colors">
-                  Interview Prep
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/parser" className="hover:text-accent-primary transition-colors">
-                  Skill Parser
+                  Interview Packs
                 </Link>
               </li>
             </ul>
