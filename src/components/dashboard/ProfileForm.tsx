@@ -3,7 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Save, Sparkles, User, Briefcase, Mail, ShieldCheck } from "lucide-react";
+import { Save, User, Briefcase, Mail, ShieldCheck } from "lucide-react";
 import { ROLES_DATABASE } from "@/data/roles";
 import { updateProfileAction } from "@/app/actions/profile";
 import { Button } from "@/components/ui/Button";

@@ -5,15 +5,16 @@ import { requireUser } from "@/lib/auth/get-user";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { ROLES_DATABASE } from "@/data/roles";
 import ProfileForm from "@/components/dashboard/ProfileForm";
+
+export const dynamic = "force-dynamic";
+
 import {
-  User,
   Compass,
   Briefcase,
   ScanSearch,
   Calendar,
   ShieldCheck,
   TrendingUp,
-  Sparkles,
 } from "lucide-react";
 
 export default async function ProfilePage() {
