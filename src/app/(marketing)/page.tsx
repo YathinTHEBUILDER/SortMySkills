@@ -159,11 +159,11 @@ export default async function LandingPage() {
               </span>
               <div className="flex flex-wrap gap-2">
                 {[
-                  { text: "React.js", bg: "rgba(227, 107, 79, 0.12)", textCol: "var(--accent-primary)", cl: "floating-chip-1" },
-                  { text: "Python", bg: "rgba(217, 166, 111, 0.15)", textCol: "var(--accent-secondary)", cl: "floating-chip-2" },
-                  { text: "Tailwind CSS", bg: "rgba(110, 139, 116, 0.12)", textCol: "var(--accent-tertiary)", cl: "floating-chip-3" },
-                  { text: "AWS Cloud", bg: "rgba(227, 107, 79, 0.12)", textCol: "var(--accent-primary)", cl: "visual-tag-stagger opacity-0" },
-                  { text: "Data Science", bg: "rgba(217, 166, 111, 0.15)", textCol: "var(--accent-secondary)", cl: "visual-tag-stagger opacity-0" },
+                  { text: "React.js", bg: "rgba(124, 124, 255, 0.12)", textCol: "var(--accent-primary)", cl: "floating-chip-1" },
+                  { text: "Python", bg: "rgba(169, 169, 254, 0.15)", textCol: "var(--accent-secondary)", cl: "floating-chip-2" },
+                  { text: "Tailwind CSS", bg: "rgba(25, 25, 96, 0.12)", textCol: "var(--accent-tertiary)", cl: "floating-chip-3" },
+                  { text: "AWS Cloud", bg: "rgba(124, 124, 255, 0.12)", textCol: "var(--accent-primary)", cl: "visual-tag-stagger opacity-0" },
+                  { text: "Data Science", bg: "rgba(169, 169, 254, 0.15)", textCol: "var(--accent-secondary)", cl: "visual-tag-stagger opacity-0" },
                 ].map((chip, idx) => (
                   <span
                     key={idx}
