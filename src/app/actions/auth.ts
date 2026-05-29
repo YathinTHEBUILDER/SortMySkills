@@ -79,26 +79,26 @@ const resetPasswordSchema = z
  * Server Action: Sign Up
  */
 export async function signUpAction(formData: z.infer<typeof signUpSchema>): Promise<ActionResponse> {
-  // 1. Zod Validation
-  const validatedFields = signUpSchema.safeParse(formData);
-  if (!validatedFields.success) {
-    return { success: false, error: validatedFields.error.issues[0].message };
-  }
-
-  const { fullName, email, password, role } = validatedFields.data;
-
-  // 2. Rate Limiting (10 signups / hour / IP)
-  const ip = await getClientIp();
-  const signupLimit = rateLimit(`signup:${ip}`, 10, 60 * 60 * 1000);
-  if (!signupLimit.success) {
-    return {
-      success: false,
-      error: "Too many sign up requests. Please try again in an hour.",
-    };
-  }
-
-  // 3. Supabase Auth Call
   try {
+    // 1. Zod Validation
+    const validatedFields = signUpSchema.safeParse(formData);
+    if (!validatedFields.success) {
+      return { success: false, error: validatedFields.error.issues[0].message };
+    }
+
+    const { fullName, email, password, role } = validatedFields.data;
+
+    // 2. Rate Limiting (10 signups / hour / IP)
+    const ip = await getClientIp();
+    const signupLimit = rateLimit(`signup:${ip}`, 10, 60 * 60 * 1000);
+    if (!signupLimit.success) {
+      return {
+        success: false,
+        error: "Too many sign up requests. Please try again in an hour.",
+      };
+    }
+
+    // 3. Supabase Auth Call
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -123,6 +123,7 @@ export async function signUpAction(formData: z.infer<typeof signUpSchema>): Prom
 
     return { success: true, message: "Registration successful!" };
   } catch (error: unknown) {
+    console.error("signUpAction critical failure:", error);
     const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
     return { success: false, error: errorMessage };
   }
@@ -132,32 +133,32 @@ export async function signUpAction(formData: z.infer<typeof signUpSchema>): Prom
  * Server Action: Sign In
  */
 export async function signInAction(formData: z.infer<typeof signInSchema>): Promise<ActionResponse> {
-  // 1. Zod Validation
-  const validatedFields = signInSchema.safeParse(formData);
-  if (!validatedFields.success) {
-    return { success: false, error: validatedFields.error.issues[0].message };
-  }
-
-  const { email, password } = validatedFields.data;
-
-  // 2. Rate Limiting
-  const ip = await getClientIp();
-  // Max 10 attempts / minute / IP
-  const ipLimit = rateLimit(`signin:ip:${ip}`, 10, 60 * 1000);
-  if (!ipLimit.success) {
-    return { success: false, error: "Too many login attempts. Please wait a minute." };
-  }
-  // Max 5 attempts / 5 minutes / Email
-  const emailLimit = rateLimit(`signin:email:${email}`, 5, 5 * 60 * 1000);
-  if (!emailLimit.success) {
-    return {
-      success: false,
-      error: "Too many failed attempts for this email. Please try again in 5 minutes.",
-    };
-  }
-
-  // 3. Supabase Auth Call
   try {
+    // 1. Zod Validation
+    const validatedFields = signInSchema.safeParse(formData);
+    if (!validatedFields.success) {
+      return { success: false, error: validatedFields.error.issues[0].message };
+    }
+
+    const { email, password } = validatedFields.data;
+
+    // 2. Rate Limiting
+    const ip = await getClientIp();
+    // Max 10 attempts / minute / IP
+    const ipLimit = rateLimit(`signin:ip:${ip}`, 10, 60 * 1000);
+    if (!ipLimit.success) {
+      return { success: false, error: "Too many login attempts. Please wait a minute." };
+    }
+    // Max 5 attempts / 5 minutes / Email
+    const emailLimit = rateLimit(`signin:email:${email}`, 5, 5 * 60 * 1000);
+    if (!emailLimit.success) {
+      return {
+        success: false,
+        error: "Too many failed attempts for this email. Please try again in 5 minutes.",
+      };
+    }
+
+    // 3. Supabase Auth Call
     const supabase = await createServerSupabaseClient();
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -173,6 +174,7 @@ export async function signInAction(formData: z.infer<typeof signInSchema>): Prom
 
     return { success: true };
   } catch (error: unknown) {
+    console.error("signInAction critical failure:", error);
     const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
     return { success: false, error: errorMessage };
   }
@@ -184,26 +186,26 @@ export async function signInAction(formData: z.infer<typeof signInSchema>): Prom
 export async function verifyEmailOtpAction(
   formData: z.infer<typeof verifyOtpSchema>
 ): Promise<ActionResponse> {
-  // 1. Zod Validation
-  const validatedFields = verifyOtpSchema.safeParse(formData);
-  if (!validatedFields.success) {
-    return { success: false, error: validatedFields.error.issues[0].message };
-  }
-
-  const { email, token, type } = validatedFields.data;
-
-  // 2. Rate Limiting (5 verification attempts / 5 minutes / email+IP)
-  const ip = await getClientIp();
-  const verifyLimit = rateLimit(`verify:${email}:${ip}`, 5, 5 * 60 * 1000);
-  if (!verifyLimit.success) {
-    return {
-      success: false,
-      error: "Too many incorrect OTP attempts. Please wait 5 minutes.",
-    };
-  }
-
-  // 3. Supabase Auth Call
   try {
+    // 1. Zod Validation
+    const validatedFields = verifyOtpSchema.safeParse(formData);
+    if (!validatedFields.success) {
+      return { success: false, error: validatedFields.error.issues[0].message };
+    }
+
+    const { email, token, type } = validatedFields.data;
+
+    // 2. Rate Limiting (5 verification attempts / 5 minutes / email+IP)
+    const ip = await getClientIp();
+    const verifyLimit = rateLimit(`verify:${email}:${ip}`, 5, 5 * 60 * 1000);
+    if (!verifyLimit.success) {
+      return {
+        success: false,
+        error: "Too many incorrect OTP attempts. Please wait 5 minutes.",
+      };
+    }
+
+    // 3. Supabase Auth Call
     const supabase = await createServerSupabaseClient();
     const { error } = await supabase.auth.verifyOtp({
       email,
@@ -217,6 +219,7 @@ export async function verifyEmailOtpAction(
 
     return { success: true };
   } catch (error: unknown) {
+    console.error("verifyEmailOtpAction critical failure:", error);
     const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
     return { success: false, error: errorMessage };
   }
@@ -226,26 +229,26 @@ export async function verifyEmailOtpAction(
  * Server Action: Resend OTP
  */
 export async function resendOtpAction(formData: z.infer<typeof resendOtpSchema>): Promise<ActionResponse> {
-  // 1. Zod Validation
-  const validatedFields = resendOtpSchema.safeParse(formData);
-  if (!validatedFields.success) {
-    return { success: false, error: validatedFields.error.issues[0].message };
-  }
-
-  const { email, type } = validatedFields.data;
-
-  // 2. Rate Limiting (3 resends / 10 minutes / email+IP)
-  const ip = await getClientIp();
-  const resendLimit = rateLimit(`resend:${email}:${ip}`, 3, 10 * 60 * 1000);
-  if (!resendLimit.success) {
-    return {
-      success: false,
-      error: "Too many resend requests. Please wait a few minutes.",
-    };
-  }
-
-  // 3. Supabase Auth Call
   try {
+    // 1. Zod Validation
+    const validatedFields = resendOtpSchema.safeParse(formData);
+    if (!validatedFields.success) {
+      return { success: false, error: validatedFields.error.issues[0].message };
+    }
+
+    const { email, type } = validatedFields.data;
+
+    // 2. Rate Limiting (3 resends / 10 minutes / email+IP)
+    const ip = await getClientIp();
+    const resendLimit = rateLimit(`resend:${email}:${ip}`, 3, 10 * 60 * 1000);
+    if (!resendLimit.success) {
+      return {
+        success: false,
+        error: "Too many resend requests. Please wait a few minutes.",
+      };
+    }
+
+    // 3. Supabase Auth Call
     const supabase = await createServerSupabaseClient();
 
     if (type === "recovery") {
@@ -266,6 +269,7 @@ export async function resendOtpAction(formData: z.infer<typeof resendOtpSchema>)
 
     return { success: true, message: "A new verification code has been sent." };
   } catch (error: unknown) {
+    console.error("resendOtpAction critical failure:", error);
     const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
     return { success: false, error: errorMessage };
   }
@@ -277,26 +281,26 @@ export async function resendOtpAction(formData: z.infer<typeof resendOtpSchema>)
 export async function forgotPasswordAction(
   formData: z.infer<typeof forgotPasswordSchema>
 ): Promise<ActionResponse> {
-  // 1. Zod Validation
-  const validatedFields = forgotPasswordSchema.safeParse(formData);
-  if (!validatedFields.success) {
-    return { success: false, error: validatedFields.error.issues[0].message };
-  }
-
-  const { email } = validatedFields.data;
-
-  // 2. Rate Limiting (3 requests / hour / email+IP)
-  const ip = await getClientIp();
-  const forgotLimit = rateLimit(`forgot:${email}:${ip}`, 3, 60 * 60 * 1000);
-  if (!forgotLimit.success) {
-    return {
-      success: false,
-      error: "Too many password reset requests. Please try again later.",
-    };
-  }
-
-  // 3. Supabase Auth Call — send OTP code (not a link)
   try {
+    // 1. Zod Validation
+    const validatedFields = forgotPasswordSchema.safeParse(formData);
+    if (!validatedFields.success) {
+      return { success: false, error: validatedFields.error.issues[0].message };
+    }
+
+    const { email } = validatedFields.data;
+
+    // 2. Rate Limiting (3 requests / hour / email+IP)
+    const ip = await getClientIp();
+    const forgotLimit = rateLimit(`forgot:${email}:${ip}`, 3, 60 * 60 * 1000);
+    if (!forgotLimit.success) {
+      return {
+        success: false,
+        error: "Too many password reset requests. Please try again later.",
+      };
+    }
+
+    // 3. Supabase Auth Call — send OTP code (not a link)
     const supabase = await createServerSupabaseClient();
     const { error } = await supabase.auth.resetPasswordForEmail(email);
 
@@ -315,7 +319,7 @@ export async function forgotPasswordAction(
     console.error("Forgot password server error:", error);
     return {
       success: true,
-      email,
+      email: formData.email,
       message: "If an account exists with that email, a verification code has been sent.",
     };
   }
@@ -327,16 +331,16 @@ export async function forgotPasswordAction(
 export async function resetPasswordAction(
   formData: z.infer<typeof resetPasswordSchema>
 ): Promise<ActionResponse> {
-  // 1. Zod Validation
-  const validatedFields = resetPasswordSchema.safeParse(formData);
-  if (!validatedFields.success) {
-    return { success: false, error: validatedFields.error.issues[0].message };
-  }
-
-  const { password } = validatedFields.data;
-
-  // 2. Supabase Auth Call
   try {
+    // 1. Zod Validation
+    const validatedFields = resetPasswordSchema.safeParse(formData);
+    if (!validatedFields.success) {
+      return { success: false, error: validatedFields.error.issues[0].message };
+    }
+
+    const { password } = validatedFields.data;
+
+    // 2. Supabase Auth Call
     const supabase = await createServerSupabaseClient();
     const { error } = await supabase.auth.updateUser({
       password,
@@ -348,6 +352,7 @@ export async function resetPasswordAction(
 
     return { success: true, message: "Your password has been successfully updated." };
   } catch (error: unknown) {
+    console.error("resetPasswordAction critical failure:", error);
     const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
     return { success: false, error: errorMessage };
   }
