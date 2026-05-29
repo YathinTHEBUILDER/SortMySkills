@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { ButtonLink } from "@/components/ui/Button";
-import { ROLES_DATABASE } from "@/data/roles";
+import { ROLES_DATABASE, Role } from "@/data/roles";
 import { Check, ArrowRight } from "lucide-react";
 import {
   BarChart,
@@ -17,7 +16,7 @@ import {
 } from "recharts";
 
 export default function SkillDevelopmentPage() {
-  const [selectedRole, setSelectedRole] = useState(ROLES_DATABASE[0]);
+  const [selectedRole, setSelectedRole] = useState<Role>(ROLES_DATABASE[0]);
   const [userSkills, setUserSkills] = useState<string[]>(["JavaScript", "Git"]);
   const [mounted, setMounted] = useState(false);
 
