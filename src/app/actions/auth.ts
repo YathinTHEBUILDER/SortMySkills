@@ -44,7 +44,7 @@ const verifyOtpSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
   token: z
     .string()
-    .length(6, "Verification code must be exactly 6 digits.")
+    .length(8, "Verification code must be exactly 8 digits.")
     .regex(/^\d+$/, "Verification code must contain digits only."),
   type: z.enum(["signup", "recovery", "email_change"], {
     message: "Invalid verification type.",
