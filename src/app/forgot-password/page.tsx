@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
         <div className="absolute inset-0 dot-grid-overlay opacity-20 pointer-events-none" />
         <CardHeader
           title="Reset Password"
-          description="Enter your email and we'll send a 6-digit verification code."
+          description="Enter your email and we'll send an 8-digit verification code."
           className="relative z-10 text-center pb-2"
         />
         <CardBody className="pt-0 relative z-10">

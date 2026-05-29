@@ -12,7 +12,7 @@ interface OtpFormProps {
 
 export default function OtpForm({ email, type }: OtpFormProps) {
   const router = useRouter();
-  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [otp, setOtp] = useState<string[]>(Array(8).fill(""));
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -50,7 +50,7 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     setOtp(newOtp);
 
     // Auto-focus next input if value is entered
-    if (value && index < 5) {
+    if (value && index < 7) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -78,12 +78,12 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     e.preventDefault();
     const pasteData = e.clipboardData.getData("text").trim();
 
-    // Check if pasted value is a 6-digit number
-    if (/^\d{6}$/.test(pasteData)) {
+    // Check if pasted value is an 8-digit number
+    if (/^\d{8}$/.test(pasteData)) {
       const pasteDigits = pasteData.split("");
       setOtp(pasteDigits);
       // Focus the last input box
-      inputRefs.current[5]?.focus();
+      inputRefs.current[7]?.focus();
     }
   };
 
@@ -94,8 +94,8 @@ export default function OtpForm({ email, type }: OtpFormProps) {
     setSuccessMessage(null);
 
     const token = otp.join("");
-    if (token.length !== 6) {
-      setError("Please enter the complete 6-digit verification code.");
+    if (token.length !== 8) {
+      setError("Please enter the complete 8-digit verification code.");
       return;
     }
 
