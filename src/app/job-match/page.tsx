@@ -1,27 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
-import Logo from "@/components/Logo";
-import Link from "next/link";
 import gsap from "gsap";
-import { Upload, FileText, Clipboard, ArrowRight, CheckCircle2, AlertTriangle, Layers, BookOpen, Clock, RotateCcw } from "lucide-react";
+import { FileText, Clipboard, CheckCircle2, AlertTriangle, Layers, Clock, RotateCcw } from "lucide-react";
 
-// Mock normalization registry
-const SKILL_MAP: Record<string, string> = {
-  react: "React", "react.js": "React", reactjs: "React", "react native": "React",
-  js: "JavaScript", javascript: "JavaScript", es6: "JavaScript",
-  ts: "TypeScript", typescript: "TypeScript",
-  py: "Python", python: "Python", python3: "Python",
-  ml: "Machine Learning", machinelearning: "Machine Learning", "deep learning": "Machine Learning", "deeplearning": "Machine Learning",
-  ds: "Data Science", datascience: "Data Science", pandas: "Data Science", numpy: "Data Science",
-  ux: "UX Design", figma: "UX Design", uiux: "UX Design", "ui/ux": "UX Design", "product design": "UX Design",
-  pm: "Product Management", "product management": "Product Management", agile: "Product Management", scrum: "Product Management",
-  tailwind: "Tailwind CSS", tailwindcss: "Tailwind CSS", css: "Tailwind CSS",
-  node: "Node.js", nodejs: "Node.js", "node.js": "Node.js",
-  sql: "SQL", postgresql: "SQL", mysql: "SQL", sqlquery: "SQL",
-  git: "Git", github: "Git"
-};
+import { extractSkillsFromText } from "@/lib/skill-map";
 
 const COURSERA_COURSES = [
   {
@@ -124,27 +108,8 @@ export default function JobMatch() {
     // Simulate compilation loading state
     setTimeout(() => {
       // NLP/Tag parsing logic
-      const extractSkills = (text: string): string[] => {
-        const tokens = text.toLowerCase().split(/[,\s\n\-\:\(\)]+/).map(t => t.trim());
-        const matched: string[] = [];
-        tokens.forEach((token) => {
-          if (SKILL_MAP[token] && !matched.includes(SKILL_MAP[token])) {
-            matched.push(SKILL_MAP[token]);
-          } else {
-            Object.keys(SKILL_MAP).forEach((key) => {
-              if (token === key || (token.includes(key) && token.length > 2)) {
-                if (!matched.includes(SKILL_MAP[key])) {
-                  matched.push(SKILL_MAP[key]);
-                }
-              }
-            });
-          }
-        });
-        return matched;
-      };
-
-      const parsedResume = extractSkills(resumeText);
-      const parsedJD = extractSkills(jdText);
+      const parsedResume = extractSkillsFromText(resumeText);
+      const parsedJD = extractSkillsFromText(jdText);
 
       // Calculations
       const matched = parsedJD.filter((s) => parsedResume.includes(s));

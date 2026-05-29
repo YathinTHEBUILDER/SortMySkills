@@ -5,23 +5,8 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Logo from "@/components/Logo";
 import gsap from "gsap";
-import { ArrowRight, Compass, CheckCircle, Search, Layers, Clipboard, HelpCircle } from "lucide-react";
-
-// Mock normalization registry
-const SKILL_MAP: Record<string, string> = {
-  react: "React", "react.js": "React", reactjs: "React", "react native": "React",
-  js: "JavaScript", javascript: "JavaScript", es6: "JavaScript",
-  ts: "TypeScript", typescript: "TypeScript",
-  py: "Python", python: "Python", python3: "Python",
-  ml: "Machine Learning", machinelearning: "Machine Learning", "deep learning": "Machine Learning", "deeplearning": "Machine Learning",
-  ds: "Data Science", datascience: "Data Science", pandas: "Data Science", numpy: "Data Science",
-  ux: "UX Design", figma: "UX Design", uiux: "UX Design", "ui/ux": "UX Design", "product design": "UX Design",
-  pm: "Product Management", "product management": "Product Management", agile: "Product Management", scrum: "Product Management",
-  tailwind: "Tailwind CSS", tailwindcss: "Tailwind CSS", css: "Tailwind CSS",
-  node: "Node.js", nodejs: "Node.js", "node.js": "Node.js",
-  sql: "SQL", postgresql: "SQL", mysql: "SQL", sqlquery: "SQL",
-  git: "Git", github: "Git"
-};
+import { ArrowRight, Compass, CheckCircle, Layers } from "lucide-react";
+import { SKILL_MAP, extractSkillsFromText } from "@/lib/skill-map";
 
 const COURSERA_COURSES = [
   {
@@ -179,26 +164,7 @@ export default function Home() {
     e.preventDefault();
     if (!inputText.trim()) return;
 
-    const tokens = inputText.toLowerCase().split(/[,\s\n]+/).map(t => t.trim());
-    const matched: string[] = [];
-
-    tokens.forEach((token) => {
-      // Direct matches
-      if (SKILL_MAP[token]) {
-        if (!matched.includes(SKILL_MAP[token])) {
-          matched.push(SKILL_MAP[token]);
-        }
-      } else {
-        // Substring matching
-        Object.keys(SKILL_MAP).forEach((key) => {
-          if (token.includes(key) || key.includes(token)) {
-            if (!matched.includes(SKILL_MAP[key]) && token.length > 1) {
-              matched.push(SKILL_MAP[key]);
-            }
-          }
-        });
-      }
-    });
+    const matched = extractSkillsFromText(inputText);
 
     if (matched.length > 0) {
       setExtractedTags(matched);
@@ -214,25 +180,26 @@ export default function Home() {
   };
 
   // Hover animations for pathway cards
-  const handlePathHover = (el: HTMLDivElement | null, accentColor: string) => {
+  const handlePathHover = (el: HTMLDivElement | null, accentVar: string) => {
     if (!el) return;
     gsap.to(el, {
-      borderColor: accentColor,
-      backgroundColor: "rgba(20, 20, 19, 0.6)",
+      borderColor: `var(${accentVar})`,
+      backgroundColor: "var(--surface-card)",
+      opacity: 0.95,
       y: -4,
       duration: 0.4,
-      ease: "power2.out"
+      ease: "power2.out",
     });
   };
 
   const handlePathLeave = (el: HTMLDivElement | null) => {
     if (!el) return;
     gsap.to(el, {
-      borderColor: "rgba(244, 244, 243, 0.06)",
+      borderColor: "var(--border-muted)",
       backgroundColor: "transparent",
       y: 0,
       duration: 0.4,
-      ease: "power2.out"
+      ease: "power2.out",
     });
   };
 
@@ -262,7 +229,7 @@ export default function Home() {
             </h1>
 
             <p className="hero-fade text-base text-text-secondary max-w-xl leading-relaxed mb-8">
-              Students waste months taking generic courses that don't match target roles. 
+              Students waste months taking generic courses that do not match target roles. 
               <span className="text-text-primary"> SortMySkills</span> breaks down chaotic resumes and job 
               descriptions into verified technical tags, matching your missing skills directly 
               against curated study roadmaps.
@@ -290,8 +257,8 @@ export default function Home() {
                 <span className="block text-2xl font-light mt-1 text-text-primary">150+ Tags</span>
               </div>
               <div>
-                <span className="block text-[10px] font-mono text-text-secondary uppercase tracking-widest">CURATED DIRECTORY</span>
-                <span className="block text-2xl font-light mt-1 text-text-primary">40+ Courses</span>
+                <span className="block text-[10px] font-mono text-text-secondary uppercase tracking-widest">INTERVIEW PACKS</span>
+                <span className="block text-2xl font-light mt-1 text-text-primary">600 Interview Qs</span>
               </div>
               <div>
                 <span className="block text-[10px] font-mono text-text-secondary uppercase tracking-widest">MATCH PRECISION</span>
@@ -379,7 +346,7 @@ export default function Home() {
           {/* Pathway 1: Skill Development Card */}
           <div
             ref={path1Ref}
-            onMouseEnter={() => handlePathHover(path1Ref.current, "#3be87e")}
+            onMouseEnter={() => handlePathHover(path1Ref.current, "--accent-primary")}
             onMouseLeave={() => handlePathLeave(path1Ref.current)}
             className="p-8 border fine-line bg-transparent flex flex-col justify-between transition-all duration-300 relative group cursor-pointer"
           >
@@ -417,7 +384,7 @@ export default function Home() {
           {/* Pathway 2: Job Match Analysis Card */}
           <div
             ref={path2Ref}
-            onMouseEnter={() => handlePathHover(path2Ref.current, "#1ad1d7")}
+            onMouseEnter={() => handlePathHover(path2Ref.current, "--accent-secondary")}
             onMouseLeave={() => handlePathLeave(path2Ref.current)}
             className="p-8 border fine-line bg-transparent flex flex-col justify-between transition-all duration-300 relative group cursor-pointer"
           >
@@ -604,6 +571,33 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Interview Packs CTA */}
+      <section className="py-20 px-6 max-w-7xl mx-auto z-10 relative fine-border-t">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-5">
+            <span className="block text-[11px] font-mono text-accent-cyan uppercase tracking-widest mb-2">SKILLQORE BANK</span>
+            <h2 className="text-3xl font-light text-text-primary">Interview Question Packs</h2>
+            <p className="text-text-secondary text-sm mt-3 leading-relaxed">
+              Six role packs with 100 questions each — Easy, Medium, and Hard — for assessments,
+              interviews, and skill evaluation.
+            </p>
+          </div>
+          <div className="lg:col-span-7 flex flex-wrap gap-2">
+            {["Frontend Engineer", "Backend Engineer", "Data Analyst", "ML Engineer", "UX Designer", "Product Manager"].map((role) => (
+              <span key={role} className="px-3 py-1.5 bg-surface-card fine-line font-mono text-[10px] text-text-secondary">
+                {role}
+              </span>
+            ))}
+            <Link
+              href="/interview-packs"
+              className="w-full sm:w-auto mt-4 px-6 py-2.5 bg-accent-green text-bg-dark font-mono text-[11px] uppercase tracking-wider font-bold hover:bg-accent-cyan transition-colors inline-flex items-center gap-1.5"
+            >
+              Browse all packs <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Product Philosophy Editorial Section */}
       <section id="philosophy" className="py-24 px-6 max-w-7xl mx-auto z-10 relative fine-border-t">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -626,7 +620,7 @@ export default function Home() {
             <div className="space-y-6">
               <p>
                 <span className="text-4xl font-normal text-text-primary text-serif float-left mr-2.5 mt-1 leading-[0.8]">T</span>
-                he online education market is bloated with a tragic paradox. Today's students have infinite access to course lectures, coding bootcamps, and specialized credentials. Yet, early-career job applicants have never felt more disconnected from the demands of real hiring managers.
+                he online education market is bloated with a tragic paradox. Today&apos;s students have infinite access to course lectures, coding bootcamps, and specialized credentials. Yet, early-career job applicants have never felt more disconnected from the demands of real hiring managers.
               </p>
               <p>
                 This misalignment exists because students learn randomly. They pursue skills based on what is recommended by generic marketplace algorithms or what is trending on tech forums. A student might master Django and Ruby, only to apply for front-end React roles, wondering why their resume gets immediately filtered out by algorithmic scanners.
@@ -670,7 +664,8 @@ export default function Home() {
 
           <div className="flex flex-wrap gap-6 justify-center">
             <Link href="/skill-development" className="hover:text-text-primary transition-colors">SKILL DEVELOPMENT</Link>
-            <Link href="/job-match" className="hover:text-text-primary transition-colors">JOB MATCH ANALYSIS</Link>
+            <Link href="/job-match" className="hover:text-text-primary transition-colors">JOB MATCH</Link>
+            <Link href="/interview-packs" className="hover:text-text-primary transition-colors">INTERVIEW PACKS</Link>
             <a href="https://www.coursera.org" target="_blank" rel="noopener noreferrer" className="hover:text-text-primary transition-colors">COURSERA DIRECTORY</a>
           </div>
 

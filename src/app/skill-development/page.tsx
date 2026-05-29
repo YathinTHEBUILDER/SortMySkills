@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
-import Logo from "@/components/Logo";
 import Link from "next/link";
 import gsap from "gsap";
 import { Check, Compass, AlertCircle, Sparkles, BookOpen, Clock, Target, ArrowRight } from "lucide-react";
@@ -279,11 +278,11 @@ export default function SkillDevelopment() {
                           <XAxis dataKey="name" stroke="#9c9c98" fontSize={9} tickLine={false} axisLine={false} />
                           <YAxis stroke="#9c9c98" fontSize={8} tickLine={false} axisLine={false} domain={[0, 10]} />
                           <Tooltip
-                            contentStyle={{ background: "#141413", border: "0.5px solid rgba(244,244,243,0.1)", fontSize: 10, fontFamily: "monospace" }}
-                            labelStyle={{ color: "#f4f4f3" }}
+                            contentStyle={{ background: "var(--surface-card)", border: "0.5px solid var(--border-muted)", fontSize: 10, fontFamily: "monospace" }}
+                            labelStyle={{ color: "var(--foreground)" }}
                           />
                           <Bar dataKey="Required" fill="rgba(244,244,243,0.08)" radius={0} />
-                          <Bar dataKey="Current" fill="#3be87e" radius={0} />
+                          <Bar dataKey="Current" fill="var(--accent-primary)" radius={0} />
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
