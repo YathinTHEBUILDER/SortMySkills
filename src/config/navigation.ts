@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   ScanSearch,
   MailX,
+  User,
 } from "lucide-react";
 
 export const mainNav = [
@@ -16,4 +17,5 @@ export const mainNav = [
   { href: "/jd-translator", label: "JD Translator", icon: Languages },
   { href: "/why-no-reply", label: "Why No Reply", icon: MailX },
   { href: "/interview-packs", label: "Interview packs", icon: BookOpen },
+  { href: "/profile", label: "Profile", icon: User },
 ] as const;
