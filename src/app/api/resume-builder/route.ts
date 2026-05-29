@@ -180,7 +180,7 @@ Special Instructions: ${instructions || "None"}`;
         },
         signal: controller.signal,
         body: JSON.stringify({
-          model: "llama3-70b-8192",
+          model: "llama-3.3-70b-versatile",
           temperature: 0.6,
           max_tokens: 3500,
           response_format: { type: "json_object" },
