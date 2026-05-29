@@ -26,7 +26,7 @@ const themeInitScript = `
   try {
     var mode = localStorage.getItem('sortmyskills-theme-mode');
     var pack = localStorage.getItem('sortmyskills-color-pack') || 'terracotta';
-    var packs = { terracotta: ['#E85A4F','#E98074'], neon: ['#3be87e','#1ad1d7'], amber: ['#d4a017','#b87333'], slate: ['#7eb8c9','#c4cdd5'] };
+    var packs = { terracotta: ['#7C7CFF','#A9A9FE'], neon: ['#3be87e','#1ad1d7'], amber: ['#d4a017','#b87333'], slate: ['#7eb8c9','#c4cdd5'] };
     var colors = packs[pack] || packs.terracotta;
     document.documentElement.classList.add(mode === 'light' ? 'light' : 'dark');
     document.documentElement.setAttribute('data-color-pack', pack);

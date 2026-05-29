@@ -12,10 +12,10 @@ export interface ColorPack {
 export const COLOR_PACKS: ColorPack[] = [
   {
     id: "terracotta",
-    name: "Minimal Yet Warm",
-    description: "Rich warm coral and rose pink — premium editorial default",
-    accentPrimary: "#E85A4F",
-    accentSecondary: "#E98074",
+    name: "Torivo Indigo",
+    description: "Vibrant electric indigo and glowing lavender — premium Torivo default",
+    accentPrimary: "#7C7CFF",
+    accentSecondary: "#A9A9FE",
   },
   {
     id: "neon",
