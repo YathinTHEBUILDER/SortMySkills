@@ -210,7 +210,7 @@ export default function CareerRoadmapPage() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="space-y-8 animate-fade-in relative z-10">
       {pageState !== "results" && (
         <PageHeader
           title="Career Roadmap"

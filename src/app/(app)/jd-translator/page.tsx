@@ -189,7 +189,7 @@ export default function JDTranslatorPage() {
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div>
+    <div className="space-y-6 animate-fade-in relative z-10">
       <PageHeader
         title="JD Translator"
         description="Paste any job description. Get the honest version."

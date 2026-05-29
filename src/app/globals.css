@@ -186,7 +186,7 @@ html.dark .warm-glow-effect {
 .premium-card {
   background: var(--surface-card);
   border: 1px solid var(--border-muted);
-  border-radius: 20px;
+  border-radius: 1rem;
   box-shadow: var(--shadow-sm);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 }

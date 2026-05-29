@@ -291,7 +291,7 @@ export default function ATSScorerPage() {
     : circumference;
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="space-y-8 animate-fade-in relative z-10">
       <PageHeader
         title="ATS Scorer"
         description="Paste your resume and a job description to audit your ATS compatibility score and identify structure/keyword gaps."

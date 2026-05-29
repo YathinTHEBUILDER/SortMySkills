@@ -367,7 +367,7 @@ export default function ResumeBuilderPage() {
   // ── RENDERING ──
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <div className="space-y-8 animate-fade-in relative z-10">
       {screen !== "result" && (
         <PageHeader
           title="Resume Builder"
@@ -1134,7 +1134,7 @@ export default function ResumeBuilderPage() {
               )}
 
               {/* Styled Resume Preview Card */}
-              <Card className="premium-card bg-[var(--surface-card-warm)] border-[var(--border-strong)] relative">
+              <Card className="premium-card bg-[var(--surface-card-warm)] relative">
                 <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
                 <CardBody className="p-8 md:p-10 font-sans relative z-10 select-text selection:bg-accent-primary/20">
                   <div className="space-y-4 max-w-2xl mx-auto">

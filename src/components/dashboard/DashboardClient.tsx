@@ -58,7 +58,7 @@ export default function DashboardClient({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Metric 1: Target Career Track */}
-        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
           <div className="flex justify-between items-center relative z-10">
             <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Target Role Track</span>
@@ -75,7 +75,7 @@ export default function DashboardClient({
         </div>
 
         {/* Metric 2: Latest Readiness Score */}
-        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
           <div className="flex justify-between items-center relative z-10">
             <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Readiness Quotient</span>
@@ -98,7 +98,7 @@ export default function DashboardClient({
         </div>
 
         {/* Metric 3: Unique Audited Skills */}
-        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
           <div className="flex justify-between items-center relative z-10">
             <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Unique Mapped Skills</span>
@@ -115,7 +115,7 @@ export default function DashboardClient({
         </div>
 
         {/* Metric 4: Total Roadmap Audits */}
-        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-5 shadow-xs relative overflow-hidden flex flex-col justify-between min-h-[140px]">
           <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
           <div className="flex justify-between items-center relative z-10">
             <span className="text-[9px] font-mono text-text-muted uppercase tracking-widest">Completed Audits</span>
@@ -137,7 +137,7 @@ export default function DashboardClient({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
         
         {/* Job Match Log Count */}
-        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-6 shadow-xs relative overflow-hidden flex items-center gap-4">
+        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex items-center gap-4">
           <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
           <div className="w-10 h-10 rounded-xl bg-[#E7717D]/10 border border-[#E7717D]/20 flex items-center justify-center text-[#E7717D] shrink-0">
             <FileText className="w-5 h-5" />
@@ -150,7 +150,7 @@ export default function DashboardClient({
         </div>
 
         {/* Skill Parser Playground Log Count */}
-        <div className="border border-[var(--border-strong)] bg-surface-card rounded-2xl p-6 shadow-xs relative overflow-hidden flex items-center gap-4">
+        <div className="border border-[var(--border-muted)] bg-[var(--surface-card)] rounded-2xl p-6 shadow-xs relative overflow-hidden flex items-center gap-4">
           <div className="absolute inset-0 dot-grid-overlay opacity-[0.06] pointer-events-none" />
           <div className="w-10 h-10 rounded-xl bg-[#AFD275]/10 border border-[#AFD275]/20 flex items-center justify-center text-[#AFD275] shrink-0">
             <Terminal className="w-5 h-5" />
@@ -165,7 +165,7 @@ export default function DashboardClient({
       </div>
 
       {/* 4. Footnote detailing RLS synchronization */}
-      <div className="border border-[var(--border-strong)] bg-[var(--surface-soft)]/20 rounded-2xl p-5 relative overflow-hidden">
+      <div className="border border-[var(--border-muted)] bg-[var(--surface-soft)]/20 rounded-2xl p-5 relative overflow-hidden">
         <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
         <span className="eyebrow block text-[8px] tracking-widest text-[#E7717D] dark:text-[#EE8590] font-mono uppercase mb-2">
           Workspace Database Synchronisation

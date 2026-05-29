@@ -4,6 +4,7 @@ import Logo from "@/components/Logo";
 import Sidebar from "./Sidebar";
 import ThemeControls from "@/components/ThemeControls";
 import { User } from "lucide-react";
+import { signOutAction } from "@/app/actions/auth";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -41,7 +42,7 @@ export default function DashboardShell({
             <ThemeControls />
             
             {maskedEmail && (
-              <div className="flex items-center gap-3 border border-[var(--border-strong)] bg-surface-card p-2 rounded-xl relative overflow-hidden h-10 shadow-xs">
+              <div className="flex items-center gap-3 border border-[var(--border-muted)] bg-[var(--surface-card)] p-2 rounded-xl relative overflow-hidden h-10 shadow-xs">
                 <div className="absolute inset-0 dot-grid-overlay opacity-10 pointer-events-none" />
                 <div className="w-6.5 h-6.5 rounded-lg bg-[#E7717D]/10 border border-[#E7717D]/20 flex items-center justify-center text-[#E7717D] dark:text-[#EE8590] shrink-0">
                   <User className="w-3.5 h-3.5" />
@@ -50,13 +51,22 @@ export default function DashboardShell({
                   <span className="block text-[7px] tracking-widest font-mono font-bold text-[#E7717D] dark:text-[#EE8590] uppercase">{roleText}</span>
                   <p className="text-[9px] text-text-secondary mt-0.5 max-w-[100px] truncate">{maskedEmail}</p>
                 </div>
-                <div className="border-l border-[var(--border-strong)] pl-2.5">
+                <div className="border-l border-[var(--border-muted)] pl-2.5 flex items-center gap-2">
                   <Link
                     href="/profile"
                     className="text-[8px] font-mono uppercase tracking-widest text-[#E7717D] dark:text-[#EE8590] hover:underline font-bold"
                   >
                     Settings
                   </Link>
+                  <span className="text-[var(--border-muted)] text-[10px] select-none font-bold">|</span>
+                  <form action={signOutAction} className="inline-flex items-center">
+                    <button
+                      type="submit"
+                      className="text-[8px] font-mono uppercase tracking-widest text-text-muted hover:text-red-500 font-bold transition-colors cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </form>
                 </div>
               </div>
             )}

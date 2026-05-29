@@ -98,22 +98,18 @@ export default async function ProfilePage() {
   });
 
   return (
-    <div className="space-y-10 animate-fade-in relative z-10">
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-[var(--border-muted)]">
-        <PageHeader
-          title="Account Profile"
-          description="Manage your career credentials, targets, and security details."
-        />
-      </div>
+    <div className="space-y-8 animate-fade-in relative z-10">
+      <PageHeader
+        title="Account Profile"
+        description="Manage your career credentials, targets, and security details."
+      />
 
       {/* Main Responsive Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Column: Premium Summary & Stats */}
-        <div className="space-y-8 lg:col-span-1">
-          {/* Visual card */}
-          <Card className="premium-card relative overflow-hidden animated-border">
+        {/* Left Column: Summary & Stats */}
+        <div className="lg:col-span-1">
+          <Card className="premium-card relative overflow-hidden animated-border h-full">
             <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
             <CardBody className="pt-6 relative z-10 flex flex-col items-center text-center">
               {/* Avatar circle */}
@@ -136,10 +132,10 @@ export default async function ProfilePage() {
                 </span>
               </div>
 
-              <div className="w-full border-t border-[var(--border-muted)] my-5" />
+              <div className="w-full border-t border-[var(--border-muted)] my-6" />
 
-              {/* Predefined Targets Info */}
-              <div className="w-full text-left space-y-4">
+              {/* Targets & Created */}
+              <div className="w-full text-left space-y-4 mb-8">
                 <div>
                   <span className="eyebrow block text-[8px] tracking-widest mb-1">Target Placement</span>
                   <div className="flex items-center gap-2 text-sm text-text-primary font-medium">
@@ -147,7 +143,6 @@ export default async function ProfilePage() {
                     <span>{targetRoleTitle}</span>
                   </div>
                 </div>
-
                 <div>
                   <span className="eyebrow block text-[8px] tracking-widest mb-1">Account Created</span>
                   <div className="flex items-center gap-2 text-sm text-text-secondary">
@@ -156,57 +151,39 @@ export default async function ProfilePage() {
                   </div>
                 </div>
               </div>
-            </CardBody>
-          </Card>
 
-          {/* Activity / Placement Stats Card */}
-          <Card className="premium-card relative overflow-hidden">
-            <CardHeader
-              title="Workspace Intelligence"
-              description="A live record of your career preparations."
-              className="border-b border-[var(--border-muted)]"
-            />
-            <CardBody className="pt-5 space-y-4.5">
-              {/* Stat 1 */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group hover:border-accent-primary/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-[#F6F1E8] transition-all">
-                    <Compass className="w-4 h-4" />
+              <div className="w-full border-t border-[var(--border-muted)] pt-6 space-y-4">
+                <span className="eyebrow block text-[8px] tracking-widest text-center mb-2">Workspace Activity</span>
+                {/* Stat 1 */}
+                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary">
+                      <Compass className="w-4 h-4" />
+                    </div>
+                    <p className="text-xs font-semibold text-text-primary">Skill Audits</p>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-text-primary leading-tight">Skill Audits</p>
-                    <p className="text-[10px] text-text-muted">Target gaps mapped</p>
-                  </div>
+                  <span className="text-sm font-bold text-text-primary font-mono">{stats.audits}</span>
                 </div>
-                <span className="text-base font-bold text-text-primary font-mono">{stats.audits}</span>
-              </div>
-
-              {/* Stat 2 */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group hover:border-accent-primary/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-[#F6F1E8] transition-all">
-                    <TrendingUp className="w-4 h-4" />
+                {/* Stat 2 */}
+                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary">
+                      <TrendingUp className="w-4 h-4" />
+                    </div>
+                    <p className="text-xs font-semibold text-text-primary">JD Analyses</p>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-text-primary leading-tight">JD Analyses</p>
-                    <p className="text-[10px] text-text-muted">Resumes matched</p>
-                  </div>
+                  <span className="text-sm font-bold text-text-primary font-mono">{stats.analyses}</span>
                 </div>
-                <span className="text-base font-bold text-text-primary font-mono">{stats.analyses}</span>
-              </div>
-
-              {/* Stat 3 */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group hover:border-accent-primary/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary group-hover:bg-accent-primary group-hover:text-[#F6F1E8] transition-all">
-                    <ScanSearch className="w-4 h-4" />
+                {/* Stat 3 */}
+                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary">
+                      <ScanSearch className="w-4 h-4" />
+                    </div>
+                    <p className="text-xs font-semibold text-text-primary">Parsed Resumes</p>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-text-primary leading-tight">Parsed Resumes</p>
-                    <p className="text-[10px] text-text-muted">Keywords normalized</p>
-                  </div>
+                  <span className="text-sm font-bold text-text-primary font-mono">{stats.parser}</span>
                 </div>
-                <span className="text-base font-bold text-text-primary font-mono">{stats.parser}</span>
               </div>
             </CardBody>
           </Card>
