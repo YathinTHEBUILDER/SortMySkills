@@ -15,7 +15,7 @@ export default function Sidebar() {
   return (
     <div className="sticky top-16 z-20 w-full border-b border-[var(--border-strong)] bg-[var(--background)]/85 backdrop-blur-md px-4 sm:px-6">
       {/* Horizontal Nav List */}
-      <nav className="max-w-5xl w-full mx-auto flex items-center justify-start gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2">
+      <nav className="max-w-5xl w-full mx-auto flex items-center justify-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-2">
         {mainNav.map(({ href, label, icon: Icon }) => {
           const active = isActive(href);
           return (
