@@ -883,7 +883,7 @@ export default function CareerAnalyserPage() {
                 </Tooltip>
               </div>
               <p className="text-xs text-text-secondary mt-2 leading-relaxed">
-                Checks your resume's structure, keyword density, action verbs, and contact details for recruiter software compatibility.
+                Checks your resume&apos;s structure, keyword density, action verbs, and contact details for recruiter software compatibility.
               </p>
               <p className="text-[10px] text-text-muted mt-2">⏱ Instant — no AI needed.</p>
             </div>
@@ -911,7 +911,7 @@ export default function CareerAnalyserPage() {
                 </Tooltip>
               </div>
               <p className="text-xs text-text-secondary mt-2 leading-relaxed">
-                Finds exactly which skills the job wants that your resume doesn't mention — and recommends Coursera courses to fill those gaps.
+                Finds exactly which skills the job wants that your resume doesn&apos;t mention — and recommends Coursera courses to fill those gaps.
               </p>
               <p className="text-[10px] text-text-muted mt-2">⏱ Instant — no AI needed.</p>
             </div>
