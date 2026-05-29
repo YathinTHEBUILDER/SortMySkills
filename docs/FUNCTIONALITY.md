@@ -104,7 +104,28 @@ See [INTERVIEW_PACKS.md](./INTERVIEW_PACKS.md) for full role list and question s
 
 ---
 
-## 5. Skill normalization (`src/lib/skill-map.ts`)
+## 5. Account Profile Settings (`/profile`)
+
+### Interactive profile card
+- Displays user's initials avatar with dynamic transitions and pulse highlights.
+- Visualizes verified email, role status (Student, Recent Graduate, Job Seeker), and target career placement.
+- Automatically creates fallback profile database states for users if they were created before schema instantiation.
+
+### Workspace Activity Dashboard
+- Shows real-time aggregated metrics computed dynamically using parallel count queries:
+  - **Skill Audits Run**: Total skill evaluations logged in `public.skill_audits`.
+  - **JD Analyses Matched**: Total comparison reports compiled in `public.job_analyses`.
+  - **Parsed Resumes**: Total normalized text streams processed in `public.parser_history`.
+- Stats scale automatically as the user completes workspace tasks.
+
+### Database Synchronization Form
+- Allows updating **Display Name**, **Membership Role**, and **Target Career Role** (linked to `ROLES_DATABASE`).
+- Synchronizes changes transactionally with both the `public.profiles` database table and Supabase Auth metadata.
+- Alerts user via `sonner` toast notifications.
+
+---
+
+## 6. Skill normalization (`src/lib/skill-map.ts`)
 
 Central registry maps aliases to canonical tags, including:
 
@@ -122,7 +143,7 @@ Central registry maps aliases to canonical tags, including:
 
 ---
 
-## 6. Theming (`ThemeProvider` + `globals.css`)
+## 7. Theming (`ThemeProvider` + `globals.css`)
 
 ### Light / dark mode
 - **Dark**: warm off-black charcoal (`#0f0f0e`), ivory text — default editorial look.
@@ -141,7 +162,7 @@ Stored in `sortmyskills-color-pack`. Logo, buttons, charts, and tags use `--acce
 
 ---
 
-## 7. Shared UI components
+## 8. Shared UI components
 
 | Component | Role |
 |-----------|------|
@@ -153,7 +174,7 @@ Stored in `sortmyskills-color-pack`. Logo, buttons, charts, and tags use `--acce
 
 ---
 
-## 8. Tech stack
+## 9. Tech stack
 
 | Layer | Choice |
 |-------|--------|
@@ -167,7 +188,7 @@ Stored in `sortmyskills-color-pack`. Logo, buttons, charts, and tags use `--acce
 
 ---
 
-## 9. Running locally
+## 10. Running locally
 
 ```bash
 npm install

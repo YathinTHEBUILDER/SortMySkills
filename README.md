@@ -3,7 +3,7 @@
 **Structured career intelligence** for students and early-career applicants: normalize skills, audit gaps, compare resumes to job descriptions, plan Coursera study paths, and practice with **600 curated interview questions**.
 
 Built with **Next.js 15**, **React 19**, **Tailwind CSS 4**, **GSAP**, **Lenis**, and **Recharts**.  
-Current version is a **client-side prototype** (no backend, no auth).
+Current version is a **fully integrated SaaS platform** featuring real-time email OTP authentication, transactional public profiles, and active Supabase database synchronization.
 
 ---
 
@@ -31,6 +31,7 @@ npm start       # serve production build
 | Plan learning for a target role | `/skill-development` | Check off skills → readiness % → Coursera gaps |
 | Compare resume vs a job post | `/job-match` | Same parser on both texts → match % + missing skills |
 | Practice interview questions | `/interview-packs` | 6 roles × 150 questions (50 Easy / Medium / Hard each) |
+| Manage profile & view workspace stats | `/profile` | Synchronizes custom display name/role with Supabase DB and Auth |
 | Switch look & accent colors | Navbar | Light/dark + 4 color packs |
 
 **Parser in one line:** messy text → tokenize → lookup aliases in `SKILL_MAP` → return canonical tags like `React`, `AWS`, `DevOps`.  
@@ -66,6 +67,7 @@ Details: **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)**
 | `/job-match` | Resume vs JD comparator |
 | `/interview-packs` | Interview pack catalog |
 | `/interview-packs/[slug]` | Single pack (e.g. `frontend-engineer`) |
+| `/profile` | Account settings, career targets, and workspace activity stats |
 
 ---
 

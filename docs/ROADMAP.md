@@ -74,12 +74,12 @@ Progress snapshot for reviewers and the team. Update this file as milestones shi
 
 ---
 
-## Phase 4 — Backend & persistence 📋
+## Phase 4 — Backend & persistence 🚧
 
 | Item | Status | Notes |
 |------|--------|-------|
 | User accounts / auth | ✅ | Implemented complete email OTP verification flow |
-| Save resume profiles & analyses | 📋 | |
+| Save resume profiles & analyses | ✅ | Implemented premium Profile Settings with active Supabase DB sync, transactional metadata updates, and stats |
 | Expand `SKILL_MAP` via admin or API | 📋 | |
 | Real Coursera or course API integration | 📋 | |
 | PDF/DOCX resume upload + text extraction | 📋 | |
@@ -121,6 +121,8 @@ Progress snapshot for reviewers and the team. Update this file as milestones shi
 ✅ Shipped Job Match comparator with gap analysis + Coursera bridges
 ✅ Added 600 interview questions across 6 roles with browse/filter UI
 ✅ Added light/dark mode + 4 swappable accent color packs
+✅ Shipped full user auth system with email OTP and session management
+✅ Shipped active Supabase DB synchronization for user profile management and stats
 ✅ Wrote reviewer documentation (parser, flows, roadmap, code guide)
 ```
 
@@ -132,7 +134,7 @@ Progress snapshot for reviewers and the team. Update this file as milestones shi
 2. **Backend Engineer** in skill planner + align roles with interview packs.  
 3. **Parser tests** + unify hero demo logic.  
 4. **Mobile navigation** hamburger menu.  
-5. **Persistence** — save analyses (needs backend).  
+5. **Persistence** — save individual resume comparison reports.  
 6. **PDF resume upload** (needs parser pipeline).  
 7. **Optional AI layer** for unknown skills (post-v1).
 

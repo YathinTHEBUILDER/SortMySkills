@@ -28,23 +28,31 @@ sortmyskills/
 │   │   ├── layout.tsx             # Root layout, fonts, ThemeProvider, theme init script
 │   │   ├── page.tsx               # Homepage — hero, parser, pathways, courses, philosophy
 │   │   │
+│   │   ├── actions/
+│   │   │   └── profile.ts         # Server action for updating database profiles
+│   │   │
 │   │   ├── skill-development/
 │   │   │   └── page.tsx           # Role selection, skill audit, readiness chart, Coursera roadmap
 │   │   │
 │   │   ├── job-match/
 │   │   │   └── page.tsx           # Resume vs JD comparator, gap matrix, course bridges
 │   │   │
-│   │   └── interview-packs/
-│   │       ├── page.tsx           # Catalog of all 6 interview packs
-│   │       └── [slug]/
-│   │           └── page.tsx       # Single pack viewer with difficulty filters
+│   │   ├── interview-packs/
+│   │   │   ├── page.tsx           # Catalog of all 6 interview packs
+│   │   │   └── [slug]/
+│   │   │       └── page.tsx       # Single pack viewer with difficulty filters
+│   │   │
+│   │   └── profile/
+│   │       └── page.tsx           # Account settings, targets, and workspace activity statistics
 │   │
 │   ├── components/
 │   │   ├── Logo.tsx               # SVG mark — gradient uses CSS accent variables
 │   │   ├── Navbar.tsx             # Global nav + theme controls
 │   │   ├── ThemeProvider.tsx      # Light/dark + color pack state (localStorage)
 │   │   ├── ThemeControls.tsx      # Sun/moon toggle + palette picker dropdown
-│   │   └── SmoothScrollProvider.tsx  # Lenis smooth scroll wrapper
+│   │   ├── SmoothScrollProvider.tsx  # Lenis smooth scroll wrapper
+│   │   └── dashboard/
+│   │       └── ProfileForm.tsx    # Premium profile edit form component
 │   │
 │   ├── data/
 │   │   └── interview-packs/
@@ -79,6 +87,7 @@ sortmyskills/
 | `/job-match` | `src/app/job-match/page.tsx` | Resume vs job description analysis |
 | `/interview-packs` | `src/app/interview-packs/page.tsx` | Interview pack catalog |
 | `/interview-packs/[slug]` | `src/app/interview-packs/[slug]/page.tsx` | Pack detail (filter by difficulty) |
+| `/profile` | `src/app/(app)/profile/page.tsx` | Account target preferences and workspace activity history |
 
 ## Slug reference (interview packs)
 
