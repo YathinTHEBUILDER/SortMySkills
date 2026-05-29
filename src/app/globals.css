@@ -36,76 +36,76 @@
 }
 
 /* ==========================================================================
-   Design Tokens - 'Refined Warm SaaS' Editorial Palette (Torivo Inspired)
+   Design Tokens - 'Torivo Electric Indigo' SaaS Palette
    ========================================================================== */
 
 :root {
-  --background: #F8F3EA;
-  --background-soft: #EFE6D8;
-  --foreground: #171717;
+  --background: #F6F6F6;
+  --background-soft: #EBEBEF;
+  --foreground: #08081E;
   --surface-card: #FFFFFF;
-  --surface-card-warm: #FFF9F0;
-  --surface-soft: #EFE6D8;
-  --surface-muted: #E8D8C2;
-  --surface-hover: #F1E4D2;
+  --surface-card-warm: #FAF9FC;
+  --surface-soft: #EBEBEF;
+  --surface-muted: #DFDFE5;
+  --surface-hover: #EEEEF2;
   
-  --text-secondary: #625B52;
-  --text-muted: #938879;
+  --text-secondary: #55556B;
+  --text-muted: #8E8E9F;
   
-  --border-muted: rgba(23, 23, 23, 0.08);
-  --border-strong: rgba(23, 23, 23, 0.16);
-  --grid-line: rgba(23, 23, 23, 0.02);
-  --dot-grid: rgba(23, 23, 23, 0.04);
+  --border-muted: rgba(8, 8, 30, 0.08);
+  --border-strong: rgba(8, 8, 30, 0.16);
+  --grid-line: rgba(8, 8, 30, 0.02);
+  --dot-grid: rgba(8, 8, 30, 0.04);
   
-  --accent-primary: #E36B4F;
-  --accent-primary-dark: #C9573F;
-  --accent-secondary: #D9A66F;
-  --accent-tertiary: #7E9F82;
-  --accent-ink: #25211D;
+  --accent-primary: #7C7CFF;
+  --accent-primary-dark: #4242FA;
+  --accent-secondary: #A9A9FE;
+  --accent-tertiary: #191960;
+  --accent-ink: #08081E;
 
-  --success: #6F9B7A;
-  --warning: #D99A4E;
-  --danger: #D96A5F;
+  --success: #34C759;
+  --warning: #FF9500;
+  --danger: #FF3B30;
 
-  --scrollbar-track: #EFE6D8;
-  --scrollbar-thumb: rgba(98, 91, 82, 0.2);
+  --scrollbar-track: #EBEBEF;
+  --scrollbar-thumb: rgba(8, 8, 30, 0.2);
   
-  --shadow-sm: 0 2px 8px rgba(37, 33, 29, 0.02);
-  --shadow-md: 0 8px 24px rgba(37, 33, 29, 0.04), 0 2px 4px rgba(37, 33, 29, 0.02);
-  --shadow-lg: 0 20px 40px rgba(37, 33, 29, 0.06), 0 4px 12px rgba(37, 33, 29, 0.03);
+  --shadow-sm: 0 2px 8px rgba(8, 8, 30, 0.02);
+  --shadow-md: 0 8px 24px rgba(8, 8, 30, 0.04), 0 2px 4px rgba(8, 8, 30, 0.02);
+  --shadow-lg: 0 20px 40px rgba(8, 8, 30, 0.06), 0 4px 12px rgba(8, 8, 30, 0.03);
 }
 
 /* Dark mode overrides */
 html.dark {
-  --background: #10100F;
-  --background-soft: #171615;
-  --foreground: #FFF8EC;
-  --surface-card: #1E1B18;
-  --surface-card-warm: #252018;
-  --surface-soft: #171615;
-  --surface-muted: #302920;
-  --surface-hover: #3A3127;
+  --background: #08081E;
+  --background-soft: #0E0E2C;
+  --foreground: #FFFFFF;
+  --surface-card: #0E0E2C;
+  --surface-card-warm: #131336;
+  --surface-soft: #131336;
+  --surface-muted: #1D1D4A;
+  --surface-hover: #1D1D4A;
   
-  --text-secondary: #C7B9A7;
-  --text-muted: #8E8172;
+  --text-secondary: #B5B5CC;
+  --text-muted: #7E7E99;
   
-  --border-muted: rgba(255, 248, 236, 0.08);
-  --border-strong: rgba(255, 248, 236, 0.16);
-  --grid-line: rgba(255, 248, 236, 0.015);
-  --dot-grid: rgba(255, 248, 236, 0.03);
+  --border-muted: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --grid-line: rgba(255, 255, 255, 0.015);
+  --dot-grid: rgba(255, 255, 255, 0.03);
   
-  --accent-primary: #EF7A5F;
-  --accent-primary-dark: #D6674F;
-  --accent-secondary: #E0B178;
-  --accent-tertiary: #91B894;
-  --accent-ink: #FFF8EC;
+  --accent-primary: #7C7CFF;
+  --accent-primary-dark: #A9A9FE;
+  --accent-secondary: #A9A9FE;
+  --accent-tertiary: #0E0E2C;
+  --accent-ink: #FFFFFF;
 
-  --success: #91B894;
-  --warning: #E0A65C;
-  --danger: #E57366;
+  --success: #34C759;
+  --warning: #FF9500;
+  --danger: #FF3B30;
 
-  --scrollbar-track: #171615;
-  --scrollbar-thumb: rgba(199, 185, 167, 0.2);
+  --scrollbar-track: #0E0E2C;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.2);
   
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -158,14 +158,14 @@ html.light .orb-bg {
   position: absolute;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(227, 107, 79, 0.08) 0%, rgba(217, 166, 111, 0.03) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(124, 124, 255, 0.08) 0%, rgba(169, 169, 254, 0.03) 50%, transparent 70%);
   filter: blur(80px);
   pointer-events: none;
   z-index: 0;
 }
 
 html.dark .warm-glow-effect {
-  background: radial-gradient(circle, rgba(239, 122, 95, 0.06) 0%, rgba(224, 177, 120, 0.02) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(124, 124, 255, 0.06) 0%, rgba(169, 169, 254, 0.02) 50%, transparent 70%);
 }
 
 /* Pure CSS high-end Noise Filter Overlay */
