@@ -133,21 +133,30 @@ export async function rateLimit(
         // by retrying the select-then-update routine once.
         console.warn("[RATE-LIMIT] Supabase insert conflict, retrying fetch + update:", insertError.message);
         const { data: retryRecords, error: retryFetchError } = await query;
-        if (!retryFetchError && retryRecords?.[0]) {
-          const retryRecord = retryRecords[0];
-          if (retryRecord.request_count >= limit) {
-            return { success: false, resetTime };
-          }
-          const { error: retryUpdateError } = await supabase
-            .from("api_rate_limits")
-            .update({
-              request_count: retryRecord.request_count + 1,
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", retryRecord.id);
-          if (retryUpdateError) {
-            console.error("[RATE-LIMIT] Supabase update retry failed:", retryUpdateError.message);
-          }
+        
+        if (retryFetchError) {
+          throw retryFetchError;
+        }
+
+        if (!retryRecords || retryRecords.length === 0) {
+          throw new Error("No record found during retry after insert conflict.");
+        }
+
+        const retryRecord = retryRecords[0];
+        if (retryRecord.request_count >= limit) {
+          return { success: false, resetTime };
+        }
+
+        const { error: retryUpdateError } = await supabase
+          .from("api_rate_limits")
+          .update({
+            request_count: retryRecord.request_count + 1,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", retryRecord.id);
+
+        if (retryUpdateError) {
+          throw retryUpdateError;
         }
       }
 

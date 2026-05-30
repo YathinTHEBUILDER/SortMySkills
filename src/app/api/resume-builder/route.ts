@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
       }
 
       systemPrompt = `You are an expert senior technical recruiter and professional resume writer.
-Your job is to generate a highly polished, ATS-optimized, and professionally written resume in clean Markdown format based on the user's inputs.
+Your job is to generate a highly polished, readiness-optimized, and professionally written resume in clean Markdown format based on the user's inputs.
 The output MUST be a JSON object with a single key "resume".
 Do not include any outer explanation, markdown code fences, or backticks in the response. It must be direct, parseable JSON.
 

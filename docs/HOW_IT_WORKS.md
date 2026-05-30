@@ -71,7 +71,7 @@ When a user requests a Study Plan, `/api/roadmap` performs secure, schema-valida
 3. **Skill-Matched Resources**: The system searches our local registry of 14 curated free educational resources (e.g. MDN, roadmap.sh, The Odin Project) and injects only relevant ones into the Groq prompt.
 4. **AI Generation & Repair**: The model produces a week-by-week transition path matching the user's available time.
 5. **Zod Validation**: Zod parses and asserts the JSON schema shape on the raw AI output before saving or returning.
-6. **URL Sanitization & Mapping**: Any unverified resources are mapped back to standard URLs, preventing AI hallucination.
+6. **Strict Resource Validation**: The backend filters the AI roadmap output, comparing every recommended resource against our verified local registry. If an AI resource is fake or unverified, it is completely stripped, preventing resource hallucinations from reaching the client.
 
 ---
 
@@ -79,6 +79,7 @@ When a user requests a Study Plan, `/api/roadmap` performs secure, schema-valida
 
 All analyses and roadmap parameters are synchronized automatically to the cloud:
 
+* **Supabase Migration**: The system uses a manual-run safe schema migration at `[supabase/migrations/001_init.sql](file:///d:/Projects/SortMySkills/supabase/migrations/001_init.sql)` to deploy all tables, triggers, indexes, and RLS policies.
 * **Persistence**: Every scan or study plan generation updates the user's active database record in `analysis_sessions`. This enables automatic reload when re-logging.
 * **Row Level Security (RLS)**: Policies prevent cross-account reading. Users can only select, insert, or delete rows associated with their authenticating `auth.uid() = user_id`.
 * **Privacy Data Deletion**: Users can permanently clear their resume, JD, history, and localStorage milestones using the "Delete Saved Analysis" button, which calls the secure `deleteMyAnalysisSessionsAction` server action.

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { callGroqAIWithRepair } from "@/lib/ai/groq-router";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { VERIFIED_RESOURCES, isVerifiedUrl, getRelevantResources, findVerifiedResource } from "@/data/verified-resources";
+import { VERIFIED_RESOURCES, getRelevantResources, matchVerifiedResource } from "@/data/verified-resources";
 import { roadmapResultSchema } from "@/lib/ai/roadmap-schema";
 
 export async function POST(req: NextRequest) {
@@ -161,29 +161,20 @@ Distribute phases across ${weeksAvailable} weeks. Group into logical phases: Fix
 
     const validatedData = validationResult.data;
 
-    // Clean and verify resource URLs in tasks
+    // Clean and verify resource URLs in tasks (Phase 4 Hardening)
     for (const phase of validatedData.roadmap) {
       for (const task of phase.tasks) {
         if (task.resource) {
-          const res = task.resource;
-          if (res.url && !isVerifiedUrl(res.url)) {
-            const verified = findVerifiedResource(undefined, res.name || res.platform);
-            if (verified) {
-              res.name = verified.name;
-              res.url = verified.url;
-              res.platform = verified.platform;
-              res.is_free = verified.is_free;
-            } else {
-              const fallback = VERIFIED_RESOURCES.find(r => r.name === "roadmap.sh");
-              if (fallback) {
-                res.name = fallback.name;
-                res.url = fallback.url;
-                res.platform = fallback.platform;
-                res.is_free = fallback.is_free;
-              } else {
-                task.resource = undefined;
-              }
-            }
+          const verified = matchVerifiedResource(task.resource);
+          if (verified) {
+            task.resource = {
+              name: verified.name,
+              url: verified.url,
+              platform: verified.platform,
+              is_free: verified.is_free,
+            };
+          } else {
+            task.resource = undefined;
           }
         }
       }

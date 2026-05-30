@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import { createClient } from "@/lib/supabase/client";
 import { deleteMyAnalysisSessionsAction } from "@/app/actions/analysis";
+import { toast } from "sonner";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -377,22 +378,26 @@ export default function CareerAnalyserPage() {
     try {
       const res = await deleteMyAnalysisSessionsAction();
       if (res.success) {
-        setSessionId(null);
-        handleResetAll();
-        localStorage.removeItem("roadmap_milestones");
-        localStorage.removeItem("analyser_target_date");
-        localStorage.removeItem("analyser_focus_areas");
+        setResume("");
+        setJd("");
         setTargetDate("");
         setFocus("");
         setMilestones({});
         setIsDemoData(false);
-        alert("All saved resume and job description analyses have been permanently deleted.");
+        setSessionId(null);
+        handleResetAll();
+        
+        localStorage.removeItem("roadmap_milestones");
+        localStorage.removeItem("analyser_target_date");
+        localStorage.removeItem("analyser_focus_areas");
+        
+        toast.success("All saved resume and job description analyses have been permanently deleted.");
       } else {
-        alert("Error deleting analysis: " + res.error);
+        toast.error("Error deleting analysis: " + res.error);
       }
     } catch (err) {
       console.error(err);
-      alert("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.");
     } finally {
       setIsDeleting(false);
     }
@@ -527,7 +532,7 @@ export default function CareerAnalyserPage() {
             diagnosis: `Identified ${foundHeaders.length} of 5 standard sections. ${hasTables ? "Found formatting tables." : "Clean layout syntax."}`,
             hurtPoints: [
               ...missingHeaders.map((h) => `Missing clear section header: ${h}.`),
-              ...(hasTables ? ["Tables or columns detected. ATS scanners often struggle with multi-column tables."] : [])
+              ...(hasTables ? ["Tables or columns detected. Automated screening systems often struggle with multi-column tables."] : [])
             ],
             wins: [
               ...missingHeaders.map((h) => `Add a clear bold heading named "${h}".`),
@@ -600,7 +605,7 @@ export default function CareerAnalyserPage() {
         saveAtsResultToSupabase(parsedAts);
       } catch (err) {
         console.error("ATS calculation failed", err);
-        setAtsError("ATS scan failed. Check console or try again.");
+        setAtsError("Readiness scan failed. Check console or try again.");
       } finally {
         setAtsLoading(false);
       }
@@ -757,7 +762,7 @@ export default function CareerAnalyserPage() {
     <div className="space-y-8 animate-fade-in relative z-10 font-sans text-left">
       <PageHeader
         title="Career Analyser"
-        description="Your all-in-one job-readiness workspace. Paste your resume and a job description once — then run ATS checks, skill gap analysis, and generate a personalised study plan."
+        description="Your all-in-one job-readiness workspace. Paste your resume and a job description once — then run resume readiness checks, skill gap analysis, and generate a personalised study plan."
       />
 
       {/* Beginner hint banner */}
@@ -907,7 +912,7 @@ export default function CareerAnalyserPage() {
               <div className="space-y-1">
                 <p className="font-semibold text-text-primary">🔒 Resume Privacy Notice</p>
                 <p>
-                  To provide you with a continuous job-readiness workspace and persistent learning tracking, we securely store your resume text, target JD, target date, and generated roadmaps in our database. Your data is strictly private to your account.
+                  Your resume text, target job description, target date, and generated roadmap may be saved to your account so you can continue later. You can permanently delete saved analysis data anytime from this page.
                 </p>
               </div>
             </div>
@@ -1136,7 +1141,7 @@ export default function CareerAnalyserPage() {
             <Card className="premium-card">
               <CardHeader
                 title="Resume Readiness Breakdown"
-                description={`Your resume was scanned across 5 essential structural factors. Total word count: ${atsResult.wordCount} words. Higher scores = more likely to pass automated filters.`}
+                description={`Your resume was scanned across 5 essential structural factors. Total word count: ${atsResult.wordCount} words. Higher scores suggest better formatting and structural clarity for modern screening systems.`}
                 className="border-b border-[var(--border-muted)] pb-3 px-6 pt-5"
               />
               <CardBody className="py-5 px-6 space-y-6">

@@ -145,3 +145,32 @@ export function findVerifiedResource(url?: string, skillName?: string): Verified
   }
   return undefined;
 }
+
+export function normalizeResourceText(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+export function matchVerifiedResource(input: {
+  name?: string;
+  url?: string;
+  platform?: string;
+}): VerifiedResource | undefined {
+  // 1. exact URL match
+  if (input.url) {
+    const matched = VERIFIED_RESOURCES.find((r) => r.url === input.url);
+    if (matched) return matched;
+  }
+  // 2. exact normalized name match
+  if (input.name) {
+    const normalizedInputName = normalizeResourceText(input.name);
+    const matched = VERIFIED_RESOURCES.find((r) => normalizeResourceText(r.name) === normalizedInputName);
+    if (matched) return matched;
+  }
+  // 3. exact normalized platform + name match
+  if (input.platform && input.name) {
+    const combinedInput = normalizeResourceText(`${input.platform} ${input.name}`);
+    const matched = VERIFIED_RESOURCES.find((r) => normalizeResourceText(`${r.platform} ${r.name}`) === combinedInput);
+    if (matched) return matched;
+  }
+  return undefined;
+}

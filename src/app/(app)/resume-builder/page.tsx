@@ -133,7 +133,7 @@ export default function ResumeBuilderPage() {
   const loadingMessages = [
     "Structuring profile details...",
     "Extracting key capabilities...",
-    "Aligning with ATS formatting rules...",
+    "Aligning with standard formatting rules...",
     "Crafting bullet points with strong action verbs...",
     "Finalizing resume template structure...",
   ];
@@ -371,7 +371,7 @@ export default function ResumeBuilderPage() {
       {screen !== "result" && (
         <PageHeader
           title="Resume Builder"
-          description="Craft an ATS-optimized, professional editorial resume from scratch or polish your existing profile using AI."
+          description="Craft a readiness-optimized, professional editorial resume from scratch or polish your existing profile using AI."
         />
       )}
 
@@ -393,7 +393,7 @@ export default function ResumeBuilderPage() {
                 {loadingMessages[loadingMsgIdx]}
               </p>
               <p className="text-xs text-text-muted">
-                Groq LLM is preparing your custom ATS-optimized resume. This may take 10-15 seconds.
+                Groq LLM is preparing your custom readiness-optimized resume. This may take 10-15 seconds.
               </p>
             </div>
             <div className="w-64 h-1.5 bg-[var(--surface-muted)] rounded-full overflow-hidden relative">
@@ -1087,7 +1087,7 @@ export default function ResumeBuilderPage() {
                 title="Your Resume is Ready"
                 description={
                   mode === "build"
-                    ? "We generated a professional ATS-friendly markdown resume matching your preferences."
+                    ? "We generated a professional and readiness-optimized markdown resume matching your preferences."
                     : "Your resume was enhanced and aligned with standard active recruiting wording rules."
                 }
                 action={
