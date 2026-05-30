@@ -398,48 +398,75 @@ export default async function LandingPage() {
 
           {/* SVG Orbit Visual */}
           <div className="relative w-[340px] h-[340px] sm:w-[480px] sm:h-[480px] flex items-center justify-center reveal-item opacity-0">
-            {/* Inner Ring */}
-            <div className="absolute w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] rounded-full border border-[var(--border-muted)] border-dashed animate-spin-slow" />
-            
-            {/* Outer Ring */}
-            <div className="absolute w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border border-[var(--border-muted)] border-dashed animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "35s" }} />
+            {/* Ambient centered glowing light-mesh backdrop */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] bg-accent-primary/10 rounded-full blur-[70px] pointer-events-none z-0 animate-pulse-glow" />
 
-            {/* Core Center Node */}
-            <div className="absolute w-20 h-20 rounded-full bg-accent-primary/10 border-2 border-accent-primary flex flex-col items-center justify-center shadow-lg z-25 transition-transform hover:scale-105">
+            {/* Inner Ring with glowing dashed boundary */}
+            <div className="absolute w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] rounded-full border border-dashed border-accent-primary/25 shadow-[0_0_20px_rgba(231,113,125,0.08)] animate-spin-slow" />
+            
+            {/* Outer Ring with glowing dashed boundary */}
+            <div className="absolute w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border border-dashed border-accent-secondary/15 shadow-[0_0_30px_rgba(175,210,117,0.04)] animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "38s" }} />
+
+            {/* Interconnecting glowing network web lines */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 480 480" fill="none">
+              <defs>
+                <radialGradient id="orbit-center-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="var(--accent-primary)" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <circle cx="240" cy="240" r="140" fill="url(#orbit-center-glow)" />
+
+              {/* Laser connecting lines */}
+              <line x1="240" y1="240" x2="240" y2="120" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
+              <line x1="240" y1="240" x2="240" y2="360" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
+              <line x1="240" y1="240" x2="120" y2="240" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
+              <line x1="240" y1="240" x2="360" y2="240" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
+
+              {/* Diagonal connecting network web overlay */}
+              <line x1="240" y1="120" x2="360" y2="240" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
+              <line x1="360" y1="240" x2="240" y2="360" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
+              <line x1="240" y1="360" x2="120" y2="240" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
+              <line x1="120" y1="240" x2="240" y2="120" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
+            </svg>
+
+            {/* Core Center Node: pulsing glassmorphism container */}
+            <div className="absolute w-20 h-20 rounded-full bg-gradient-to-tr from-[#E7717D]/35 to-[#AFD275]/15 backdrop-blur-md border-2 border-[#E7717D] flex flex-col items-center justify-center shadow-[0_0_35px_rgba(231,113,125,0.45)] z-25 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_45px_rgba(231,113,125,0.6)] cursor-pointer">
               <Logo className="w-7 h-7" />
-              <span className="text-[8px] font-mono font-bold mt-1 text-text-primary uppercase tracking-wider">SMS CORE</span>
+              <span className="text-[8px] font-mono font-bold mt-1 text-[#F8F3EA] uppercase tracking-wider">CORE</span>
             </div>
 
-            {/* Orbiting standard skill nodes */}
-            <div className="absolute translate-y-[-90px] sm:translate-y-[-120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
+            {/* Orbiting standard skill nodes: Premium Glowing Glassmorphism badges */}
+            <div className="absolute translate-y-[-90px] sm:translate-y-[-120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
               React
             </div>
-            <div className="absolute translate-y-[90px] sm:translate-y-[120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
+            <div className="absolute translate-y-[90px] sm:translate-y-[120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
               Python
             </div>
-            <div className="absolute translate-x-[-90px] sm:translate-x-[-120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
+            <div className="absolute translate-x-[-90px] sm:translate-x-[-120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
               SQL
             </div>
-            <div className="absolute translate-x-[90px] sm:translate-x-[120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
+            <div className="absolute translate-x-[90px] sm:translate-x-[120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
               TypeScript
             </div>
 
-            <div className="absolute translate-y-[-140px] translate-x-[-100px] sm:translate-y-[-200px] sm:translate-x-[-140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+            {/* Outer skill nodes: Secondary Glassmorphism badges */}
+            <div className="absolute translate-y-[-140px] translate-x-[-100px] sm:translate-y-[-200px] sm:translate-x-[-140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
               Git
             </div>
-            <div className="absolute translate-y-[-140px] translate-x-[100px] sm:translate-y-[-200px] sm:translate-x-[140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+            <div className="absolute translate-y-[-140px] translate-x-[100px] sm:translate-y-[-200px] sm:translate-x-[140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
               Figma
             </div>
-            <div className="absolute translate-y-[140px] translate-x-[-100px] sm:translate-y-[200px] sm:translate-x-[-140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+            <div className="absolute translate-y-[140px] translate-x-[-100px] sm:translate-y-[200px] sm:translate-x-[-140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
               Node.js
             </div>
-            <div className="absolute translate-y-[140px] translate-x-[100px] sm:translate-y-[200px] sm:translate-x-[140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+            <div className="absolute translate-y-[140px] translate-x-[100px] sm:translate-y-[200px] sm:translate-x-[140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
               Machine Learning
             </div>
-            <div className="absolute translate-y-[-60px] translate-x-[-150px] sm:translate-y-[-90px] sm:translate-x-[-200px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+            <div className="absolute translate-y-[-60px] translate-x-[-150px] sm:translate-y-[-90px] sm:translate-x-[-200px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
               Product
             </div>
-            <div className="absolute translate-y-[-60px] translate-x-[150px] sm:translate-y-[-90px] sm:translate-x-[200px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
+            <div className="absolute translate-y-[-60px] translate-x-[150px] sm:translate-y-[-90px] sm:translate-x-[200px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
               Cloud
             </div>
           </div>
