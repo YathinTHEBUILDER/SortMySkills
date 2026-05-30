@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- S-curve Spine and loops (Warm Ivory #FAF8F6) -->
+  <path d="M 48 70 C 48 58 60 58 60 52 C 60 46 48 46 48 40 C 48 34 60 34 72 34" stroke="#FAF8F6" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Bottom-most Loop (Warm Ivory #FAF8F6) -->
+  <path d="M 48 70 C 58 70 66 74 66 80 C 66 86 58 86 48 86" stroke="#FAF8F6" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Left branch lines (Warm Ivory #FAF8F6) -->
+  <line x1="48" y1="70" x2="32" y2="82" stroke="#FAF8F6" stroke-width="5.5" stroke-linecap="round" />
+  <line x1="48" y1="70" x2="32" y2="58" stroke="#FAF8F6" stroke-width="5.5" stroke-linecap="round" />
+  
+  <!-- Top-right roadmap arrow track (Sage Green #AFD275) -->
+  <path d="M 72 34 C 80 34 80 24 80 14" stroke="#AFD275" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Sage green arrowhead pointing up-right -->
+  <path d="M 74 18 L 80 12 L 86 18" stroke="#AFD275" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  
+  <!-- Node Circles (Connected skill nodes) -->
+  <!-- Amber node (bottom-left end) -->
+  <circle cx="32" cy="82" r="6" fill="#EAB364" stroke="#FAF8F6" stroke-width="1.5" />
+  <!-- Coral node (mid-left end) -->
+  <circle cx="32" cy="58" r="6" fill="#E7717D" stroke="#FAF8F6" stroke-width="1.5" />
+  <!-- Ivory center-left node -->
+  <circle cx="48" cy="70" r="6" fill="#FAF8F6" />
+  <!-- Coral center node -->
+  <circle cx="60" cy="52" r="6" fill="#E7717D" stroke="#FAF8F6" stroke-width="1.5" />
+  <!-- Amber center-top node -->
+  <circle cx="48" cy="40" r="6" fill="#EAB364" stroke="#FAF8F6" stroke-width="1.5" />
+  <!-- Coral top-right node -->
+  <circle cx="72" cy="34" r="6" fill="#E7717D" stroke="#FAF8F6" stroke-width="1.5" />
+  <!-- Sage node (bottom-middle end) -->
+  <circle cx="48" cy="86" r="6" fill="#AFD275" stroke="#FAF8F6" stroke-width="1.5" />
+</svg>

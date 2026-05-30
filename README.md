@@ -1,4 +1,8 @@
-# SortMySkills
+<p align="center">
+  <img src="./public/brand/sortmyskills-horizontal-dark.png" alt="SortMySkills" width="320" />
+</p>
+
+<br/>
 
 **Structured career intelligence** for students and early-career applicants: normalize skills, audit gaps, compare resumes to job descriptions, plan Coursera study paths, and practice with **900 curated interview questions**.
 

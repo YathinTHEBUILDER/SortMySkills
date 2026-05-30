@@ -25,11 +25,8 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
       <div className="flex items-center justify-between px-6 h-16 max-w-6xl mx-auto w-full">
         {/* Left Brand Logo */}
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2.5 group" onClick={closeMobileMenu}>
-            <Logo className="w-7 h-7 group-hover:rotate-6 transition-transform duration-300" />
-            <span className="font-semibold text-text-primary text-base tracking-tight font-serif italic">
-              SortMySkills
-            </span>
+          <Link href="/" className="flex items-center group" onClick={closeMobileMenu}>
+            <Logo variant="horizontal" className="h-8 w-auto text-text-primary" />
           </Link>
 
           {/* Desktop Navigation */}

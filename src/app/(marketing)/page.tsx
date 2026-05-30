@@ -905,11 +905,8 @@ export default async function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-left">
           {/* Col 1 Brand */}
           <div className="space-y-4 md:col-span-2">
-            <Link href="/" className="flex items-center gap-2">
-              <Logo className="w-6 h-6" />
-              <span className="font-semibold text-text-primary text-base tracking-tight font-serif italic">
-                SortMySkills
-              </span>
+            <Link href="/" className="flex items-center group">
+              <Logo variant="horizontal" className="h-7 w-auto text-text-primary" />
             </Link>
             <p className="text-xs text-text-secondary leading-relaxed max-w-sm">
               SortMySkills helps students compare their resume with real job descriptions, identify missing skills, and prepare with a clearer plan.

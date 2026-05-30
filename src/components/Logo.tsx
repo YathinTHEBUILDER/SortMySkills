@@ -2,49 +2,101 @@
 
 import React from "react";
 
-export default function Logo({ className = "w-8 h-8" }: { className?: string }) {
-  return (
+type LogoVariant = "mark" | "horizontal" | "wordmark";
+
+interface LogoProps {
+  variant?: LogoVariant;
+  className?: string;
+  priority?: boolean;
+}
+
+export default function Logo({
+  variant = "mark",
+  className = "",
+}: LogoProps) {
+  // S-mark SVG structure
+  const renderMark = (sizeClass: string) => (
     <svg
-      className={className}
-      viewBox="0 0 120 120"
+      className={`${sizeClass}`}
+      viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
     >
-      <defs>
-        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="var(--accent-primary, #c45b37)" />
-          <stop offset="100%" stopColor="var(--accent-secondary, #d9b48f)" />
-        </linearGradient>
-      </defs>
-
+      {/* S-curve Spine and loops (Theme-adaptive stroke via currentColor) */}
       <path
-        d="M88 22L92 44L82 40L62 60L50 48L70 28L66 24L88 22Z"
-        fill="url(#logo-gradient)"
+        d="M 48 70 C 48 58 60 58 60 52 C 60 46 48 46 48 40 C 48 34 60 34 72 34"
+        stroke="currentColor"
+        strokeWidth="5.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
       />
+      
+      {/* Bottom-most Loop (Theme-adaptive stroke via currentColor) */}
       <path
-        d="M20 54L38 36H72L54 54H32L20 66L14 60L20 54Z"
-        fill="url(#logo-gradient)"
+        d="M 48 70 C 58 70 66 74 66 80 C 66 86 58 86 48 86"
+        stroke="currentColor"
+        strokeWidth="5.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
       />
+      
+      {/* Left branch lines (Theme-adaptive stroke via currentColor) */}
+      <line x1="48" y1="70" x2="32" y2="82" stroke="currentColor" strokeWidth="5.5" strokeLinecap="round" />
+      <line x1="48" y1="70" x2="32" y2="58" stroke="currentColor" strokeWidth="5.5" strokeLinecap="round" />
+      
+      {/* Top-right roadmap arrow track (Sage Green #AFD275) */}
       <path
-        d="M72 36L44 64L32 52L60 24H72V36Z"
-        fill="url(#logo-gradient)"
+        d="M 72 34 C 80 34 80 24 80 14"
+        stroke="#AFD275"
+        strokeWidth="5.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
       />
+      
+      {/* Sage green arrowhead pointing up-right */}
       <path
-        d="M48 66L66 48H80L62 66H48Z"
-        fill="url(#logo-gradient)"
+        d="M 74 18 L 80 12 L 86 18"
+        stroke="#AFD275"
+        strokeWidth="5.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
       />
-      <path
-        d="M32 82L50 64H84L66 82H32Z"
-        fill="url(#logo-gradient)"
-      />
-      <path
-        d="M14 60L26 48L44 66L32 78L14 60Z"
-        fill="url(#logo-gradient)"
-      />
-      <path
-        d="M80 48L92 60L74 78L62 66L80 48Z"
-        fill="url(#logo-gradient)"
-      />
+      
+      {/* Node Circles (Connected skill nodes) */}
+      <circle cx="32" cy="82" r="6" fill="#EAB364" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="32" cy="58" r="6" fill="#E7717D" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="48" cy="70" r="6" fill="currentColor" />
+      <circle cx="60" cy="52" r="6" fill="#E7717D" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="48" cy="40" r="6" fill="#EAB364" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="72" cy="34" r="6" fill="#E7717D" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="48" cy="86" r="6" fill="#AFD275" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   );
+
+  const renderWordmark = (textClass: string) => (
+    <span className={`font-sans font-extrabold tracking-tight select-none ${textClass}`}>
+      SortMy<span className="text-[#E7717D]">S</span>kills
+    </span>
+  );
+
+  if (variant === "wordmark") {
+    return renderWordmark(className || "text-xl");
+  }
+
+  if (variant === "horizontal") {
+    return (
+      <div className={`inline-flex items-center gap-2.5 ${className}`}>
+        {renderMark("w-7 h-7 shrink-0")}
+        {renderWordmark("text-base")}
+      </div>
+    );
+  }
+
+  // Default variant is "mark"
+  return renderMark(className || "w-8 h-8");
 }

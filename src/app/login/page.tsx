@@ -79,9 +79,8 @@ function LoginForm() {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-[var(--background)] warm-noise-bg relative">
       <div className="warm-glow-effect top-[10%] left-[20%] opacity-80" />
 
-      <Link href="/" className="flex items-center gap-2 mb-8 relative z-10 group">
-        <Logo className="w-8 h-8 group-hover:rotate-6 transition-transform duration-300" />
-        <span className="font-semibold text-text-primary text-base tracking-tight font-serif italic">SortMySkills</span>
+      <Link href="/" className="flex items-center mb-8 relative z-10 group">
+        <Logo variant="horizontal" className="h-8 w-auto text-text-primary" />
       </Link>
 
       <Card className="w-full max-w-md premium-card shadow-lg relative z-10 overflow-hidden animated-border">

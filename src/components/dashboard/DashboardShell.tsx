@@ -28,11 +28,8 @@ export default function DashboardShell({
       <div className="flex-1 flex flex-col min-w-0 relative z-10">
         <header className="sticky top-0 z-30 flex items-center justify-between gap-4 h-16 px-6 border-b border-[var(--border-strong)] bg-[var(--background)]/85 backdrop-blur-md shadow-xs">
           {/* Brand Logo & Name in Header */}
-          <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <Logo className="w-7 h-7 group-hover:rotate-6 transition-transform duration-300" />
-            <span className="font-semibold text-text-primary text-base tracking-tight font-serif italic">
-              SortMySkills
-            </span>
+          <Link href="/dashboard" className="flex items-center group">
+            <Logo variant="horizontal" className="h-7 w-auto text-text-primary" />
           </Link>
 
           <div className="flex-1" />

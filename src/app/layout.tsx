@@ -11,6 +11,27 @@ export const metadata: Metadata = {
   title: "SortMySkills — Career Intelligence & Skill-Gap Analysis",
   description:
     "Structured career platform: skill normalization, gap analysis, Coursera roadmaps, and SkillQore interview question packs.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
+  openGraph: {
+    title: "SortMySkills",
+    description: "Resume clarity for placement prep",
+    images: [
+      {
+        url: "/brand/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "SortMySkills logo",
+      },
+    ],
+  },
 };
 
 const themeInitScript = `
