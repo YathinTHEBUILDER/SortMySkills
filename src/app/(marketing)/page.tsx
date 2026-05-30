@@ -800,48 +800,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* SECTION 8.5 — THEMED CONTACT FORM */}
-      <section id="contact" className="section-shell border-t border-[var(--border-muted)] bg-[var(--background)] py-24 relative overflow-hidden reveal-section">
-        {/* Ambient Grid Overlay */}
-        <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
-        
-        <div className="container-shell grid lg:grid-cols-12 gap-12 items-start relative z-10">
-          {/* Left Text Block */}
-          <div className="lg:col-span-6 flex flex-col text-left reveal-item opacity-0">
-            <span className="eyebrow block mb-3">Contact</span>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-primary font-sans leading-tight mb-4">
-              Have feedback or want to collaborate?
-            </h2>
-            <p className="text-sm text-text-secondary leading-relaxed mb-8">
-              Send a quick message. Whether it is a bug, idea, campus use case, or collaboration, I will read it and get back to you soon.
-            </p>
-            
-            {/* Visual bullets */}
-            <div className="space-y-4">
-              {[
-                "Direct line to the builder",
-                "Responses usually within 24 hours",
-                "Privacy guaranteed — no tracking",
-              ].map((bullet, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-accent-primary/15 border border-accent-primary/20 flex items-center justify-center text-accent-primary shrink-0">
-                    <CheckCircle2 className="w-3 h-3 text-accent-primary" />
-                  </div>
-                  <span className="text-xs text-text-secondary font-medium font-sans">
-                    {bullet}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Form Block */}
-          <div className="lg:col-span-6 w-full reveal-item opacity-0">
-            <ContactForm />
-          </div>
-        </div>
-      </section>
-
       {/* SECTION 9 — FINAL CTA */}
       <section className="section-shell border-t border-[var(--border-muted)] bg-[var(--surface-card-warm)]/10 py-24 relative overflow-hidden cta-reveal-container">
         <div className="absolute inset-0 dot-grid-overlay opacity-15 pointer-events-none" />
@@ -940,11 +898,6 @@ export default async function LandingPage() {
               <li>
                 <Link href="/dashboard" className="hover:text-accent-primary transition-colors">
                   Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link href="#contact" className="hover:text-accent-primary transition-colors">
-                  Contact
                 </Link>
               </li>
             </ul>
