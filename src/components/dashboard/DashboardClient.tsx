@@ -50,25 +50,25 @@ export default function DashboardClient({
     ctaLabel: string;
     ctaHref: string;
   }>({
-    title: "Start Career Analyser",
-    description: "Compare your resume against a target Job Description, scan ATS rejection risks, and compile a week-by-week learning roadmap in one place.",
-    ctaLabel: "Run Analysis",
+    title: "Scan Target Job Compatibility",
+    description: "Map and analyze your resume against a target job description, resolve critical keyword deficits, and compile an active placement roadmap.",
+    ctaLabel: "Audit ATS & Fit",
     ctaHref: "/career-analyser",
   });
 
   useEffect(() => {
     if (!hasTargetRole) {
       setRecommendedStep({
-        title: "Define Target Career Track",
-        description: "Specify your desired role track in your profile settings. This helps tailor your matching weights and interview pack suggestions.",
-        ctaLabel: "Set Target Role",
+        title: "Calibrate Target Profile",
+        description: "Specify your target career track in your profile settings. This adjusts matching algorithms, weights, and interview focus areas.",
+        ctaLabel: "Calibrate Target Profile",
         ctaHref: "/profile",
       });
     } else if (auditsCount === 0 && jobMatchesCount === 0) {
       setRecommendedStep({
-        title: "Diagnose Application Silence",
-        description: "Are you sending resumes but getting no callbacks? Run a Why No Reply recruiter assessment to isolate emotional/structural rejection reasons.",
-        ctaLabel: "Start Diagnosis",
+        title: "Isolate Rejection Vectors",
+        description: "Are you sending resumes but getting no callbacks? Run a Why No Reply evaluation to isolate competency, structural, or semantic rejection reasons.",
+        ctaLabel: "Isolate Rejection",
         ctaHref: "/why-no-reply",
       });
     } else {
@@ -78,9 +78,9 @@ export default function DashboardClient({
         const storedJd = localStorage.getItem("sortmyskills_jdText") || localStorage.getItem("sortmyskills_jd");
         if (storedResume || storedJd) {
           setRecommendedStep({
-            title: "Continue Active Analysis",
+            title: "Resume Workspace Scan",
             description: "We found resume or job description content saved in your local workspace. Open the Career Analyser to resume your scan or generate a roadmap.",
-            ctaLabel: "Resume Analysis",
+            ctaLabel: "Resume Scan",
             ctaHref: "/career-analyser",
           });
         }
@@ -94,22 +94,22 @@ export default function DashboardClient({
       {/* 1. Welcome Banner */}
       <div className="pb-6 border-b border-[var(--border-strong)]">
         <span className="eyebrow block text-xs tracking-widest text-[#E7717D] dark:text-[#EE8590] font-mono">
-          CAREER OPERATING SYSTEM
+          PLACEMENT ENGINE WORKSPACE
         </span>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary mt-2">
           Welcome back, <span className="font-serif italic font-normal text-[#E7717D] dark:text-[#EE8590]">{name}</span>.
         </h1>
         <p className="text-sm text-text-secondary mt-2 max-w-xl">
-          Turn your resume into recruiter-ready proof. Start with a callback diagnosis under Why No Reply, or utilize our unified Career Analyser workspace to verify ATS compatibility, role matching, and weekly action plans.
+          Calibrate your credentials against target placement tracks, isolate structural rejection vectors, and launch targeted skill preparation from a single, unified workspace.
         </p>
 
         {/* Dashboard Quick Action CTAs */}
         <div className="flex flex-wrap gap-4 mt-6">
-          <ButtonLink href="/why-no-reply" className="h-10 px-5 text-xs font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary rounded-full hover:bg-accent-primary-dark">
-            Diagnose Silence
+          <ButtonLink href="/why-no-reply">
+            Diagnose Recruiter Silence
           </ButtonLink>
-          <ButtonLink href="/career-analyser" variant="secondary" className="h-10 px-5 text-xs font-mono uppercase tracking-widest text-text-primary rounded-full border border-[var(--border-muted)] hover:bg-surface-hover/80">
-            Open Career Analyser
+          <ButtonLink href="/career-analyser" variant="secondary">
+            Audit ATS & Fit
           </ButtonLink>
         </div>
       </div>
@@ -125,7 +125,7 @@ export default function DashboardClient({
             <h2 className="text-base font-bold text-text-primary tracking-tight mt-2">{recommendedStep.title}</h2>
             <p className="text-xs text-text-secondary leading-relaxed">{recommendedStep.description}</p>
           </div>
-          <ButtonLink href={recommendedStep.ctaHref} className="h-9 px-4 text-xs font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary rounded-full hover:bg-accent-primary-dark shrink-0">
+          <ButtonLink href={recommendedStep.ctaHref} className="shrink-0">
             {recommendedStep.ctaLabel} <ArrowRight className="w-3.5 h-3.5 ml-1" />
           </ButtonLink>
         </div>
@@ -145,12 +145,12 @@ export default function DashboardClient({
               </div>
               <h3 className="text-sm font-bold text-text-primary tracking-tight font-mono uppercase text-xs">01 — Diagnose</h3>
               <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                Find the real reasons recruiters are ignoring your applications with the emotional Why No Reply callback assessment.
+                Isolate competency, semantic, and structural rejection vectors to determine why employers bypass your profile.
               </p>
             </div>
             <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
-              <ButtonLink href="/why-no-reply" className="w-full h-8 text-[10px] font-mono tracking-widest uppercase">
-                Diagnose Silence
+              <ButtonLink href="/why-no-reply" className="w-full">
+                Diagnose Rejection
               </ButtonLink>
             </div>
           </div>
@@ -161,14 +161,14 @@ export default function DashboardClient({
               <div className="w-10 h-10 rounded-xl bg-[#AFD275]/10 border border-[#AFD275]/20 flex items-center justify-center text-[#AFD275] mb-4">
                 <Compass className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-text-primary tracking-tight font-mono uppercase text-xs">02 — Analyse</h3>
+              <h3 className="text-sm font-bold text-text-primary tracking-tight font-mono uppercase text-xs">02 — Calibrate</h3>
               <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                Scan ATS compatibility, perform deep requirement matching, and generate weekly roadmaps from one unified workspace.
+                Audit ATS compatibility scores, run semantic skill matches, and compile dynamic learning roadmaps.
               </p>
             </div>
             <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
-              <ButtonLink href="/career-analyser" className="w-full h-8 text-[10px] font-mono tracking-widest uppercase">
-                Run Analyser
+              <ButtonLink href="/career-analyser" className="w-full">
+                Audit ATS & Fit
               </ButtonLink>
             </div>
           </div>
@@ -179,17 +179,17 @@ export default function DashboardClient({
               <div className="w-10 h-10 rounded-xl bg-[#C2CAD0]/10 border border-[#C2CAD0]/20 flex items-center justify-center text-accent-primary mb-4">
                 <BookOpen className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-bold text-text-primary tracking-tight font-mono uppercase text-xs">03 — Fix & Prepare</h3>
+              <h3 className="text-sm font-bold text-text-primary tracking-tight font-mono uppercase text-xs">03 — Optimize</h3>
               <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                Improve your resume using active recruiting tones, and practice interview questions mapped to standard role families.
+                Structure your CV bullets with active, placement-ready verbs and practice question packs designed by tech recruiters.
               </p>
             </div>
             <div className="pt-4 border-t border-[var(--border-muted)] mt-4 flex gap-2">
-              <ButtonLink href="/resume-builder" variant="secondary" className="flex-1 h-8 text-[9px] font-mono tracking-widest uppercase px-2 border border-[var(--border-muted)] hover:bg-surface-hover/80 text-text-primary">
-                Builder
+              <ButtonLink href="/resume-builder" variant="secondary" className="flex-1">
+                Enhance CV
               </ButtonLink>
-              <ButtonLink href="/interview-packs" variant="secondary" className="flex-1 h-8 text-[9px] font-mono tracking-widest uppercase px-2 border border-[var(--border-muted)] hover:bg-surface-hover/80 text-text-primary">
-                Prep Packs
+              <ButtonLink href="/interview-packs" variant="secondary" className="flex-1">
+                Practice
               </ButtonLink>
             </div>
           </div>

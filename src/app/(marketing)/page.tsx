@@ -52,43 +52,32 @@ export default async function LandingPage() {
           </div>
 
           <h1 className="hero-reveal-title opacity-0 hero-display text-text-primary leading-[1.05] tracking-tight text-3xl sm:text-5xl font-extrabold">
-            Turn scattered skills <br />
-            into a clear <br />
-            <span className="text-serif font-normal italic text-accent-primary">career roadmap.</span>
+            Transform unstructured skills <br />
+            into a high-yield <br />
+            <span className="text-serif font-normal italic text-accent-primary">placement roadmap.</span>
           </h1>
 
           <p className="hero-reveal-sub opacity-0 mt-6 text-base md:text-lg text-text-secondary leading-relaxed max-w-xl font-sans normal-case">
-            SortMySkills analyzes your resume, compares it with real job descriptions, detects skill gaps, and shows the fastest path to become placement-ready.
+            SortMySkills analyzes your profile, maps technical keywords against target job roles, resolves ATS compliance gaps, and charts a direct course to placement readiness.
           </p>
 
           <div className="hero-reveal-ctas opacity-0 mt-10 flex flex-wrap gap-4 items-center">
             {user ? (
-              <ButtonLink
-                href="/dashboard"
-                className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
-              >
-                <span>Open Dashboard</span>
+              <ButtonLink href="/dashboard">
+                <span>Launch Workspace</span>
                 <ArrowRight className="w-4 h-4" />
               </ButtonLink>
             ) : (
               <>
-                <ButtonLink
-                  href="/signup"
-                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
-                >
-                  <span>Start Skill Audit</span>
+                <ButtonLink href="/signup">
+                  <span>Run Diagnostics</span>
                   <ArrowRight className="w-4 h-4" />
                 </ButtonLink>
-                <ButtonLink
-                  href="/login"
-                  variant="secondary"
-                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest border border-[var(--border-strong)] rounded-full hover:bg-surface-hover"
-                >
-                  Try Job Match
+                <ButtonLink href="/login" variant="secondary">
+                  Analyze Fit
                 </ButtonLink>
               </>
             )}
-
           </div>
 
           {/* Core Signals Strip */}
@@ -515,38 +504,28 @@ export default async function LandingPage() {
             {/* Ambient pattern */}
             <div className="absolute inset-0 dot-grid-overlay opacity-25 pointer-events-none" />
 
-            <span className="eyebrow">placement intelligence</span>
+            <span className="eyebrow">placement taxonomy</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-primary mt-3 font-serif italic">
-              Ready to stop guessing your career path?
+              Calibrate your profile for modern tech hiring.
             </h2>
             <p className="text-sm text-text-secondary mt-4 max-w-md mx-auto leading-relaxed font-sans">
-              Create your skill profile, compare it with real roles, and get a roadmap you can act on today.
+              Isolate rejection signals, map your canonical technical capabilities, and get a precise, actionable roadmap today.
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               {user ? (
-                <ButtonLink
-                  href="/dashboard"
-                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
-                >
-                  <span>Open Dashboard</span>
+                <ButtonLink href="/dashboard">
+                  <span>Launch Workspace</span>
                   <ArrowRight className="w-4 h-4" />
                 </ButtonLink>
               ) : (
                 <>
-                  <ButtonLink
-                    href="/signup"
-                    className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
-                  >
-                    <span>Get Started Free</span>
+                  <ButtonLink href="/signup">
+                    <span>Launch Workspace</span>
                     <ArrowRight className="w-4 h-4" />
                   </ButtonLink>
-                  <ButtonLink
-                    href="/login"
-                    variant="secondary"
-                    className="px-6 py-3 text-xs font-mono uppercase tracking-widest border border-[var(--border-strong)] rounded-full hover:bg-surface-hover"
-                  >
-                    Open Dashboard
+                  <ButtonLink href="/login" variant="secondary">
+                    Analyze Custom Fit
                   </ButtonLink>
                 </>
               )}

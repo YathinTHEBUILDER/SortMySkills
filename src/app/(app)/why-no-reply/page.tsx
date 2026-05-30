@@ -207,7 +207,7 @@ export default function WhyNoReplyPage() {
       {pageState !== "results" && (
         <PageHeader
           title="Why No Reply"
-          description="Paste a job and your resume. Find out the real reason you are not hearing back."
+          description="Isolate competency, structural, and semantic rejection vectors to discover why employers bypass your profile."
         />
       )}
 
@@ -281,15 +281,14 @@ export default function WhyNoReplyPage() {
             {/* Action Area */}
             <div className="pt-2 border-t border-[var(--border-muted)] flex items-center justify-between gap-4">
               <span className="text-xs font-mono text-text-muted">
-                3 free diagnoses per 15 minutes
+                3 clinical audits per 15-minute window
               </span>
               <Button
                 type="button"
                 onClick={handleSubmit}
                 disabled={rateLimited && countdown > 0}
-                className="px-6 py-2.5 font-medium transition-all"
               >
-                Diagnose →
+                Run Deep Recruiter Audit
               </Button>
             </div>
           </CardBody>

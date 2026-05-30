@@ -122,12 +122,14 @@ export default async function ProfilePage() {
               <h2 className="text-lg font-bold text-text-primary tracking-tight leading-snug">
                 {displayName}
               </h2>
-              <p className="text-xs font-mono text-text-muted mt-0.5 select-all">{user.email}</p>
+              <p className="text-[10px] font-mono text-accent-primary mt-1.5 border border-accent-primary/20 bg-accent-primary/[0.04] px-2.5 py-0.5 rounded-lg select-all max-w-full truncate">
+                {user.email}
+              </p>
 
               {/* Status Badge */}
-              <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[var(--border-muted)] bg-[var(--surface-soft)]/50">
-                <ShieldCheck className="w-3.5 h-3.5 text-accent-primary" />
-                <span className="text-[9px] font-mono font-bold tracking-widest text-text-primary">
+              <div className="mt-3.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-accent-secondary/35 bg-accent-secondary/[0.08] text-text-primary">
+                <ShieldCheck className="w-3.5 h-3.5 text-accent-secondary" />
+                <span className="text-[9px] font-mono font-bold tracking-widest uppercase">
                   {memberStatusText}
                 </span>
               </div>
@@ -155,7 +157,7 @@ export default async function ProfilePage() {
               <div className="w-full border-t border-[var(--border-muted)] pt-6 space-y-4">
                 <span className="eyebrow block text-[8px] tracking-widest text-center mb-2">Workspace Activity</span>
                 {/* Stat 1 */}
-                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group">
+                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/20 hover:border-accent-primary/30 transition-all hover:scale-[1.02] shadow-xs group">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary">
                       <Compass className="w-4 h-4" />
@@ -165,7 +167,7 @@ export default async function ProfilePage() {
                   <span className="text-sm font-bold text-text-primary font-mono">{stats.audits}</span>
                 </div>
                 {/* Stat 2 */}
-                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group">
+                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/20 hover:border-accent-primary/30 transition-all hover:scale-[1.02] shadow-xs group">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary">
                       <TrendingUp className="w-4 h-4" />
@@ -175,7 +177,7 @@ export default async function ProfilePage() {
                   <span className="text-sm font-bold text-text-primary font-mono">{stats.analyses}</span>
                 </div>
                 {/* Stat 3 */}
-                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/35 group">
+                <div className="flex items-center justify-between p-3 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/20 hover:border-accent-primary/30 transition-all hover:scale-[1.02] shadow-xs group">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-accent-primary/10 border border-accent-primary/15 flex items-center justify-center text-accent-primary">
                       <ScanSearch className="w-4 h-4" />

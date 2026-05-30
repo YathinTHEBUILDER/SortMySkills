@@ -66,10 +66,10 @@ export default function InterviewPackDetailPage() {
             key={f.id}
             type="button"
             onClick={() => setFilter(f.id)}
-            className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
+            className={`px-4 py-2 rounded-xl text-xs font-mono uppercase tracking-wider border transition-all duration-300 cursor-pointer ${
               filter === f.id
-                ? "bg-accent-primary/10 border-accent-primary/30 text-accent-primary font-bold shadow-xs"
-                : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover/80"
+                ? "bg-accent-primary/15 border-accent-primary/45 text-text-primary font-bold shadow-xs scale-[1.03]"
+                : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover/80 hover:scale-[1.01]"
             }`}
           >
             {f.label}

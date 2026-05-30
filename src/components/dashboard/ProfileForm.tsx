@@ -170,7 +170,7 @@ export default function ProfileForm({
       {/* Submit Button */}
       <Button
         type="submit"
-        className="w-full h-11 font-mono uppercase tracking-widest text-[#F6F1E8] bg-accent-primary hover:bg-accent-primary/95 flex items-center justify-center gap-2 mt-4 cursor-pointer"
+        className="w-full h-11 mt-4"
         disabled={isPending}
       >
         {isPending ? (

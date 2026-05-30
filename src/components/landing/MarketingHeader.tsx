@@ -98,7 +98,7 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
                 </Link>
                 <ButtonLink
                   href="/signup"
-                  className="h-9 px-4 text-xs font-semibold tracking-wide text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full"
+                  className="h-9"
                 >
                   Get Started
                 </ButtonLink>
@@ -191,10 +191,10 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
                   <ButtonLink
                     href="/signup"
                     onClick={closeMobileMenu}
-                    className="w-full h-11 rounded-full text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all flex items-center justify-center"
+                    className="w-full h-11"
                   >
                     <span>Get Started</span>
-                    <ArrowRight className="w-4 h-4 ml-1.5" />
+                    <ArrowRight className="w-4 h-4" />
                   </ButtonLink>
                 </>
               )}

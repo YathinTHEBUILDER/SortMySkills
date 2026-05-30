@@ -382,114 +382,172 @@ html.dark .glass-card {
 }
 
 /* ==========================================================================
-   Signature Double-Border Tactile 3D Offset Buttons
+   Modern Premium SaaS Glowing Gradient Buttons & Centered Alignment
    ========================================================================== */
+@keyframes sweep-shine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
 .torivo-btn-wrapper {
   position: relative;
   display: inline-flex;
   vertical-align: middle;
   cursor: pointer;
   user-select: none;
+  border-radius: 0.75rem;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
 .torivo-btn-shadow {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  border: 1.5px solid var(--accent-ink);
-  background: var(--accent-ink);
-  transform: translate(3px, 3px);
-  z-index: 0;
-  transition: transform 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-html.dark .torivo-btn-shadow {
-  border-color: var(--accent-ink);
-  background: var(--accent-ink);
+  display: none !important;
 }
 
 .torivo-btn-content {
   position: relative;
+  overflow: hidden;
   z-index: 10;
   width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  border: 1.5px solid var(--accent-ink);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
+  gap: 0.6rem;
+  border-radius: 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 0.6rem 1.6rem;
-  transition: transform 0.12s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.12s ease;
+  letter-spacing: 0.08em;
+  padding: 0.65rem 1.6rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
 }
 
-/* Primary tactile variant */
+.torivo-btn-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.torivo-btn-primary:hover .torivo-btn-content::after,
+.torivo-btn-secondary:hover .torivo-btn-content::after {
+  animation: sweep-shine 1.6s ease-in-out infinite;
+}
+
+/* Primary premium gradient variant */
 .torivo-btn-primary .torivo-btn-content {
-  background: var(--accent-primary);
-  color: var(--background);
+  background: linear-gradient(135deg, #E7717D 0%, #CE5A66 100%);
+  color: #FAF8F6;
+  box-shadow: 0 4px 14px rgba(231, 113, 125, 0.32);
 }
+
+html.dark .torivo-btn-primary .torivo-btn-content {
+  background: linear-gradient(135deg, #EE8590 0%, #E7717D 100%);
+  color: #13100E;
+  box-shadow: 0 4px 16px rgba(238, 133, 144, 0.22);
+}
+
+.torivo-btn-primary:hover {
+  transform: translateY(-2px);
+}
+
 .torivo-btn-primary:hover .torivo-btn-content {
-  background: var(--accent-primary-dark);
-  transform: translate(1px, 1px);
-}
-.torivo-btn-primary:active .torivo-btn-content {
-  transform: translate(3px, 3px);
+  box-shadow: 0 6px 20px rgba(231, 113, 125, 0.42);
+  filter: brightness(1.04);
 }
 
-/* Secondary tactile variant */
+html.dark .torivo-btn-primary:hover .torivo-btn-content {
+  box-shadow: 0 6px 20px rgba(238, 133, 144, 0.3);
+}
+
+.torivo-btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Secondary elegant glass variant */
 .torivo-btn-secondary .torivo-btn-content {
-  background: var(--surface-card);
-  color: var(--foreground);
+  background: rgba(250, 248, 246, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(126, 104, 90, 0.25);
+  color: #2E2824;
+  box-shadow: 0 4px 12px rgba(126, 104, 90, 0.04);
 }
+
+html.dark .torivo-btn-secondary .torivo-btn-content {
+  background: rgba(35, 29, 26, 0.65);
+  border: 1px solid rgba(247, 245, 242, 0.18);
+  color: #F7F5F2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.torivo-btn-secondary:hover {
+  transform: translateY(-2px);
+}
+
 .torivo-btn-secondary:hover .torivo-btn-content {
-  background: var(--surface-hover);
-  transform: translate(1px, 1px);
-}
-.torivo-btn-secondary:active .torivo-btn-content {
-  transform: translate(3px, 3px);
+  background: rgba(250, 248, 246, 0.95);
+  border-color: rgba(126, 104, 90, 0.35);
+  box-shadow: 0 6px 18px rgba(126, 104, 90, 0.1);
 }
 
-/* Tactile shadows transform shifts */
-.torivo-btn-primary:hover .torivo-btn-shadow,
-.torivo-btn-secondary:hover .torivo-btn-shadow {
-  transform: translate(2px, 2px);
-}
-.torivo-btn-primary:active .torivo-btn-shadow,
-.torivo-btn-secondary:active .torivo-btn-shadow {
-  transform: translate(3px, 3px);
+html.dark .torivo-btn-secondary:hover .torivo-btn-content {
+  background: rgba(35, 29, 26, 0.85);
+  border-color: rgba(247, 245, 242, 0.28);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
-/* Fallbacks for older cta reference definitions */
+.torivo-btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* Fallback/CTA definitions mapped to premium modern styles */
 .primary-cta {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  gap: 0.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  border-radius: 9999px;
-  border: 1.5px solid var(--accent-ink);
-  background: var(--accent-primary);
-  color: var(--background);
-  box-shadow: 3px 3px 0px var(--accent-ink);
-  padding: 0.6rem 1.6rem;
-  transition: all 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
+  letter-spacing: 0.08em;
+  border-radius: 0.75rem;
+  padding: 0.65rem 1.6rem;
+  background: linear-gradient(135deg, #E7717D 0%, #CE5A66 100%);
+  color: #FAF8F6;
+  box-shadow: 0 4px 14px rgba(231, 113, 125, 0.32);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
 }
+
+html.dark .primary-cta {
+  background: linear-gradient(135deg, #EE8590 0%, #E7717D 100%);
+  color: #13100E;
+  box-shadow: 0 4px 16px rgba(238, 133, 144, 0.22);
+}
+
 .primary-cta:hover {
-  background: var(--accent-primary-dark);
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0px var(--accent-ink);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 113, 125, 0.42);
+  filter: brightness(1.04);
 }
+
 .primary-cta:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0px 0px 0px var(--accent-ink);
+  transform: translateY(1px);
 }
 
 .secondary-cta {
@@ -497,26 +555,38 @@ html.dark .torivo-btn-shadow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  gap: 0.6rem;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  border-radius: 9999px;
-  border: 1.5px solid var(--accent-ink);
-  background: var(--surface-card);
-  color: var(--foreground);
-  box-shadow: 3px 3px 0px var(--accent-ink);
-  padding: 0.6rem 1.6rem;
-  transition: all 0.12s cubic-bezier(0.25, 0.8, 0.25, 1);
+  letter-spacing: 0.08em;
+  border-radius: 0.75rem;
+  padding: 0.65rem 1.6rem;
+  background: rgba(250, 248, 246, 0.7);
+  border: 1px solid rgba(126, 104, 90, 0.25);
+  color: #2E2824;
+  box-shadow: 0 4px 12px rgba(126, 104, 90, 0.04);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
+
+html.dark .secondary-cta {
+  background: rgba(35, 29, 26, 0.65);
+  border: 1px solid rgba(247, 245, 242, 0.18);
+  color: #F7F5F2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
 .secondary-cta:hover {
-  background: var(--surface-hover);
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0px var(--accent-ink);
+  transform: translateY(-2px);
+  background: rgba(250, 248, 246, 0.95);
+  border-color: rgba(126, 104, 90, 0.35);
+  box-shadow: 0 6px 18px rgba(126, 104, 90, 0.1);
 }
+
 .secondary-cta:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0px 0px 0px var(--accent-ink);
+  transform: translateY(1px);
 }
 

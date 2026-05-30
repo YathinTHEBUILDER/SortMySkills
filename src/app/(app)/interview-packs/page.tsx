@@ -9,7 +9,7 @@ export default function InterviewPacksPage() {
     <div className="space-y-8 animate-fade-in relative z-10">
       <PageHeader
         title="Placement Interview Packs"
-        description="150 questions per role (50 easy, 50 medium, 50 hard) — sorted and ready for mock interviews."
+        description="Systematically grouped interview banks across 6 technical role families to prepare modern placements."
       />
 
       <div className="grid sm:grid-cols-2 gap-6">
@@ -49,9 +49,9 @@ export default function InterviewPacksPage() {
                       </span>
                     </div>
 
-                    <span className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-widest text-accent-primary">
-                      <span>Open Pack</span> 
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    <span className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-accent-primary font-bold">
+                      <span>Initiate Preparation</span> 
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
                     </span>
                   </div>
                 </CardBody>

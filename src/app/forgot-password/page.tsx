@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
 
             {error && <p className="text-xs text-red-400 font-semibold text-center mt-2">{error}</p>}
 
-            <Button type="submit" className="w-full h-11 font-mono uppercase tracking-widest text-[#F6F1E8] bg-accent-primary mt-2" disabled={isPending}>
+            <Button type="submit" className="w-full h-11 mt-2" disabled={isPending}>
               {isPending ? "Sending code…" : "Send Reset Code"}
             </Button>
 

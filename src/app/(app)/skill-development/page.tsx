@@ -54,10 +54,10 @@ export default function SkillDevelopmentPage() {
                   key={role.id}
                   type="button"
                   onClick={() => setSelectedRole(role)}
-                  className={`w-full text-left rounded-lg px-4 py-3 text-xs font-mono uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
+                  className={`w-full text-left rounded-xl px-4 py-3 text-xs font-mono uppercase tracking-wider border transition-all duration-300 cursor-pointer flex items-center justify-between ${
                     selectedRole.id === role.id
-                      ? "bg-accent-primary/10 border-accent-primary/30 text-accent-primary font-bold shadow-xs"
-                      : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover/80"
+                      ? "bg-accent-primary/15 border-accent-primary/45 text-text-primary font-bold shadow-xs pl-5 border-l-4"
+                      : "border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-hover/80 hover:pl-5"
                   }`}
                 >
                   {role.title}
@@ -120,10 +120,10 @@ export default function SkillDevelopmentPage() {
                             on ? prev.filter((s) => s !== skill) : [...prev, skill]
                           )
                         }
-                        className={`w-full flex items-center justify-between rounded-lg px-4 py-3 text-xs font-mono uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
+                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-xs font-mono uppercase tracking-wider border transition-all duration-300 cursor-pointer ${
                           on
-                            ? "border-accent-primary/30 bg-accent-primary/5 text-text-primary font-semibold shadow-xs"
-                            : "border-[var(--border-muted)] text-text-secondary hover:bg-surface-hover/80"
+                            ? "border-accent-primary/35 bg-accent-primary/10 text-text-primary font-bold shadow-xs scale-[1.01] translate-x-1"
+                            : "border-[var(--border-muted)] text-text-secondary hover:bg-surface-hover/80 hover:translate-x-1"
                         }`}
                       >
                         <span>{skill}</span>
@@ -195,12 +195,12 @@ export default function SkillDevelopmentPage() {
                   <div className="w-10 h-10 rounded-full bg-accent-green/10 flex items-center justify-center text-accent-green mx-auto mb-4 border border-accent-green/20">
                     <Target className="w-5 h-5" />
                   </div>
-                  <p className="text-text-primary font-bold text-sm font-mono uppercase tracking-wider">All baseline targets met</p>
+                  <p className="text-text-primary font-bold text-sm font-mono uppercase tracking-wider">All target capabilities successfully validated</p>
                   <p className="text-xs text-text-secondary mt-2 max-w-sm mx-auto leading-relaxed">
-                    You have audited all standard skills. Try the Job Description Matcher to test your profile against a custom placement description.
+                    You have verified all target skill metrics. Launch a compatibility scan to test your profile against specific job roles.
                   </p>
-                  <ButtonLink href="/job-match" className="mt-6 font-mono uppercase tracking-widest text-[#F6F1E8] bg-accent-primary">
-                    Try Job Match <ArrowRight className="w-4 h-4 ml-1" />
+                  <ButtonLink href="/career-analyser" className="mt-6">
+                    Audit ATS & Fit <ArrowRight className="w-4 h-4 ml-1" />
                   </ButtonLink>
                 </div>
               ) : (
