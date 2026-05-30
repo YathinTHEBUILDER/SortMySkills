@@ -1,6 +1,6 @@
 # SortMySkills
 
-**Structured career intelligence** for students and early-career applicants: normalize skills, audit gaps, compare resumes to job descriptions, plan Coursera study paths, and practice with **600 curated interview questions**.
+**Structured career intelligence** for students and early-career applicants: normalize skills, audit gaps, compare resumes to job descriptions, plan Coursera study paths, and practice with **900 curated interview questions**.
 
 Built with **Next.js 15**, **React 19**, **Tailwind CSS 4**, **GSAP**, **Lenis**, and **Recharts**.  
 Current version is a **fully integrated SaaS platform** featuring real-time email OTP authentication, transactional public profiles, and active Supabase database synchronization.
@@ -78,7 +78,7 @@ Details: **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)**
 src/
   app/              # Pages (Next.js App Router)
   components/       # Navbar, theme, scroll, logo
-  data/interview-packs/   # 600 questions (TypeScript data)
+  data/interview-packs/   # 900 questions (TypeScript data)
   lib/
     skill-map.ts    # Parser + SKILL_MAP  ← start here for code review
     themes.ts       # Color pack definitions

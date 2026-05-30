@@ -4,8 +4,8 @@ Comprehensive interview preparation question banks aligned with real-world hirin
 
 Each role contains:
 
-- **100 curated questions**
-- Split into **Easy (1–35)** / **Medium (36–70)** / **Hard (71–100)**
+- **150 curated questions**
+- Split into **Easy (1–50)** / **Medium (51–100)** / **Hard (101–150)**
 - Conceptual + scenario-based + system-thinking questions
 - Designed for assessments, interviews, and skill evaluation
 
@@ -22,7 +22,7 @@ Each role contains:
 | UX Designer | `ux-designer` | `src/data/interview-packs/ux-designer.ts` |
 | Product Manager | `product-manager` | `src/data/interview-packs/product-manager.ts` |
 
-**Total: 600 questions** across 6 roles.
+**Total: 900 questions** across 6 roles.
 
 ---
 
@@ -39,7 +39,7 @@ Detail pages support filters: All, Easy, Medium, Hard.
 
 ```typescript
 interface InterviewQuestion {
-  id: number;           // 1–100 within pack
+  id: number;           // 1–150 within pack
   difficulty: "easy" | "medium" | "hard";
   text: string;
 }
@@ -61,7 +61,7 @@ Built with `buildPack()` in `src/data/interview-packs/types.ts`.
 ## Adding or editing questions
 
 1. Open the role file under `src/data/interview-packs/`.
-2. Edit `EASY`, `MEDIUM`, or `HARD` string arrays (keep 35 / 35 / 30 counts).
+2. Edit `EASY`, `MEDIUM`, or `HARD` string arrays (keep 50 / 50 / 50 counts).
 3. Export is automatic via `buildPack()`.
 4. Registry in `index.ts` must include new packs if you add roles.
 

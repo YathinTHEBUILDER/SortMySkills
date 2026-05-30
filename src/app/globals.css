@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
 
   /* Premium SaaS theme variables mapped to CSS custom properties */
   --color-accent-primary: var(--accent-primary);
@@ -589,4 +590,30 @@ html.dark .secondary-cta {
 .secondary-cta:active {
   transform: translateY(1px);
 }
+
+/* ==========================================================================
+   Contact Form Premium Glow & Aesthetics
+   ========================================================================== */
+.contact-grid-glow {
+  position: relative;
+}
+
+.contact-grid-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent-primary) 18%, transparent), transparent 38%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--accent-secondary) 14%, transparent), transparent 42%);
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.contact-grid-glow > * {
+  position: relative;
+  z-index: 1;
+}
+
 

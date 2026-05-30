@@ -35,30 +35,47 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6 font-sans">
             <a
-              href="#product-showcase"
+              href="#product"
               className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
               Product
             </a>
             <a
-              href="#tools-preview"
+              href="#workflow"
               className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
-              Tools
+              Workflow
             </a>
-
-            <Link
-              href="/interview-packs"
+            <a
+              href="#roadmap"
               className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
-              Interview Packs
-            </Link>
+              Roadmap
+            </a>
+            <a
+              href="#interview-prep"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              Interview Prep
+            </a>
+            <a
+              href="#contact"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              Contact
+            </a>
             <Link
               href="/career-analyser"
               className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
             >
               Analyser
             </Link>
+            <a
+              href="#contact"
+              className="text-xs font-semibold tracking-wide text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              Contact
+            </a>
           </nav>
         </div>
 
@@ -123,34 +140,54 @@ export default function MarketingHeader({ user }: MarketingHeaderProps) {
         <div className="md:hidden fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-[var(--background)]/98 backdrop-blur-lg border-t border-[var(--border-muted)] flex flex-col justify-between p-6 z-50 animate-fade-in-up">
           <nav className="flex flex-col gap-5 pt-4 font-sans">
             <a
-              href="#product-showcase"
+              href="#product"
               onClick={closeMobileMenu}
               className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
               Product
             </a>
             <a
-              href="#tools-preview"
+              href="#workflow"
               onClick={closeMobileMenu}
               className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
-              Tools
+              Workflow
             </a>
-
-            <Link
-              href="/interview-packs"
+            <a
+              href="#roadmap"
+              onClick={closeMobileMenu}
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+            >
+              Roadmap
+            </a>
+            <a
+              href="#interview-prep"
               onClick={closeMobileMenu}
               className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
               Interview Prep
-            </Link>
+            </a>
+            <a
+              href="#contact"
+              onClick={closeMobileMenu}
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+            >
+              Contact
+            </a>
             <Link
               href="/career-analyser"
               onClick={closeMobileMenu}
               className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
             >
-              Career Analyser
+              Analyser
             </Link>
+            <a
+              href="#contact"
+              onClick={closeMobileMenu}
+              className="text-sm font-semibold tracking-wide text-text-primary hover:text-accent-primary border-b border-[var(--border-muted)] pb-2 transition-colors"
+            >
+              Contact
+            </a>
             <Link
               href="/dashboard"
               onClick={closeMobileMenu}
