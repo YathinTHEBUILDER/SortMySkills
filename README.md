@@ -7,7 +7,7 @@
 **Structured career intelligence** for students and early-career applicants: normalize skills, audit gaps, compare resumes to job descriptions, plan Coursera study paths, and practice with **900 curated interview questions**.
 
 Built with **Next.js 15**, **React 19**, **Tailwind CSS 4**, **GSAP**, **Lenis**, and **Recharts**.  
-Current version is a **fully integrated SaaS platform** featuring real-time email OTP authentication, transactional public profiles, and active Supabase database synchronization.
+Current version is a **fully integrated SaaS platform** featuring real-time email OTP authentication, transactional public profiles, active Supabase database synchronization, animated landing interactions, Formspree contact support, and verified-resource AI roadmap generation.
 
 ---
 
@@ -31,9 +31,9 @@ npm start       # serve production build
 
 | You want to… | Go to… | How it works |
 |--------------|--------|----------------|
-| See the product story + try the parser | `/` | Rule-based skill normalization from pasted text |
-| Plan learning for a target role | `/skill-development` | Check off skills → readiness % → Coursera gaps |
-| Compare resume vs JD, run readiness checks, generate study roadmaps | `/career-analyser` (unified workspace; `/job-match` redirects here) | Scan readiness score + check skill gaps + generate AI roadmap with verified learning resources (and privacy data deletion option) |
+| See the product story + animated workflow | `/` | GSAP + Lenis landing page with resume-to-roadmap product story and contact form |
+| Plan learning for a target role | `/skill-development` | Check off skills → readiness % → Coursera/resource gaps |
+| Compare resume vs JD, run readiness checks, generate study roadmaps | `/career-analyser` (unified workspace; `/job-match` redirects here) | Scan readiness score + check skill gaps + generate AI roadmap with verified learning resources and privacy data deletion |
 | Practice interview questions | `/interview-packs` | 6 roles × 150 questions (50 Easy / Medium / Hard each) |
 | Manage profile & view workspace stats | `/profile` | Synchronizes custom display name/role with Supabase DB and Auth |
 | Switch look & accent colors | Navbar | Light/dark + 4 color packs |
@@ -47,6 +47,7 @@ Details: **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)**
 
 | Document | Use when you need to… |
 |----------|------------------------|
+| **[docs/fullfunctionality.md](./docs/fullfunctionality.md)** | Complete newest feature reference: landing page, animations, contact form, branding, auth, dashboards, analyser, AI roadmap, Supabase/RLS, privacy, and demo flow |
 | **[docs/README.md](./docs/README.md)** | Index of all docs |
 | **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)** | Explain parser, scoring, mocks vs real |
 | **[docs/APP_FLOW.md](./docs/APP_FLOW.md)** | User journeys + Mermaid diagrams |
@@ -58,7 +59,7 @@ Details: **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)**
 | **[docs/INTERVIEW_PACKS.md](./docs/INTERVIEW_PACKS.md)** | Question bank structure |
 | **[homepage_prompts.md](./homepage_prompts.md)** | AI/design prompts for UI iteration |
 
-**Suggested review path:** `HOW_IT_WORKS` → `APP_FLOW` → `REVIEWER_GUIDE` → live demo.
+**Suggested review path:** `fullfunctionality` → `HOW_IT_WORKS` → `APP_FLOW` → `REVIEWER_GUIDE` → live demo.
 
 ---
 
@@ -66,9 +67,9 @@ Details: **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)**
 
 | Route | Purpose |
 |-------|---------|
-| `/` | Homepage |
+| `/` | Animated homepage with GSAP/Lenis product story and contact form |
 | `/skill-development` | Role planner + readiness chart |
-| `/career-analyser` | Unified workspace: Scan Readiness, Check Skill Gaps, and Generate Study Roadmap (with user privacy delete actions) |
+| `/career-analyser` | Unified workspace: Scan Readiness, Check Skill Gaps, and Generate Study Roadmap with user privacy delete actions |
 | `/job-match` | Redirects to `/career-analyser` |
 | `/interview-packs` | Interview pack catalog |
 | `/interview-packs/[slug]` | Single pack (e.g. `frontend-engineer`) |
@@ -81,7 +82,7 @@ Details: **[docs/HOW_IT_WORKS.md](./docs/HOW_IT_WORKS.md)**
 ```text
 src/
   app/              # Pages (Next.js App Router)
-  components/       # Navbar, theme, scroll, logo
+  components/       # Navbar, theme, scroll, logo, landing/contact components
   data/interview-packs/   # 900 questions (TypeScript data)
   lib/
     skill-map.ts    # Parser + SKILL_MAP  ← start here for code review
@@ -99,6 +100,9 @@ Full tree: **[docs/FILE_STRUCTURE.md](./docs/FILE_STRUCTURE.md)**
 2. `src/app/(app)/career-analyser/page.tsx` — unified workspace for Readiness Scans, Skill Gaps, and Roadmaps (contains privacy data delete logic and demo warning badges)  
 3. `src/app/api/roadmap/route.ts` — study roadmap generation with Groq AI, Zod schema validation, and resource mapping against local verified sources  
 4. `src/app/actions/analysis.ts` — server actions for secure user data deletion  
+5. `src/components/landing/LandingAnimations.tsx` — GSAP/ScrollTrigger homepage animation system  
+6. `src/components/SmoothScrollProvider.tsx` — Lenis smooth scrolling integration  
+7. `src/components/landing/ContactForm.tsx` — Formspree-powered themed contact form
 
 ---
 
