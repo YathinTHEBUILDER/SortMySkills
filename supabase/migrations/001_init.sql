@@ -111,13 +111,59 @@ alter table public.api_rate_limits enable row level security;
 
 -- Policies for public.api_rate_limits
 drop policy if exists "Enable select for users" on public.api_rate_limits;
-create policy "Enable select for users" on public.api_rate_limits for select using (auth.uid() = user_id OR user_id is null);
-
 drop policy if exists "Enable insert for users" on public.api_rate_limits;
-create policy "Enable insert for users" on public.api_rate_limits for insert with check (auth.uid() = user_id OR user_id is null);
-
 drop policy if exists "Enable update for users" on public.api_rate_limits;
-create policy "Enable update for users" on public.api_rate_limits for update using (auth.uid() = user_id OR user_id is null) with check (auth.uid() = user_id OR user_id is null);
+
+drop policy if exists "Authenticated users can select own rate limits" on public.api_rate_limits;
+drop policy if exists "Authenticated users can insert own rate limits" on public.api_rate_limits;
+drop policy if exists "Authenticated users can update own rate limits" on public.api_rate_limits;
+
+drop policy if exists "Anonymous users can select anon rate limits" on public.api_rate_limits;
+drop policy if exists "Anonymous users can insert anon rate limits" on public.api_rate_limits;
+drop policy if exists "Anonymous users can update anon rate limits" on public.api_rate_limits;
+
+-- Authenticated users can only access their own user-scoped rate limit rows.
+create policy "Authenticated users can select own rate limits"
+on public.api_rate_limits
+for select
+to authenticated
+using (auth.uid() = user_id);
+
+create policy "Authenticated users can insert own rate limits"
+on public.api_rate_limits
+for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+create policy "Authenticated users can update own rate limits"
+on public.api_rate_limits
+for update
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+-- Anonymous IP-based rate limit rows are allowed only for anon-key server routes.
+-- This is a compatibility compromise because the current implementation uses the Supabase anon client.
+-- For stricter production hardening, move rate limiting to a server-only service-role client or RPC.
+create policy "Anonymous users can select anon rate limits"
+on public.api_rate_limits
+for select
+to anon
+using (user_id is null);
+
+create policy "Anonymous users can insert anon rate limits"
+on public.api_rate_limits
+for insert
+to anon
+with check (user_id is null);
+
+create policy "Anonymous users can update anon rate limits"
+on public.api_rate_limits
+for update
+to anon
+using (user_id is null)
+with check (user_id is null);
+
 
 -- Indexes for public.api_rate_limits
 create index if not exists idx_api_rate_limits_lookup on public.api_rate_limits(feature_name, window_start, user_id, ip_address);

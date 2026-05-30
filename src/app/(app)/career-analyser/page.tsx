@@ -966,7 +966,7 @@ export default function CareerAnalyserPage() {
               </div>
               <div className="flex items-center gap-1.5">
                 <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">Readiness Score</h3>
-                <Tooltip content="This score estimates your resume's readiness for this job posting based on structural format, keyword matching, impact verbs, and completeness. Please note this is a heuristic estimate to help you improve, not a guarantee of passing any specific applicant tracking system.">
+                <Tooltip content="This score estimates your resume's readiness for this job posting based on structural format, keyword matching, impact verbs, and completeness. Please note this is a heuristic estimate to help you improve, not a guarantee of passing any specific hiring system.">
                   <Info className="w-3.5 h-3.5 text-text-muted cursor-help" />
                 </Tooltip>
               </div>

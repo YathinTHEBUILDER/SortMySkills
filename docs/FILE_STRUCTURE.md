@@ -23,15 +23,24 @@ sortmyskills/
 │   └── README.md                  # Database schema & policy documentation
 │
 ├── src/
+│   ├── middleware.ts              # Route protection check for auth
 │   ├── app/
 │   │   ├── globals.css            # Tailwind theme, light/dark CSS variables
 │   │   ├── layout.tsx             # Root layout, fonts, ThemeProvider, theme init script
-│   │   ├── middleware.ts          # Route protection check for auth
+│   │   ├── page.tsx               # Marketing homepage
 │   │   │
-│   │   ├── (auth)/                # Anonymous-only authentication routes
-│   │   │   ├── login/
-│   │   │   ├── signup/
+│   │   ├── login/                 # User authentication sign in
+│   │   │   └── page.tsx
+│   │   ├── signup/                # User signup with roles
+│   │   │   └── page.tsx
+│   │   ├── forgot-password/       # Password reset initiation
+│   │   │   └── page.tsx
+│   │   │
+│   │   ├── auth/                  # Supabase auth handlers
+│   │   │   ├── callback/
+│   │   │   │   └── route.ts
 │   │   │   └── verify/
+│   │   │       └── page.tsx
 │   │   │
 │   │   ├── (app)/                 # Authenticated application workspace routes
 │   │   │   ├── dashboard/         # Combined placement engine dashboard
@@ -73,11 +82,22 @@ sortmyskills/
 | Route | File | Purpose |
 |-------|------|---------|
 | `/` | `src/app/page.tsx` | Marketing homepage + live skill parser demo |
-| `/login` | `src/app/(auth)/login/page.tsx` | User authentication sign in |
-| `/signup` | `src/app/(auth)/signup/page.tsx` | User signup with sanitized roles |
+| `/login` | `src/app/login/page.tsx` | User authentication sign in |
+| `/signup` | `src/app/signup/page.tsx` | User signup with sanitized roles |
+| `/forgot-password` | `src/app/forgot-password/page.tsx` | Forgot password initiation |
+| `/auth/verify` | `src/app/auth/verify/page.tsx` | Auth verification instructions |
 | `/dashboard` | `src/app/(app)/dashboard/page.tsx` | Placement workspace dashboard metrics |
 | `/career-analyser` | `src/app/(app)/career-analyser/page.tsx` | Unified workspace: Scan Readiness, Check Skill Gaps, and Generate Study Roadmap (with data privacy deletion) |
 | `/job-match` | `src/app/(app)/job-match/page.tsx` | Redirects directly to `/career-analyser` |
 | `/skill-development` | `src/app/(app)/skill-development/page.tsx` | Career roadmap planner and checklist |
 | `/interview-packs` | `src/app/(app)/interview-packs/page.tsx` | Catalog of 6 interview preparation packs |
 | `/profile` | `src/app/(app)/profile/page.tsx` | Profile targets and database credentials info |
+
+## Key Architectural & Feature Specifications
+
+* **Unified Workspace (`/career-analyser`)**: The single source of truth for resume readiness scans, job matching, and AI roadmaps.
+* **Redirect Path (`/job-match`)**: The `/job-match` path automatically redirects users directly to `/career-analyser` to ensure a cohesive, unified workspace experience.
+* **AI Roadmap Engine**: Generates highly accurate study paths using **Groq** APIs structured through strict **Zod** schema validations, combined with verified local resources. No live web browsing/scraping is performed to guarantee speed and deterministic safety.
+* **Verified Local Resources**: All learning pathways and resources displayed to the user originate solely from a pre-vetted catalog defined in `src/data/verified-resources.ts` (`VERIFIED_RESOURCES`).
+* **Data Privacy & Control**: Users have complete ownership of their data and can permanently delete all saved analyses, resume text, target JDs, focus areas, and milestone trackers both from the UI and active database records.
+* **Database & Migration Schema**: All database initialization schemas, table definitions, custom triggers, indexes, and RLS policies are maintained in `supabase/migrations/001_init.sql`.
