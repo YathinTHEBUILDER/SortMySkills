@@ -8,12 +8,13 @@ import MarketingHeader from "@/components/landing/MarketingHeader";
 import {
   ArrowRight,
   Compass,
+  Briefcase,
   BookOpen,
+  Code,
   Sparkles,
   CheckCircle2,
   AlertTriangle,
-  MailX,
-  FileText,
+  Globe,
 } from "lucide-react";
 
 export default async function LandingPage() {
@@ -52,32 +53,43 @@ export default async function LandingPage() {
           </div>
 
           <h1 className="hero-reveal-title opacity-0 hero-display text-text-primary leading-[1.05] tracking-tight text-3xl sm:text-5xl font-extrabold">
-            Transform unstructured skills <br />
-            into a high-yield <br />
-            <span className="text-serif font-normal italic text-accent-primary">placement roadmap.</span>
+            Turn scattered skills <br />
+            into a clear <br />
+            <span className="text-serif font-normal italic text-accent-primary">career roadmap.</span>
           </h1>
 
           <p className="hero-reveal-sub opacity-0 mt-6 text-base md:text-lg text-text-secondary leading-relaxed max-w-xl font-sans normal-case">
-            SortMySkills analyzes your profile, maps technical keywords against target job roles, resolves ATS compliance gaps, and charts a direct course to placement readiness.
+            SortMySkills analyzes your resume, compares it with real job descriptions, detects skill gaps, and shows the fastest path to become placement-ready.
           </p>
 
           <div className="hero-reveal-ctas opacity-0 mt-10 flex flex-wrap gap-4 items-center">
             {user ? (
-              <ButtonLink href="/dashboard">
-                <span>Launch Workspace</span>
+              <ButtonLink
+                href="/dashboard"
+                className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
+              >
+                <span>Open Dashboard</span>
                 <ArrowRight className="w-4 h-4" />
               </ButtonLink>
             ) : (
               <>
-                <ButtonLink href="/signup">
-                  <span>Run Diagnostics</span>
+                <ButtonLink
+                  href="/signup"
+                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
+                >
+                  <span>Start Skill Audit</span>
                   <ArrowRight className="w-4 h-4" />
                 </ButtonLink>
-                <ButtonLink href="/login" variant="secondary">
-                  Analyze Fit
+                <ButtonLink
+                  href="/login"
+                  variant="secondary"
+                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest border border-[var(--border-strong)] rounded-full hover:bg-surface-hover"
+                >
+                  Try Job Match
                 </ButtonLink>
               </>
             )}
+
           </div>
 
           {/* Core Signals Strip */}
@@ -222,82 +234,104 @@ export default async function LandingPage() {
             Everything you need to move from scattered tech keywords to clear placement readiness.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
-            {/* Feature 1: Why No Reply */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16 text-left">
+            {/* Feature 1: Skill DNA */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
-                  <MailX className="w-5 h-5" />
+                  <Compass className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Why No Reply</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Skill DNA</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  The ultimate recruiter callback diagnosis. Isolate specific emotional, structure, or competency reasons why employers might be ignoring your applications.
+                  Map and normalize your unstructured tech credentials against standardized industry taxonomies using our local alias translation registry.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">CALLBACK DIAGNOSIS</span>
-                <Link href="/why-no-reply" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Start Diagnosis</span>
+                <span className="text-text-muted">NORMALIZE STACK</span>
+                <Link href="/skill-development" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Open Planner</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Feature 2: Career Analyser */}
+            {/* Feature 2: Job Match Engine */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-secondary/10 border border-accent-secondary/20 flex items-center justify-center text-accent-secondary mb-5">
-                  <Compass className="w-5 h-5" />
+                  <Briefcase className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Career Analyser</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Job Match Engine</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Consolidated analysis workspace. Paste your target job and credentials once to check ATS compatibility, match keyword deficits, and compile dynamic study roadmaps.
+                  Dual-panel comparison laboratory. Paste your resume and target placement posts to compute instant matching weights, missing keywords, and supplementary assets.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">UNIFIED WORKSPACE</span>
-                <Link href="/career-analyser" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Run Analysis</span>
+                <span className="text-text-muted">MATCH LAB</span>
+                <Link href="/job-match" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Run Comparison</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Feature 3: Resume Builder */}
+
+
+            {/* Feature 4: Skill Gap Roadmap */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
-                  <FileText className="w-5 h-5" />
+                  <Globe className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Resume Builder</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Skill Gap Roadmap</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Revamp your bullets in real-time. Use active technical verbs, recruiter-ready language, and layout sweeps to score perfectly on automated ATS scanners.
+                  Generate personal step-by-step learning structures paired directly with specific Coursera bridges to close target placement skill gaps fast.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">PROFILE ENGINE</span>
-                <Link href="/resume-builder" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Open Builder</span>
+                <span className="text-text-muted">ROADMAP MAPPED</span>
+                <Link href="/skill-development" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Build Roadmap</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Feature 4: Interview Packs */}
+            {/* Feature 5: Interview Packs */}
             <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-accent-secondary/10 border border-accent-secondary/20 flex items-center justify-center text-accent-secondary mb-5">
                   <BookOpen className="w-5 h-5" />
                 </div>
-                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Interview Packs</h3>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Interview Prep Packs</h3>
                 <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
-                  Practice 900+ curated placement questions across 6 core technical role families, sorted systematically by easy, medium, and hard levels.
+                  Practice 900+ curated placement evaluation questions across 6 core technical role families, sorted systematically by easy, medium, and hard levels.
                 </p>
               </div>
               <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
-                <span className="text-text-muted">PLACEMENT PREP</span>
+                <span className="text-text-muted">900+ QUESTIONS</span>
                 <Link href="/interview-packs" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
-                  <span>Browse Packs</span>
+                  <span>Browse Prep Catalog</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Feature 6: Parser Tool */}
+            <div className="premium-card p-6 flex flex-col justify-between reveal-item opacity-0 hover-lift">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-accent-primary/10 border border-accent-primary/20 flex items-center justify-center text-accent-primary mb-5">
+                  <Code className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-bold text-text-primary tracking-tight font-sans uppercase text-xs font-mono">Parser Tool</h3>
+                <p className="text-xs text-text-secondary mt-2.5 leading-relaxed font-sans">
+                  Standardizes unstructured tech terms (e.g. `k8s`, `py`, `react.js`) into clean, standard canonical competency taxonomies locally to match employer scanners.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-[var(--border-muted)] flex justify-between items-center text-[10px] font-mono">
+                <span className="text-text-muted">NORMALIZATION PLAYGROUND</span>
+                <Link href="/tools/parser" className="text-accent-primary font-bold hover:underline flex items-center gap-1">
+                  <span>Normalize Skills</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -398,75 +432,48 @@ export default async function LandingPage() {
 
           {/* SVG Orbit Visual */}
           <div className="relative w-[340px] h-[340px] sm:w-[480px] sm:h-[480px] flex items-center justify-center reveal-item opacity-0">
-            {/* Ambient centered glowing light-mesh backdrop */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] bg-accent-primary/10 rounded-full blur-[70px] pointer-events-none z-0 animate-pulse-glow" />
-
-            {/* Inner Ring with glowing dashed boundary */}
-            <div className="absolute w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] rounded-full border border-dashed border-accent-primary/25 shadow-[0_0_20px_rgba(231,113,125,0.08)] animate-spin-slow" />
+            {/* Inner Ring */}
+            <div className="absolute w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] rounded-full border border-[var(--border-muted)] border-dashed animate-spin-slow" />
             
-            {/* Outer Ring with glowing dashed boundary */}
-            <div className="absolute w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border border-dashed border-accent-secondary/15 shadow-[0_0_30px_rgba(175,210,117,0.04)] animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "38s" }} />
+            {/* Outer Ring */}
+            <div className="absolute w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] rounded-full border border-[var(--border-muted)] border-dashed animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "35s" }} />
 
-            {/* Interconnecting glowing network web lines */}
-            <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 480 480" fill="none">
-              <defs>
-                <radialGradient id="orbit-center-glow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="var(--accent-primary)" stopOpacity="0.2" />
-                  <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-              <circle cx="240" cy="240" r="140" fill="url(#orbit-center-glow)" />
-
-              {/* Laser connecting lines */}
-              <line x1="240" y1="240" x2="240" y2="120" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
-              <line x1="240" y1="240" x2="240" y2="360" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
-              <line x1="240" y1="240" x2="120" y2="240" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
-              <line x1="240" y1="240" x2="360" y2="240" stroke="var(--accent-primary)" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.65" />
-
-              {/* Diagonal connecting network web overlay */}
-              <line x1="240" y1="120" x2="360" y2="240" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
-              <line x1="360" y1="240" x2="240" y2="360" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
-              <line x1="240" y1="360" x2="120" y2="240" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
-              <line x1="120" y1="240" x2="240" y2="120" stroke="var(--border-strong)" strokeWidth="0.8" opacity="0.35" />
-            </svg>
-
-            {/* Core Center Node: pulsing glassmorphism container */}
-            <div className="absolute w-20 h-20 rounded-full bg-gradient-to-tr from-[#E7717D]/35 to-[#AFD275]/15 backdrop-blur-md border-2 border-[#E7717D] flex flex-col items-center justify-center shadow-[0_0_35px_rgba(231,113,125,0.45)] z-25 transition-all duration-300 hover:scale-110 hover:shadow-[0_0_45px_rgba(231,113,125,0.6)] cursor-pointer">
+            {/* Core Center Node */}
+            <div className="absolute w-20 h-20 rounded-full bg-accent-primary/10 border-2 border-accent-primary flex flex-col items-center justify-center shadow-lg z-25 transition-transform hover:scale-105">
               <Logo className="w-7 h-7" />
-              <span className="text-[8px] font-mono font-bold mt-1 text-[#F8F3EA] uppercase tracking-wider">CORE</span>
+              <span className="text-[8px] font-mono font-bold mt-1 text-text-primary uppercase tracking-wider">SMS CORE</span>
             </div>
 
-            {/* Orbiting standard skill nodes: Premium Glowing Glassmorphism badges */}
-            <div className="absolute translate-y-[-90px] sm:translate-y-[-120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
+            {/* Orbiting standard skill nodes */}
+            <div className="absolute translate-y-[-90px] sm:translate-y-[-120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
               React
             </div>
-            <div className="absolute translate-y-[90px] sm:translate-y-[120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
+            <div className="absolute translate-y-[90px] sm:translate-y-[120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
               Python
             </div>
-            <div className="absolute translate-x-[-90px] sm:translate-x-[-120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
+            <div className="absolute translate-x-[-90px] sm:translate-x-[-120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
               SQL
             </div>
-            <div className="absolute translate-x-[90px] sm:translate-x-[120px] rounded-xl border border-[#E7717D]/45 bg-surface-card/75 backdrop-blur-md px-3.5 py-1.5 text-[10px] font-mono font-semibold text-text-primary shadow-[0_0_15px_rgba(231,113,125,0.18)] z-20 transition-all duration-300 hover:scale-110 hover:border-[#E7717D] hover:shadow-[0_0_20px_rgba(231,113,125,0.35)] cursor-pointer">
+            <div className="absolute translate-x-[90px] sm:translate-x-[120px] rounded-lg border border-[var(--border-strong)] bg-surface-card px-2.5 py-1 text-[10px] font-mono font-semibold text-text-primary shadow-xs z-20">
               TypeScript
             </div>
 
-            {/* Outer skill nodes: Secondary Glassmorphism badges */}
-            <div className="absolute translate-y-[-140px] translate-x-[-100px] sm:translate-y-[-200px] sm:translate-x-[-140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
+            <div className="absolute translate-y-[-140px] translate-x-[-100px] sm:translate-y-[-200px] sm:translate-x-[-140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Git
             </div>
-            <div className="absolute translate-y-[-140px] translate-x-[100px] sm:translate-y-[-200px] sm:translate-x-[140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
+            <div className="absolute translate-y-[-140px] translate-x-[100px] sm:translate-y-[-200px] sm:translate-x-[140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Figma
             </div>
-            <div className="absolute translate-y-[140px] translate-x-[-100px] sm:translate-y-[200px] sm:translate-x-[-140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
+            <div className="absolute translate-y-[140px] translate-x-[-100px] sm:translate-y-[200px] sm:translate-x-[-140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Node.js
             </div>
-            <div className="absolute translate-y-[140px] translate-x-[100px] sm:translate-y-[200px] sm:translate-x-[140px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
+            <div className="absolute translate-y-[140px] translate-x-[100px] sm:translate-y-[200px] sm:translate-x-[140px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Machine Learning
             </div>
-            <div className="absolute translate-y-[-60px] translate-x-[-150px] sm:translate-y-[-90px] sm:translate-x-[-200px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
+            <div className="absolute translate-y-[-60px] translate-x-[-150px] sm:translate-y-[-90px] sm:translate-x-[-200px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Product
             </div>
-            <div className="absolute translate-y-[-60px] translate-x-[150px] sm:translate-y-[-90px] sm:translate-x-[200px] rounded-xl border border-[var(--border-muted)] bg-surface-card/50 backdrop-blur-xs px-3 py-1 text-[9px] font-mono text-text-secondary shadow-xs z-15 transition-all duration-300 hover:scale-115 hover:border-accent-secondary hover:shadow-[0_0_15px_rgba(175,210,117,0.3)] cursor-pointer">
+            <div className="absolute translate-y-[-60px] translate-x-[150px] sm:translate-y-[-90px] sm:translate-x-[200px] rounded-lg border border-[var(--border-muted)] bg-surface-card/85 px-2 py-0.5 text-[9px] font-mono text-text-secondary shadow-xs z-15">
               Cloud
             </div>
           </div>
@@ -531,28 +538,38 @@ export default async function LandingPage() {
             {/* Ambient pattern */}
             <div className="absolute inset-0 dot-grid-overlay opacity-25 pointer-events-none" />
 
-            <span className="eyebrow">placement taxonomy</span>
+            <span className="eyebrow">placement intelligence</span>
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-text-primary mt-3 font-serif italic">
-              Calibrate your profile for modern tech hiring.
+              Ready to stop guessing your career path?
             </h2>
             <p className="text-sm text-text-secondary mt-4 max-w-md mx-auto leading-relaxed font-sans">
-              Isolate rejection signals, map your canonical technical capabilities, and get a precise, actionable roadmap today.
+              Create your skill profile, compare it with real roles, and get a roadmap you can act on today.
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               {user ? (
-                <ButtonLink href="/dashboard">
-                  <span>Launch Workspace</span>
+                <ButtonLink
+                  href="/dashboard"
+                  className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
+                >
+                  <span>Open Dashboard</span>
                   <ArrowRight className="w-4 h-4" />
                 </ButtonLink>
               ) : (
                 <>
-                  <ButtonLink href="/signup">
-                    <span>Launch Workspace</span>
+                  <ButtonLink
+                    href="/signup"
+                    className="px-6 py-3 text-xs font-mono uppercase tracking-widest text-[#F8F3EA] bg-accent-primary hover:bg-accent-primary-dark transition-all rounded-full shadow-md flex items-center gap-1.5"
+                  >
+                    <span>Get Started Free</span>
                     <ArrowRight className="w-4 h-4" />
                   </ButtonLink>
-                  <ButtonLink href="/login" variant="secondary">
-                    Analyze Custom Fit
+                  <ButtonLink
+                    href="/login"
+                    variant="secondary"
+                    className="px-6 py-3 text-xs font-mono uppercase tracking-widest border border-[var(--border-strong)] rounded-full hover:bg-surface-hover"
+                  >
+                    Open Dashboard
                   </ButtonLink>
                 </>
               )}
@@ -582,23 +599,23 @@ export default async function LandingPage() {
             <h4 className="font-mono text-[10px] text-text-primary uppercase tracking-widest font-bold">Workspace</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/why-no-reply" className="hover:text-accent-primary transition-colors">
-                  Why No Reply
+                <Link href="/skill-development" className="hover:text-accent-primary transition-colors">
+                  Skill Roadmap
                 </Link>
               </li>
               <li>
-                <Link href="/career-analyser" className="hover:text-accent-primary transition-colors">
-                  Career Analyser
-                </Link>
-              </li>
-              <li>
-                <Link href="/resume-builder" className="hover:text-accent-primary transition-colors">
-                  Resume Builder
+                <Link href="/job-match" className="hover:text-accent-primary transition-colors">
+                  Job Matcher
                 </Link>
               </li>
               <li>
                 <Link href="/interview-packs" className="hover:text-accent-primary transition-colors">
-                  Interview Packs
+                  Interview Prep
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/parser" className="hover:text-accent-primary transition-colors">
+                  Skill Parser
                 </Link>
               </li>
             </ul>
