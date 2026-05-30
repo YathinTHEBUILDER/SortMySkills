@@ -52,7 +52,7 @@ export default function DashboardClient({
   }>({
     title: "Scan Target Job Compatibility",
     description: "Map and analyze your resume against a target job description, resolve critical keyword deficits, and compile an active placement roadmap.",
-    ctaLabel: "Audit ATS & Fit",
+    ctaLabel: "Audit Resume & Fit",
     ctaHref: "/career-analyser",
   });
 
@@ -109,7 +109,7 @@ export default function DashboardClient({
             Diagnose Recruiter Silence
           </ButtonLink>
           <ButtonLink href="/career-analyser" variant="secondary">
-            Audit ATS & Fit
+            Audit Resume & Fit
           </ButtonLink>
         </div>
       </div>
@@ -163,12 +163,12 @@ export default function DashboardClient({
               </div>
               <h3 className="text-sm font-bold text-text-primary tracking-tight font-mono uppercase text-xs">02 — Calibrate</h3>
               <p className="text-xs text-text-secondary mt-2.5 leading-relaxed">
-                Audit ATS compatibility scores, run semantic skill matches, and compile dynamic learning roadmaps.
+                Audit resume readiness scores, run semantic skill matches, and compile dynamic learning roadmaps.
               </p>
             </div>
             <div className="pt-4 border-t border-[var(--border-muted)] mt-4">
               <ButtonLink href="/career-analyser" className="w-full">
-                Audit ATS & Fit
+                Audit Resume & Fit
               </ButtonLink>
             </div>
           </div>

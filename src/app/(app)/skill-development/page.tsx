@@ -200,7 +200,7 @@ export default function SkillDevelopmentPage() {
                     You have verified all target skill metrics. Launch a compatibility scan to test your profile against specific job roles.
                   </p>
                   <ButtonLink href="/career-analyser" className="mt-6">
-                    Audit ATS & Fit <ArrowRight className="w-4 h-4 ml-1" />
+                    Audit Resume & Fit <ArrowRight className="w-4 h-4 ml-1" />
                   </ButtonLink>
                 </div>
               ) : (

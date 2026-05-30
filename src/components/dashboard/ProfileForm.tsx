@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/Button";
 interface ProfileFormProps {
   initialDisplayName: string;
   initialTargetRole: string;
-  initialRole: "student" | "graduate" | "job_seeker" | "admin";
+  initialRole: "student" | "graduate" | "job_seeker";
   email: string;
 }
 
@@ -140,7 +140,7 @@ export default function ProfileForm({
           onChange={(e) =>
             setFormData({
               ...formData,
-              role: e.target.value as "student" | "graduate" | "job_seeker" | "admin",
+              role: e.target.value as "student" | "graduate" | "job_seeker",
             })
           }
           disabled={isPending}
@@ -149,7 +149,6 @@ export default function ProfileForm({
           <option value="student" className="bg-surface-card">Student</option>
           <option value="graduate" className="bg-surface-card">Recent Graduate</option>
           <option value="job_seeker" className="bg-surface-card">Job Seeker</option>
-          <option value="admin" className="bg-surface-card">Administrator</option>
         </select>
       </div>
 

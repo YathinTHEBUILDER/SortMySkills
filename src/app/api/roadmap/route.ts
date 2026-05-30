@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { callGroqAIWithRepair } from "@/lib/ai/groq-router";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { VERIFIED_RESOURCES, isVerifiedUrl, getRelevantResources, findVerifiedResource } from "@/data/verified-resources";
+import { roadmapResultSchema } from "@/lib/ai/roadmap-schema";
 
 export async function POST(req: NextRequest) {
   // 1. Rate limiting check: 3 requests per 15 minutes
@@ -18,7 +20,17 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // 2. Parse body
+  // 2. Auth check before doing anything heavy (Phase 1)
+  const supabase = await createServerSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json(
+      { error: "Unauthorized. Please log in to generate a roadmap." },
+      { status: 401 }
+    );
+  }
+
+  // 3. Parse body
   let body: { resume?: string; jd?: string; date?: string; focus?: string };
   try {
     body = await req.json();
@@ -63,7 +75,21 @@ export async function POST(req: NextRequest) {
   const weeksAvailable = Math.max(1, Math.ceil(diffDays / 7));
 
   try {
-    const systemPrompt = `You are a ruthlessly honest career coach specializing in tech and design roles. You identify exactly why a resume isn't getting replies and build a rigorous improvement roadmap. Use web search to find real, currently available free resources — Coursera free audit, YouTube (freeCodeCamp, Fireship, Traversy Media, Kevin Powell), GitHub repos, official docs, roadmap.sh, The Odin Project, CS50. Never invent resource names or URLs. Respond ONLY in valid JSON. No markdown, no preamble, no backticks.`;
+    // Phase 3: Extract matching verified resources based on skill matching in resume & JD
+    const textToMatch = `${resume} ${jd}`.toLowerCase();
+    const allSkills = Array.from(new Set(
+      VERIFIED_RESOURCES.flatMap(r => r.skills)
+    ));
+    const matchedSkills = allSkills.filter(skill => textToMatch.includes(skill.toLowerCase()));
+
+    const relevantResources = getRelevantResources(matchedSkills);
+    const resourcesToInject = relevantResources.length > 0 ? relevantResources : VERIFIED_RESOURCES.slice(0, 8);
+
+    const resourcesFormatted = resourcesToInject
+      .map(r => `- ${r.name} (${r.platform}): ${r.url} [Skills: ${r.skills.join(", ")}]`)
+      .join("\n");
+
+    const systemPrompt = `You are a ruthlessly honest career coach specializing in tech and design roles. You identify exactly why a resume isn't getting replies and build a rigorous improvement roadmap. You must ONLY recommend learning resources from the provided list of verified resources. Do NOT invent other URLs or resource names. Respond ONLY in valid JSON. No markdown, no preamble, no backticks.`;
 
     const userPrompt = `Resume: ---
 ${resume}
@@ -73,6 +99,9 @@ ${jd}
 ---
 Target date: ${date} (${weeksAvailable} weeks from today)
 Focus: ${focus || "none"}
+
+Verified Resources available to recommend:
+${resourcesFormatted}
 
 Generate this exact JSON structure:
 {
@@ -117,53 +146,91 @@ Distribute phases across ${weeksAvailable} weeks. Group into logical phases: Fix
 
     const parsed = aiResult.data as Record<string, unknown>;
 
-    // Supabase Persistence (Step 8)
-    const supabase = await createServerSupabaseClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    let savedSessionId: string | null = null;
+    // Phase 4: Zod Validation & Repair
+    const validationResult = roadmapResultSchema.safeParse(parsed);
+    if (!validationResult.success) {
+      console.error("[roadmap-api] Zod validation failed:", validationResult.error.format());
+      return NextResponse.json(
+        { 
+          error: "The AI response failed validation schema checks.",
+          details: process.env.NODE_ENV === "development" ? validationResult.error.format() : undefined
+        },
+        { status: 502 }
+      );
+    }
 
-    if (user) {
-      const { data: existingSessions } = await supabase
-        .from("analysis_sessions")
-        .select("id")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(1);
+    const validatedData = validationResult.data;
 
-      const latestSession = existingSessions?.[0];
-
-      if (latestSession) {
-        savedSessionId = latestSession.id;
-        await supabase
-          .from("analysis_sessions")
-          .update({
-            resume_text: resume,
-            jd_text: jd,
-            target_date: date,
-            focus_areas: focus || null,
-            roadmap_result: parsed,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", latestSession.id);
-      } else {
-        const { data: inserted } = await supabase
-          .from("analysis_sessions")
-          .insert({
-            user_id: user.id,
-            resume_text: resume,
-            jd_text: jd,
-            target_date: date,
-            focus_areas: focus || null,
-            roadmap_result: parsed,
-          })
-          .select()
-          .single();
-        
-        savedSessionId = inserted?.id || null;
+    // Clean and verify resource URLs in tasks
+    for (const phase of validatedData.roadmap) {
+      for (const task of phase.tasks) {
+        if (task.resource) {
+          const res = task.resource;
+          if (res.url && !isVerifiedUrl(res.url)) {
+            const verified = findVerifiedResource(undefined, res.name || res.platform);
+            if (verified) {
+              res.name = verified.name;
+              res.url = verified.url;
+              res.platform = verified.platform;
+              res.is_free = verified.is_free;
+            } else {
+              const fallback = VERIFIED_RESOURCES.find(r => r.name === "roadmap.sh");
+              if (fallback) {
+                res.name = fallback.name;
+                res.url = fallback.url;
+                res.platform = fallback.platform;
+                res.is_free = fallback.is_free;
+              } else {
+                task.resource = undefined;
+              }
+            }
+          }
+        }
       }
     }
 
-    return NextResponse.json({ result: parsed, sessionId: savedSessionId });
+    // Supabase Persistence
+    let savedSessionId: string | null = null;
+    const { data: existingSessions } = await supabase
+      .from("analysis_sessions")
+      .select("id")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    const latestSession = existingSessions?.[0];
+
+    if (latestSession) {
+      savedSessionId = latestSession.id;
+      await supabase
+        .from("analysis_sessions")
+        .update({
+          resume_text: resume,
+          jd_text: jd,
+          target_date: date,
+          focus_areas: focus || null,
+          roadmap_result: validatedData,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", latestSession.id);
+    } else {
+      const { data: inserted } = await supabase
+        .from("analysis_sessions")
+        .insert({
+          user_id: user.id,
+          resume_text: resume,
+          jd_text: jd,
+          target_date: date,
+          focus_areas: focus || null,
+          roadmap_result: validatedData,
+        })
+        .select()
+        .single();
+      
+      savedSessionId = inserted?.id || null;
+    }
+
+    return NextResponse.json({ result: validatedData, sessionId: savedSessionId });
   } catch (err: unknown) {
     console.error("[roadmap-api] Unexpected error:", err);
     return NextResponse.json(

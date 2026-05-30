@@ -2,7 +2,7 @@
 
 > See also: [docs/README.md](./README.md) (documentation index), [HOW_IT_WORKS.md](./HOW_IT_WORKS.md), [APP_FLOW.md](./APP_FLOW.md), [REVIEWER_GUIDE.md](./REVIEWER_GUIDE.md), [ROADMAP.md](./ROADMAP.md).
 
-Updated project layout after theme system, interview packs, and shared libraries.
+Updated project layout containing standard Next.js App Router route groups, local server actions, custom Zod schemas, and Supabase Postgres migration configurations.
 
 ```
 sortmyskills/
@@ -15,67 +15,57 @@ sortmyskills/
 │   ├── FILE_STRUCTURE.md          # This file — repository layout
 │   ├── FUNCTIONALITY.md           # Feature-by-feature behavior
 │   ├── COLOR_THEMES.md            # Light/dark + accent color packs
-│   └── INTERVIEW_PACKS.md         # SkillQore question bank reference
+│   ├── INTERVIEW_PACKS.md         # Interview pack reference
+│   └── PARSER_TEST_CASES.md       # Skill parser test assertions
 │
-├── public/
-│   ├── file.svg
-│   ├── vercel.svg
-│   └── window.svg
+├── supabase/
+│   ├── migrations/                # Database SQL migration files
+│   └── README.md                  # Database schema & policy documentation
 │
 ├── src/
 │   ├── app/
 │   │   ├── globals.css            # Tailwind theme, light/dark CSS variables
 │   │   ├── layout.tsx             # Root layout, fonts, ThemeProvider, theme init script
-│   │   ├── page.tsx               # Homepage — hero, parser, pathways, courses, philosophy
+│   │   ├── middleware.ts          # Route protection check for auth
 │   │   │
-│   │   ├── actions/
-│   │   │   └── profile.ts         # Server action for updating database profiles
+│   │   ├── (auth)/                # Anonymous-only authentication routes
+│   │   │   ├── login/
+│   │   │   ├── signup/
+│   │   │   └── verify/
 │   │   │
-│   │   ├── skill-development/
-│   │   │   └── page.tsx           # Role selection, skill audit, readiness chart, Coursera roadmap
+│   │   ├── (app)/                 # Authenticated application workspace routes
+│   │   │   ├── dashboard/         # Combined placement engine dashboard
+│   │   │   ├── career-analyser/   # Unified workspace (Readiness Scan, Gaps, AI Roadmap)
+│   │   │   ├── job-match/         # Redirects directly to unified /career-analyser
+│   │   │   ├── skill-development/ # Target role planner + baseline checklist
+│   │   │   ├── profile/           # Account preferences & sanitized user metadata
+│   │   │   └── interview-packs/   # 6 role-specific interview study packs
 │   │   │
-│   │   ├── job-match/
-│   │   │   └── page.tsx           # Resume vs JD comparator, gap matrix, course bridges
+│   │   ├── actions/               # Server-side actions
+│   │   │   ├── auth.ts            # Authenticated signUp and signIn handlers
+│   │   │   ├── profile.ts         # Server actions for account update
+│   │   │   └── analysis.ts        # Server action for secure resume history deletion
 │   │   │
-│   │   ├── interview-packs/
-│   │   │   ├── page.tsx           # Catalog of all 6 interview packs
-│   │   │   └── [slug]/
-│   │   │       └── page.tsx       # Single pack viewer with difficulty filters
-│   │   │
-│   │   └── profile/
-│   │       └── page.tsx           # Account settings, targets, and workspace activity statistics
+│   │   └── api/
+│   │       └── roadmap/
+│   │           └── route.ts       # AI Roadmap generation route with schema validation
 │   │
 │   ├── components/
-│   │   ├── Logo.tsx               # SVG mark — gradient uses CSS accent variables
+│   │   ├── Logo.tsx               # SVG mark — dynamic colors
 │   │   ├── Navbar.tsx             # Global nav + theme controls
 │   │   ├── ThemeProvider.tsx      # Light/dark + color pack state (localStorage)
-│   │   ├── ThemeControls.tsx      # Sun/moon toggle + palette picker dropdown
-│   │   ├── SmoothScrollProvider.tsx  # Lenis smooth scroll wrapper
 │   │   └── dashboard/
-│   │       └── ProfileForm.tsx    # Premium profile edit form component
+│   │       └── ProfileForm.tsx    # Sanitized membership role profile editor
 │   │
 │   ├── data/
-│   │   └── interview-packs/
-│   │       ├── types.ts           # InterviewPack, InterviewQuestion, buildPack()
-│   │       ├── index.ts           # INTERVIEW_PACKS registry + getInterviewPackBySlug()
-│   │       ├── frontend.ts        # 100 Frontend Engineer questions
-│   │       ├── backend.ts         # 100 Backend Engineer questions
-│   │       ├── data-analyst.ts      # 100 Data Analyst questions
-│   │       ├── ml-engineer.ts       # 100 ML Engineer questions
-│   │       ├── ux-designer.ts       # 100 UX Designer questions
-│   │       └── product-manager.ts   # 100 Product Manager questions
+│   │   ├── verified-resources.ts  # Filtered free local learning resources
+│   │   └── interview-packs/       # 600 interview prep questions
 │   │
 │   └── lib/
-│       ├── themes.ts              # COLOR_PACKS definitions + storage keys
-│       └── skill-map.ts           # SKILL_MAP registry + extractSkillsFromText()
-│
-├── homepage_prompts.md            # AI/design iteration prompts for the homepage
-├── package.json
-├── next.config.ts
-├── tsconfig.json
-├── postcss.config.mjs
-├── eslint.config.mjs
-└── README.md
+│       ├── ai/
+│       │   └── roadmap-schema.ts  # Zod schema definitions for validated roadmap output
+│       ├── skill-map.ts           # SKILL_MAP registry, category maps + tokenizer
+│       └── rate-limit.ts          # Concurrency-hardened API rate-limiting
 ```
 
 ## Route map
@@ -83,19 +73,11 @@ sortmyskills/
 | Route | File | Purpose |
 |-------|------|---------|
 | `/` | `src/app/page.tsx` | Marketing homepage + live skill parser demo |
-| `/skill-development` | `src/app/skill-development/page.tsx` | Career roadmap planner |
-| `/job-match` | `src/app/job-match/page.tsx` | Resume vs job description analysis |
-| `/interview-packs` | `src/app/interview-packs/page.tsx` | Interview pack catalog |
-| `/interview-packs/[slug]` | `src/app/interview-packs/[slug]/page.tsx` | Pack detail (filter by difficulty) |
-| `/profile` | `src/app/(app)/profile/page.tsx` | Account target preferences and workspace activity history |
-
-## Slug reference (interview packs)
-
-| Slug | Role |
-|------|------|
-| `frontend-engineer` | Frontend Engineer |
-| `backend-engineer` | Backend Engineer |
-| `data-analyst` | Data Analyst |
-| `ml-engineer` | ML Engineer |
-| `ux-designer` | UX Designer |
-| `product-manager` | Product Manager |
+| `/login` | `src/app/(auth)/login/page.tsx` | User authentication sign in |
+| `/signup` | `src/app/(auth)/signup/page.tsx` | User signup with sanitized roles |
+| `/dashboard` | `src/app/(app)/dashboard/page.tsx` | Placement workspace dashboard metrics |
+| `/career-analyser` | `src/app/(app)/career-analyser/page.tsx` | Unified workspace: Scan Readiness, Check Skill Gaps, and Generate Study Roadmap (with data privacy deletion) |
+| `/job-match` | `src/app/(app)/job-match/page.tsx` | Redirects directly to `/career-analyser` |
+| `/skill-development` | `src/app/(app)/skill-development/page.tsx` | Career roadmap planner and checklist |
+| `/interview-packs` | `src/app/(app)/interview-packs/page.tsx` | Catalog of 6 interview preparation packs |
+| `/profile` | `src/app/(app)/profile/page.tsx` | Profile targets and database credentials info |

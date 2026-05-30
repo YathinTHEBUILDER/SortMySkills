@@ -79,8 +79,13 @@ export default async function ProfilePage() {
   const targetRoleTitle = targetRoleObj ? targetRoleObj.title : "Not Selected";
 
   const memberStatusRaw = user.user_metadata?.role || "student";
+  // Sanitize legacy admin role for display and form usage
+  const sanitizedRole: "student" | "graduate" | "job_seeker" = 
+    ["student", "graduate", "job_seeker"].includes(memberStatusRaw) 
+      ? (memberStatusRaw as "student" | "graduate" | "job_seeker") 
+      : "student";
   const memberStatusText =
-    memberStatusRaw.replace("_", " ").toUpperCase();
+    memberStatusRaw === "admin" ? "MEMBER" : memberStatusRaw.replace("_", " ").toUpperCase();
 
   // Generate clean initials for the avatar
   const initials = displayName
@@ -204,7 +209,7 @@ export default async function ProfilePage() {
               <ProfileForm
                 initialDisplayName={profile?.display_name || ""}
                 initialTargetRole={profile?.target_role || ""}
-                initialRole={memberStatusRaw as "student" | "graduate" | "job_seeker" | "admin"}
+                initialRole={sanitizedRole}
                 email={user.email || ""}
               />
             </CardBody>

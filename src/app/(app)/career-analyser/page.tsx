@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useResume } from "@/context/ResumeContext";
 import { createClient } from "@/lib/supabase/client";
+import { deleteMyAnalysisSessionsAction } from "@/app/actions/analysis";
 import PageHeader from "@/components/dashboard/PageHeader";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -183,6 +184,8 @@ export default function CareerAnalyserPage() {
 
   // Supabase Persistent Session States (Step 8 & 9)
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [isDemoData, setIsDemoData] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Load latest Supabase session if authenticated (Step 8 & 9)
   useEffect(() => {
@@ -366,15 +369,53 @@ export default function CareerAnalyserPage() {
   };
 
   // Helper actions
+  const handleDeleteSession = async () => {
+    if (!confirm("Are you sure you want to delete all your saved analysis sessions? This action is permanent and cannot be undone.")) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      const res = await deleteMyAnalysisSessionsAction();
+      if (res.success) {
+        setSessionId(null);
+        handleResetAll();
+        localStorage.removeItem("roadmap_milestones");
+        localStorage.removeItem("analyser_target_date");
+        localStorage.removeItem("analyser_focus_areas");
+        setTargetDate("");
+        setFocus("");
+        setMilestones({});
+        setIsDemoData(false);
+        alert("All saved resume and job description analyses have been permanently deleted.");
+      } else {
+        alert("Error deleting analysis: " + res.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An unexpected error occurred.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const checkDemoDataProceed = () => {
+    if (isDemoData || resume === SAMPLE_RESUME) {
+      return confirm("⚠️ You are using the demo sample data. Any analysis saved will be for 'John Doe'. We recommend pasting your real resume first.\n\nDo you want to proceed with the demo data anyway?");
+    }
+    return true;
+  };
+
   const handleLoadSample = () => {
     setResume(SAMPLE_RESUME);
     setJd(SAMPLE_JD);
+    setIsDemoData(true);
     handleResetAll();
   };
 
   const handleClearInputs = () => {
     setResume("");
     setJd("");
+    setIsDemoData(false);
     handleResetAll();
   };
 
@@ -391,6 +432,7 @@ export default function CareerAnalyserPage() {
   // 1. RUN ATS COMPATIBILITY SCAN
   const runATSScan = () => {
     if (!resume || !jd) return;
+    if (!checkDemoDataProceed()) return;
     setAtsLoading(true);
     setAtsError(null);
     
@@ -568,6 +610,7 @@ export default function CareerAnalyserPage() {
   // 2. RUN JOB DESCRIPTION MATCH
   const runJobMatch = () => {
     if (!resume || !jd) return;
+    if (!checkDemoDataProceed()) return;
     setJobMatchLoading(true);
     setJobMatchError(null);
 
@@ -607,6 +650,7 @@ export default function CareerAnalyserPage() {
   // 3. GENERATE STUDY ROADMAP
   const runGenerateRoadmap = async () => {
     if (!resume || !jd || !targetDate) return;
+    if (!checkDemoDataProceed()) return;
     setRoadmapLoading(true);
     setRoadmapError(null);
     setRoadmapDebugRaw(null);
@@ -720,7 +764,7 @@ export default function CareerAnalyserPage() {
       <div className="flex items-start gap-3 rounded-xl border border-accent-primary/20 bg-accent-primary/[0.03] px-4 py-3">
         <Info className="w-4 h-4 text-accent-primary shrink-0 mt-0.5" />
         <p className="text-xs text-text-secondary leading-relaxed">
-          <span className="font-semibold text-text-primary">New here?</span> Start by pasting your resume and the job description below. Then use the three tools — ATS Scan, Job Match, and Roadmap — in order for the best experience.
+          <span className="font-semibold text-text-primary">New here?</span> Start by pasting your resume and the job description below. Then use the three tools — Readiness Scan, Job Match, and Roadmap — in order for the best experience.
         </p>
       </div>
 
@@ -740,6 +784,14 @@ export default function CareerAnalyserPage() {
           description="Paste your details here once. Every analysis tool below will use these inputs automatically — no re-typing needed."
           className="border-b border-[var(--border-muted)] pb-3 px-6 pt-5"
         />
+        {isDemoData && (
+          <div className="mx-6 mt-4 p-3 bg-warning/[0.04] border border-warning/30 rounded-xl flex items-start gap-2 text-xs text-warning font-mono">
+            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold">Demo data loaded</span> — replace with your real resume and target JD to save and get a personalized analysis.
+            </div>
+          </div>
+        )}
         <CardBody className="py-5 px-6 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Resume Input */}
@@ -755,12 +807,15 @@ export default function CareerAnalyserPage() {
               <textarea
                 id="resume-textarea"
                 value={resume}
-                onChange={(e) => setResume(e.target.value)}
+                onChange={(e) => {
+                  setResume(e.target.value);
+                  setIsDemoData(false);
+                }}
                 placeholder="Paste the plain text of your resume here..."
                 className="w-full h-48 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-4 text-xs font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary/50 resize-y transition-all"
               />
               <p className="text-[10px] text-text-muted">
-                💡 Tip: Use <span className="font-semibold">Load Sample</span> below to see how a real resume looks.
+                💡 Tip: Use <span className="font-semibold">Load demo sample</span> below to see how a real resume looks.
               </p>
             </div>
 
@@ -777,7 +832,10 @@ export default function CareerAnalyserPage() {
               <textarea
                 id="jd-textarea"
                 value={jd}
-                onChange={(e) => setJd(e.target.value)}
+                onChange={(e) => {
+                  setJd(e.target.value);
+                  setIsDemoData(false);
+                }}
                 placeholder="Paste the job posting here — copy from LinkedIn, Naukri, or any job site..."
                 className="w-full h-48 rounded-xl border border-[var(--border-muted)] bg-[var(--surface-soft)]/40 p-4 text-xs font-mono text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary/20 focus:border-accent-primary/50 resize-y transition-all"
               />
@@ -842,10 +900,35 @@ export default function CareerAnalyserPage() {
             </div>
           </div>
 
+          {/* Privacy Notice and Deletion */}
+          <div className="border-t border-[var(--border-muted)] pt-5 pb-1 space-y-3">
+            <div className="flex items-start gap-2.5 text-[11px] text-text-secondary leading-relaxed bg-[var(--surface-soft)]/30 border border-[var(--border-muted)] p-3.5 rounded-xl">
+              <Info className="w-4 h-4 text-accent-primary shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-semibold text-text-primary">🔒 Resume Privacy Notice</p>
+                <p>
+                  To provide you with a continuous job-readiness workspace and persistent learning tracking, we securely store your resume text, target JD, target date, and generated roadmaps in our database. Your data is strictly private to your account.
+                </p>
+              </div>
+            </div>
+            {sessionId && (
+              <div className="flex justify-end">
+                <Button
+                  variant="ghost"
+                  onClick={handleDeleteSession}
+                  disabled={isDeleting}
+                  className="text-[10px] font-mono uppercase tracking-widest px-3 h-8 text-danger hover:bg-danger/[0.04] border border-danger/25"
+                >
+                  {isDeleting ? "Deleting Data..." : "Delete Saved Analysis Data"}
+                </Button>
+              </div>
+            )}
+          </div>
+
           <div className="border-t border-[var(--border-muted)] pt-4 flex flex-wrap justify-between gap-3">
             <div className="flex gap-2">
               <Button variant="secondary" onClick={handleLoadSample} className="text-[10px] font-mono uppercase tracking-widest px-3.5 h-9">
-                Load Sample
+                Load demo sample
               </Button>
               <Button variant="ghost" onClick={handleClearInputs} className="text-[10px] font-mono uppercase tracking-widest px-3 h-9 text-text-muted hover:text-danger hover:bg-danger/[0.04]">
                 Clear All
@@ -877,8 +960,8 @@ export default function CareerAnalyserPage() {
                 <FileCheck className="w-5 h-5" />
               </div>
               <div className="flex items-center gap-1.5">
-                <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">ATS Score</h3>
-                <Tooltip content="ATS stands for Applicant Tracking System — the software companies use to filter resumes before a human ever reads them. This scan checks if your resume passes those filters.">
+                <h3 className="text-sm font-bold text-text-primary tracking-tight font-sans">Readiness Score</h3>
+                <Tooltip content="This score estimates your resume's readiness for this job posting based on structural format, keyword matching, impact verbs, and completeness. Please note this is a heuristic estimate to help you improve, not a guarantee of passing any specific applicant tracking system.">
                   <Info className="w-3.5 h-3.5 text-text-muted cursor-help" />
                 </Tooltip>
               </div>
@@ -893,7 +976,7 @@ export default function CareerAnalyserPage() {
                 disabled={!hasInputs || atsLoading}
                 className="w-full h-9 text-[10px] font-mono uppercase tracking-widest text-[#FAF8F6] bg-accent-primary cursor-pointer"
               >
-                {atsLoading ? "Scanning..." : "Scan ATS Score"}
+                {atsLoading ? "Scanning..." : "Scan Readiness Score"}
               </Button>
             </div>
           </div>
@@ -1021,7 +1104,7 @@ export default function CareerAnalyserPage() {
                   {/* Individual breakdown weights */}
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between text-xs font-mono text-text-secondary">
-                      <span>ATS Structure:</span>
+                      <span>Resume Structure:</span>
                       <span className="font-semibold text-text-primary">{atsResult ? `${atsResult.finalScore}%` : "Not Scanned"}</span>
                     </div>
                     <div className="flex justify-between text-xs font-mono text-text-secondary">
@@ -1033,7 +1116,7 @@ export default function CareerAnalyserPage() {
                   {/* Contextual Prompts */}
                   <div className="text-xs bg-[var(--surface-soft)]/50 rounded-xl p-3 border border-[var(--border-muted)]">
                     {!atsResult && (
-                      <p className="text-text-secondary">💡 Scan <span className="font-semibold">ATS Compatibility</span> to compute your full structure score.</p>
+                      <p className="text-text-secondary">💡 Scan <span className="font-semibold">Resume Readiness</span> to compute your full structure score.</p>
                     )}
                     {!jobMatchResult && (
                       <p className="text-text-secondary">💡 Compare <span className="font-semibold">Job Match Gaps</span> to isolate specific requirement holes.</p>
@@ -1052,8 +1135,8 @@ export default function CareerAnalyserPage() {
           {atsResult && (
             <Card className="premium-card">
               <CardHeader
-                title="ATS Score Breakdown"
-                description={`Your resume was scanned across 5 factors that recruiters' software checks. Total word count: ${atsResult.wordCount} words. Higher scores = more likely to pass automated filters.`}
+                title="Resume Readiness Breakdown"
+                description={`Your resume was scanned across 5 essential structural factors. Total word count: ${atsResult.wordCount} words. Higher scores = more likely to pass automated filters.`}
                 className="border-b border-[var(--border-muted)] pb-3 px-6 pt-5"
               />
               <CardBody className="py-5 px-6 space-y-6">

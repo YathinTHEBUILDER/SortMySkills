@@ -1,195 +1,87 @@
 # SortMySkills — Application Flow
 
-Visual and narrative flows for reviewers. Pair this with [HOW_IT_WORKS.md](./HOW_IT_WORKS.md) for implementation detail.
+This document details the visual and narrative flows of SortMySkills, including primary user journeys, state persistence, and a live review demo script.
 
 ---
 
-## Site map (all routes)
-
-```mermaid
-flowchart TB
-  HOME["/  Homepage"]
-  SKILL["/skill-development"]
-  JOB["/job-match"]
-  PACKS["/interview-packs"]
-  PACK["/interview-packs/[slug]"]
-
-  HOME --> SKILL
-  HOME --> JOB
-  HOME --> PACKS
-  PACKS --> PACK
-  SKILL --> JOB
-  JOB --> SKILL
-```
-
----
-
-## Primary user journeys
-
-### Journey A — “I don’t know what to learn”
-
-```text
-Homepage
-  → Read value prop + watch hero normalization demo
-  → Click "Build Skill Roadmap"
-  → /skill-development
-  → Pick target role (e.g. Frontend Engineer)
-  → Check skills you already have
-  → See readiness % + chart
-  → If gaps: view Coursera course cards for missing skills
-  → Optional: open Coursera in new tab
-```
-
-### Journey B — “Am I qualified for this job?”
-
-```text
-Homepage or Navbar
-  → "Job Match Analysis" or "Comparator"
-  → /job-match
-  → Paste resume (or Load Sample Datasets)
-  → Paste job description
-  → Calculate Competency Gaps
-  → View match % + Aligned / Gaps / Supplementary columns
-  → Browse Coursera bridge courses for missing skills
-  → Reset → analyze another JD
-```
-
-### Journey C — “I want interview practice”
-
-```text
-Homepage or Navbar
-  → "Interview Packs"
-  → /interview-packs
-  → Choose role card (e.g. Backend Engineer)
-  → /interview-packs/backend-engineer
-  → Filter Easy / Medium / Hard
-  → Study questions offline or in mock interviews
-```
-
-### Journey D — “Try the parser only”
-
-```text
-Homepage
-  → Section: "Test the Standardizing Parser"
-  → Paste chaotic skill text
-  → Normalize Tokens
-  → See canonical tags + discipline hint
-```
-
----
-
-## Homepage flow (detailed)
-
-```mermaid
-sequenceDiagram
-  participant U as User
-  participant P as page.tsx
-  participant M as skill-map.ts
-  participant G as GSAP
-
-  U->>P: Lands on /
-  P->>G: Hero fade-in animation
-  loop Every 8s
-    P->>M: Hero demo uses SKILL_MAP
-    M-->>P: Normalized tags
-    P->>G: Animate .demo-tag
-  end
-  U->>P: Paste text in parser form
-  U->>P: Submit Normalize Tokens
-  P->>M: extractSkillsFromText()
-  M-->>P: string[]
-  P->>G: Animate .manual-tag
-  P-->>U: Show tags + alignment labels
-```
-
----
-
-## Job Match flow (detailed)
-
-```mermaid
-sequenceDiagram
-  participant U as User
-  participant J as job-match/page.tsx
-  participant M as skill-map.ts
-  participant C as COURSERA_COURSES
-
-  U->>J: Paste resume + JD
-  U->>J: Submit analysis
-  Note over J: 1.5s setTimeout (loading UI)
-  J->>M: extractSkillsFromText(resume)
-  J->>M: extractSkillsFromText(jd)
-  M-->>J: resumeSkills, jdSkills
-  J->>J: Compute matched, missing, supplementary, score
-  J->>C: Filter courses where skills ∩ missing ≠ ∅
-  C-->>J: bridge courses
-  J-->>U: Results dashboard + Coursera cards
-```
-
----
-
-## Skill Development flow (detailed)
+## Site Map (All Routes)
 
 ```mermaid
 flowchart TD
-  A[Select role from ROLES_DATABASE] --> B[Load role.skills checklist]
-  B --> C{User toggles skills}
-  C --> D[Recalculate readiness %]
-  D --> E{missingSkills empty?}
-  E -->|Yes| F[Show success + link to Job Match]
-  E -->|No| G[Filter role.courses by covered gaps]
-  G --> H[Show Coursera roadmap cards]
-```
+  HOME["/  Homepage"]
+  LOGIN["/login (OTP Auth)"]
+  SIGNUP["/signup"]
+  DASH["/dashboard (Placement Stats)"]
+  ANALYSER["/career-analyser (Unified Workspace)"]
+  SKILL["/skill-development (Role Planner)"]
+  PACKS["/interview-packs (Study Q&As)"]
+  PACK["/interview-packs/[slug]"]
+  PROFILE["/profile (Sanitized Settings)"]
+  JOB["/job-match (Redirects to /career-analyser)"]
 
-**Note:** No text parser on this page — skills come from predefined role blueprints.
-
----
-
-## Interview packs flow
-
-```mermaid
-flowchart LR
-  A[/interview-packs] --> B[INTERVIEW_PACKS from index.ts]
-  B --> C[User clicks role]
-  C --> D[getInterviewPackBySlug]
-  D --> E[Render 100 questions]
-  E --> F{Filter difficulty}
-  F --> E
-```
-
----
-
-## Global chrome (every page)
-
-```mermaid
-flowchart TB
-  L[layout.tsx] --> T[ThemeProvider]
-  T --> N[Navbar]
-  T --> S[SmoothScrollProvider Lenis]
-  S --> PAGE[Page content]
-  N --> TC[ThemeControls light/dark + palette]
+  HOME --> LOGIN
+  LOGIN --> SIGNUP
+  SIGNUP --> DASH
+  DASH --> ANALYSER
+  DASH --> SKILL
+  DASH --> PACKS
+  DASH --> PROFILE
+  ANALYSER --> PACKS
+  JOB -.->|HTTP 301| ANALYSER
+  PACKS --> PACK
 ```
 
 ---
 
-## State persistence today
+## Primary User Journeys
 
-| Data | Persists? | Where |
-|------|-----------|--------|
-| Theme mode | ✅ | `localStorage` `sortmyskills-theme-mode` |
-| Color pack | ✅ | `localStorage` `sortmyskills-color-pack` |
-| Parser input | ❌ | React state — lost on refresh |
-| Job match texts | ❌ | React state |
-| Skill audit checkboxes | ❌ | React state |
-| Interview filter | ❌ | React state |
+### Journey A — "I don't know what to learn" (Skill Planner)
+1. **Dashboard / Navigation**: Click "Skill Planner" or go to `/skill-development`.
+2. **Role Blueprint**: Choose a career track from the roles sidebar (e.g. Frontend Engineer).
+3. **Audit Baseline**: Review and check off baseline skills you already possess.
+4. **Acquire Gaps**: Toggle metrics to calculate readiness %; remaining gaps automatically display curated Coursera course recommendations to bridge knowledge.
+
+### Journey B — "Am I qualified for this specific job?" (Unified Analyser)
+1. **Dashboard / Navigation**: Click "Audit Resume & Fit" or go to `/career-analyser`.
+2. **Setup Inputs**: Paste your resume and the target Job Description (JD).
+3. **Readiness Scan**: Execute the "Scan Readiness Score" check to analyze format, action verbs, keyword density, and contact details.
+4. **Gap Analysis**: Execute the "Check Skill Gaps" check to parse and isolate matching, missing, and bonus canonical skills.
+5. **Dynamic Roadmap**: Input target timeline dates and optional focus areas, then click "Generate Study Plan" to render an AI week-by-week roadmap.
+6. **Data Deletion**: Delete all saved analyses permanently if desired.
+
+### Journey C — "I want interview practice"
+1. **Dashboard / Navigation**: Click "Interview Packs" or go to `/interview-packs`.
+2. **Catalog Selector**: Choose a track family pack (e.g., Backend Engineer).
+3. **Structured Q&A**: Filter cards by difficulty (Easy, Medium, Hard) to practice study questions.
 
 ---
 
-## Suggested live demo script (5 minutes)
+## State Persistence Map
 
-1. **Homepage (1 min)** — Hero demo → parser paste test → point at `skill-map.ts`.
-2. **Skill Development (1.5 min)** — Switch roles → toggle skills → show chart + roadmap.
-3. **Job Match (1.5 min)** — Load samples → run analysis → explain score formula.
-4. **Interview Packs (0.5 min)** — Open one pack → filter Hard questions.
-5. **Theme (0.5 min)** — Toggle light mode + switch accent pack.
+| Data Category | Saved in LocalStorage? | Saved in Supabase DB? | Description / Key Name |
+|---------------|------------------------|-----------------------|-------------------------|
+| **Theme & Accent** | ✅ Yes | ❌ No | Mode: `sortmyskills-theme-mode` <br> Accent: `sortmyskills-color-pack` |
+| **Workspace Inputs** | ✅ Yes (partial) | ✅ Yes | Saved to `public.analysis_sessions` automatically upon scanning or generating a roadmap. |
+| **Target Date & Focus** | ✅ Yes | ✅ Yes | Saved to `analyser_target_date` / `analyser_focus_areas` & Supabase. |
+| **Roadmap Milestones**| ✅ Yes | ❌ No | Milestone checkboxes tracked via `roadmap_milestones`. |
+| **Sanitized User Profile**| ❌ No | ✅ Yes | Display name and targets synced with `public.profiles`. |
 
-Close with [ROADMAP.md](./ROADMAP.md) — what is planned next.
+---
+
+## Suggested Live Demo Script (5 minutes)
+
+1. **Authentication & Welcome (1 min)**
+   * Log in with OTP. Land on the unified `/dashboard`. Show user profile initials and stats (Comparisons, Completed Audits).
+2. **Skill Planner (1 min)**
+   * Go to `/skill-development`. Switch roles, toggle a few checkboxes, and show the Recharts bar chart comparing required vs possessed skills.
+3. **Career Analyser (2 min)**
+   * Go to `/career-analyser`.
+   * Click **Load demo sample** to load John Doe and TechCorp. Point out the "Demo data loaded" warning banner.
+   * Run the **Readiness Scan** and scroll through the structural subscores.
+   * Run the **Gap Analysis** and show the missing skill badges.
+   * Choose a target date (e.g., 4 weeks out) and click **Generate Study Plan**. Show the AI week-by-week timeline using verified learning resources.
+   * Demonstrate **milestone checklist** clicks.
+4. **Data Privacy Deletion (0.5 min)**
+   * Scroll up and click **Delete Saved Analysis Data**. Confirm the popup and show that all inputs, roadmaps, and local storage values are cleanly reset.
+5. **Theme system (0.5 min)**
+   * Navigate back to the homepage `/` or dashboard. Toggle dark/light modes and switch between accent palettes (Terracotta, Neon, Amber, Slate).

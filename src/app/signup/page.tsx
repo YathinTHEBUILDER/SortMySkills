@@ -41,7 +41,7 @@ export default function SignupPage() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    role: "student" as "student" | "graduate" | "job_seeker" | "admin",
+    role: "student" as "student" | "graduate" | "job_seeker",
     password: "",
     confirmPassword: "",
   });
@@ -117,7 +117,7 @@ export default function SignupPage() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    role: e.target.value as "student" | "graduate" | "job_seeker" | "admin",
+                    role: e.target.value as "student" | "graduate" | "job_seeker",
                   })
                 }
                 disabled={isPending}
@@ -126,7 +126,6 @@ export default function SignupPage() {
                 <option value="student">Student</option>
                 <option value="graduate">Recent Graduate</option>
                 <option value="job_seeker">Job Seeker</option>
-                <option value="admin">Administrator</option>
               </select>
             </div>
 

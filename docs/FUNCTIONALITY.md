@@ -1,203 +1,94 @@
 # SortMySkills — Functionality Overview
 
-> For parser internals and “what is real vs mocked”, see **[HOW_IT_WORKS.md](./HOW_IT_WORKS.md)**.  
-> For user journeys and diagrams, see **[APP_FLOW.md](./APP_FLOW.md)**.  
-> For presenting to reviewers, see **[REVIEWER_GUIDE.md](./REVIEWER_GUIDE.md)**.  
-> For done vs planned work, see **[ROADMAP.md](./ROADMAP.md)**.
+> For parser internals and validation systems, see **[HOW_IT_WORKS.md](./HOW_IT_WORKS.md)**.  
+> For visual maps and persistence layouts, see **[APP_FLOW.md](./APP_FLOW.md)**.  
+> For code guides and Q&A preparation, see **[REVIEWER_GUIDE.md](./REVIEWER_GUIDE.md)**.  
+> For product milestones, see **[ROADMAP.md](./ROADMAP.md)**.
 
-SortMySkills is a **structured career intelligence platform** built with Next.js 15, React 19, Tailwind CSS 4, GSAP, Lenis, and Recharts. It helps students and early-career applicants normalize skills, audit gaps, compare resumes to job descriptions, plan Coursera study paths, and practice with curated interview question banks.
-
----
-
-## 1. Homepage (`/`)
-
-### Hero & live normalization demo
-- Editorial asymmetric layout (7/5 column split).
-- Auto-cycling **raw skill strings** (e.g. `reactjs, py, figma`) are parsed against `SKILL_MAP` in `src/lib/skill-map.ts`.
-- Normalized tags animate in with GSAP; demonstrates the platform’s taxonomy engine.
-
-### Two pathways (product modules)
-1. **Skill Development** → `/skill-development`  
-   Map competencies to a target role; readiness % and study roadmap.
-2. **Job Match Analysis** → `/job-match`  
-   Dual-panel resume vs JD parser; gap matrix and Coursera bridges.
-
-### Interactive parser playground
-- User pastes chaotic tech text; `extractSkillsFromText()` returns standardized tags.
-- Shows inferred discipline (e.g. Frontend Engineering) and alignment strength.
-
-### Coursera recommendations
-- Static curated list of professional certificates mapped to skills.
-- Links toward skill planner and external Coursera search.
-
-### Interview packs CTA
-- Highlights six SkillQore packs (600 total questions).
-- Links to `/interview-packs`.
-
-### Philosophy manifesto
-- Long-form editorial section (`#philosophy`) on intentional learning vs random course consumption.
-
-### Animations
-- GSAP intro fades on hero, pathway cards, and demo tags.
-- Lenis smooth scrolling via `SmoothScrollProvider`.
+SortMySkills is a secure, authenticated **career intelligence SaaS platform** built with Next.js 15, React 19, Tailwind CSS 4, Supabase, Groq AI, GSAP, and Lenis.
 
 ---
 
-## 2. Skill Development (`/skill-development`)
+## 1. Marketing Homepage (`/`)
 
-### Target role selection
-Five roles in `ROLES_DATABASE`:
-- Frontend Engineer
-- Data Analyst
-- Machine Learning Engineer
-- UX Designer
-- Product Manager
-
-Each role includes description, salary range, difficulty, required skills, and linked Coursera course(s).
-
-### Capabilities audit
-- Toggle skills you already have.
-- **Readiness %** = (matched required skills / total required) × 100.
-- Recharts bar chart: required vs current per skill (uses theme accent CSS variables).
-
-### Compiled study roadmap
-- If gaps exist: surfaces Coursera courses that cover missing skills.
-- If 100% ready: prompts user to run Job Match Analysis.
-- External links to Coursera search for each course title.
+* **Hero & Tokenizer Demo**: Editorial asymmetric layout. Auto-cycling raw tech text parses against `SKILL_MAP` to display dynamic tokenization.
+* **Interactive Playground**: paste chaotic resume blocks to view inferred discipline (e.g. Frontend Engineering) and alignment tags.
+* **Theme System Display**: Swap dark/light modes and try brand palettes (Terracotta, Neon, Amber, Slate).
 
 ---
 
-## 3. Job Match Analysis (`/job-match`)
+## 2. Unified Career Analyser (`/career-analyser`)
 
-### Inputs
-- **Resume** plain text (textarea).
-- **Job description** plain text (textarea).
-- **Load Sample Datasets** pre-fills a Frontend Engineer example.
-- Simulated 1.5s “compiling” state for UX.
+This is the central candidate workspace, combining instant client scans with validated AI roadmaps. Note: `/job-match` redirects here automatically.
 
-### Analysis engine
-- Both texts parsed with `extractSkillsFromText()`.
-- **Match score** = matched JD skills / total JD skills.
-- **Aligned assets**: skills in both resume and JD.
-- **Critical gaps**: JD skills missing from resume.
-- **Supplementary assets**: resume skills not required by JD.
+### A. Inputs Panel
+* Pastes Resume and target Job Description (JD) text once.
+* **Load demo sample**: Instantly populates mock variables (John Doe / TechCorp) for trial and triggers **"Demo data loaded"** warning badges to avoid saving duplicate data.
 
-### Gap bridging
-- Filters `COURSERA_COURSES` where course skills overlap missing tags.
-- Cards link to Coursera search for each certificate.
+### B. Readiness Scan (Formerly ATS Compatibility)
+* Evaluates resume completeness across **5 distinct weighting factors**: Keyword Match (35%), Format & Structure (20%), Word Count (15%), Recruiter Tones (15%), and Contacts (15%).
+* Renders a breakdown panel indicating structural strengths and targeted quick wins.
+
+### C. Skill Gap Check
+* Compares parsed resume tokens against target JD requirements.
+* Classifies tags as: **Skills You Have** (Green), **Missing Skills** (Orange), or **Bonus Skills** (Blue).
+* Missing skills automatically trigger direct **Course Bridges** linking to relevant Coursera searches.
+
+### D. Study Roadmap Generator
+* Input a target job-ready date and optional focus areas.
+* Uses **Groq Llama-3** to output a week-by-week transition schedule.
+* **Hallucination Defense**: Automatically sanitizes and maps AI-suggested resources against a local registry of 14 free platforms (Odin Project, MDN, freeCodeCamp, roadmap.sh).
+* **Zod Validation**: Safe-parses and validates JSON payloads before database insert or returning.
+* **Persistent Milestones**: Generates an interactive weekly milestone checklist stored in `localStorage`.
+
+### E. Data Privacy Deletion
+* Displays a **🔒 Resume Privacy Notice** documenting session synchronization.
+* Dedicated "Delete Saved Analysis" button triggers the secure `deleteMyAnalysisSessionsAction` server action to clear account history and local footprints.
+
+---
+
+## 3. Skill Development Planner (`/skill-development`)
+
+* **Role Selection**: Six target role profiles (Frontend, Backend, Analyst, ML, UX, PM) loaded with descriptions, average salaries, and baseline skills.
+* **Readiness Chart**: Checkbox toggles calculate readiness ratios. Renders a Recharts bar chart comparing required baseline targets against your actual skills.
+* **Static Roadmap**: Shows hand-curated Coursera Certificates specifically addressing target checkboxes that are unchecked.
 
 ---
 
 ## 4. Interview Question Packs (`/interview-packs`)
 
-### Catalog page
-Lists all packs from `INTERVIEW_PACKS` in `src/data/interview-packs/index.ts`:
-- 100 questions per role
-- Counts for Easy (35), Medium (35), Hard (30)
-
-### Detail page (`/interview-packs/[slug]`)
-- Filter: All | Easy | Medium | Hard
-- Numbered question list with difficulty badges
-- Designed for assessments, mock interviews, and self-evaluation
-
-See [INTERVIEW_PACKS.md](./INTERVIEW_PACKS.md) for full role list and question structure.
+* **Catalog Grid**: Displays packs for the 6 primary career families (100 Q&As per pack).
+* **Slug Detail Page (`/interview-packs/[slug]`)**: View cards with questions categorized by Easy (35), Medium (35), and Hard (30). Easy difficulty filtering supports mock interview drills.
 
 ---
 
-## 5. Account Profile Settings (`/profile`)
+## 5. Account Settings & Stats (`/profile`)
 
-### Interactive profile card
-- Displays user's initials avatar with dynamic transitions and pulse highlights.
-- Visualizes verified email, role status (Student, Recent Graduate, Job Seeker), and target career placement.
-- Automatically creates fallback profile database states for users if they were created before schema instantiation.
-
-### Workspace Activity Dashboard
-- Shows real-time aggregated metrics computed dynamically using parallel count queries:
-  - **Skill Audits Run**: Total skill evaluations logged in `public.skill_audits`.
-  - **JD Analyses Matched**: Total comparison reports compiled in `public.job_analyses`.
-  - **Parsed Resumes**: Total normalized text streams processed in `public.parser_history`.
-- Stats scale automatically as the user completes workspace tasks.
-
-### Database Synchronization Form
-- Allows updating **Display Name**, **Membership Role**, and **Target Career Role** (linked to `ROLES_DATABASE`).
-- Synchronizes changes transactionally with both the `public.profiles` database table and Supabase Auth metadata.
-- Alerts user via `sonner` toast notifications.
+* **Interactive Profile Card**: Displays verified emails, role selections (student, graduate, job seeker), and custom display names.
+* **Database Synchronisation**: Synchronizes user details securely with Postgres `public.profiles` and Supabase Auth metadata.
+* **Workspace Metrics**: Displays dynamic parallel Postgres statistics:
+  * Completed Audits count (analysis sessions logged).
+  * Career Comparisons count (active comparisons run).
+  * Parser Mapping counts (taxonomy normalizations logged).
 
 ---
 
-## 6. Skill normalization (`src/lib/skill-map.ts`)
+## 6. Skill Parser Specificity (`src/lib/skill-map.ts`)
 
-Central registry maps aliases to canonical tags, including:
+Central lookup registry standardizes messy aliases into canonical titles with high-specificity rules:
 
-| Aliases | Canonical tag |
-|---------|---------------|
-| react, reactjs, react.js | React |
-| aws, s3, ec2 | AWS |
-| gcp, google cloud, firebase | Google Cloud |
-| docker, kubernetes, k8s | DevOps |
-| graphql, apollo, gql | GraphQL |
-| mongodb, mongo, nosql | MongoDB |
-| … | (see file for full list) |
-
-`extractSkillsFromText(text)` tokenizes input and returns deduplicated canonical skills.
-
----
-
-## 7. Theming (`ThemeProvider` + `globals.css`)
-
-### Light / dark mode
-- **Dark**: warm off-black charcoal (`#0f0f0e`), ivory text — default editorial look.
-- **Light**: warm ivory paper (`#fdfdfb`), charcoal print text — journal aesthetic.
-- Toggle in navbar; preference stored in `localStorage` (`sortmyskills-theme-mode`).
-- Inline script in `layout.tsx` prevents flash of wrong theme.
-
-### Accent color packs
-Four swappable palettes (see [COLOR_THEMES.md](./COLOR_THEMES.md)):
-- Terracotta & Sand (default)
-- Neon Green & Cyan (original)
-- Amber & Copper
-- Slate & Pearl
-
-Stored in `sortmyskills-color-pack`. Logo, buttons, charts, and tags use `--accent-primary` / `--accent-secondary`.
-
----
-
-## 8. Shared UI components
-
-| Component | Role |
-|-----------|------|
-| `Navbar` | Fixed header, route highlights, theme controls, CTA |
-| `Logo` | Brand SVG with dynamic gradient |
-| `ThemeProvider` | Theme context + DOM class/CSS variable application |
-| `ThemeControls` | Light/dark + palette dropdown |
-| `SmoothScrollProvider` | Lenis instance for smooth page scroll |
-
----
-
-## 9. Tech stack
-
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 15 (App Router) |
-| UI | React 19, Tailwind CSS 4 |
-| Motion | GSAP 3 |
-| Scroll | Lenis |
-| Charts | Recharts (skill-development page) |
-| Icons | lucide-react |
-| Fonts | Geist Sans, Geist Mono (+ Georgia for editorial serif) |
-
----
-
-## 10. Running locally
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-```bash
-npm run build   # production build
-npm run start   # serve production build
-```
+| Aliases | Resolved Canonical Tag | Category Mapped |
+|---------|------------------------|-----------------|
+| `pandas` | Pandas | Data Science & Analytics |
+| `numpy` | NumPy | Data Science & Analytics |
+| `pytorch` | PyTorch | AI & Machine Learning |
+| `tensorflow`, `tf` | TensorFlow | AI & Machine Learning |
+| `scikit-learn`, `sklearn` | Scikit-learn | AI & Machine Learning |
+| `firebase` | Firebase | Cloud & Hosting Services |
+| `dynamodb` | DynamoDB | Cloud & Hosting Services |
+| `docker` | Docker | DevOps |
+| `kubernetes`, `k8s` | Kubernetes | DevOps |
+| `s3` | Amazon S3 | Cloud Infrastructure |
+| `ec2` | Amazon EC2 | Cloud Infrastructure |
+| `lambda` | AWS Lambda | Cloud Infrastructure |
+| `go`, `golang` | Go (protected against verb "go") | Languages |

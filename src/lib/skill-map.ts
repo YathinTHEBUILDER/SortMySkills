@@ -4,6 +4,7 @@ export interface DetectedSkill {
   canonical: string;
   level: ProficiencyLevel;
   matchedTokens: string[];
+  category?: string;
 }
 
 export interface TokenTrace {
@@ -66,14 +67,14 @@ export const SKILL_MAP: Record<string, string> = {
   django: "Django",
   flask: "Flask",
   fastapi: "FastAPI",
-  pandas: "Data Science",
-  numpy: "Data Science",
-  tensorflow: "Machine Learning",
-  tf: "Machine Learning",
-  pytorch: "Machine Learning",
-  sklearn: "Machine Learning",
-  "scikit-learn": "Machine Learning",
-  sklearnprotected: "Machine Learning",
+  pandas: "Pandas",
+  numpy: "NumPy",
+  tensorflow: "TensorFlow",
+  tf: "TensorFlow",
+  pytorch: "PyTorch",
+  sklearn: "Scikit-learn",
+  "scikit-learn": "Scikit-learn",
+  sklearnprotected: "Scikit-learn",
   java: "Java",
   "c#": "C#",
   csharp: "C#",
@@ -100,19 +101,19 @@ export const SKILL_MAP: Record<string, string> = {
   nosql: "MongoDB",
   redis: "Redis",
   elasticsearch: "Elasticsearch",
-  dynamodb: "AWS",
+  dynamodb: "DynamoDB",
   aws: "AWS",
-  ec2: "AWS",
-  s3: "AWS",
-  lambda: "AWS",
+  ec2: "Amazon EC2",
+  s3: "Amazon S3",
+  lambda: "AWS Lambda",
   "amazon web services": "AWS",
   gcp: "Google Cloud",
-  firebase: "Google Cloud",
+  firebase: "Firebase",
   "google cloud": "Google Cloud",
   azure: "Azure",
-  docker: "DevOps",
-  kubernetes: "DevOps",
-  k8s: "DevOps",
+  docker: "Docker",
+  kubernetes: "Kubernetes",
+  k8s: "Kubernetes",
   devops: "DevOps",
   ci: "DevOps",
   cd: "DevOps",
@@ -251,6 +252,81 @@ const JD_MODERATE_SIGNALS = [
   "proficiency required", "expertise required",
 ];
 
+export const SKILL_CATEGORY_MAP: Record<string, string> = {
+  // Languages
+  "JavaScript": "Languages",
+  "TypeScript": "Languages",
+  "Python": "Languages",
+  "Java": "Languages",
+  "C#": "Languages",
+  "C++": "Languages",
+  "Go": "Languages",
+  "Rust": "Languages",
+  "Ruby": "Languages",
+  "PHP": "Languages",
+  "Swift": "Languages",
+  "Kotlin": "Languages",
+  "Scala": "Languages",
+  "R": "Languages",
+
+  // Frontend Frameworks & Libraries
+  "React": "Frontend Frameworks",
+  "Next.js": "Frontend Frameworks",
+  "Vue.js": "Frontend Frameworks",
+  "Angular": "Frontend Frameworks",
+  "Svelte": "Frontend Frameworks",
+  "HTML": "Frontend Basic UI",
+  "CSS": "Frontend Basic UI",
+  "Tailwind CSS": "Frontend Basic UI",
+
+  // Backend Frameworks & Core APIs
+  "Node.js": "Backend Frameworks",
+  "Express.js": "Backend Frameworks",
+  "Django": "Backend Frameworks",
+  "Flask": "Backend Frameworks",
+  "FastAPI": "Backend Frameworks",
+  "Spring": "Backend Frameworks",
+  "Microservices": "System Design & Architecture",
+  "REST APIs": "System Design & Architecture",
+  "WebSockets": "System Design & Architecture",
+
+  // Databases & Caching
+  "SQL": "Databases & Storage",
+  "MongoDB": "Databases & Storage",
+  "Redis": "Databases & Storage",
+  "Elasticsearch": "Databases & Storage",
+  "Firebase": "Cloud & Hosting Services",
+  "DynamoDB": "Cloud & Hosting Services",
+
+  // Cloud Providers
+  "AWS": "Cloud Infrastructure",
+  "Google Cloud": "Cloud Infrastructure",
+  "Azure": "Cloud Infrastructure",
+  "Amazon S3": "Cloud Infrastructure",
+  "Amazon EC2": "Cloud Infrastructure",
+  "AWS Lambda": "Cloud Infrastructure",
+
+  // DevOps & Automation
+  "DevOps": "DevOps",
+  "Docker": "DevOps",
+  "Kubernetes": "DevOps",
+  "Git": "DevOps",
+
+  // Data Science & AI/ML
+  "Data Science": "Data Science & Analytics",
+  "Pandas": "Data Science & Analytics",
+  "NumPy": "Data Science & Analytics",
+  "Machine Learning": "AI & Machine Learning",
+  "TensorFlow": "AI & Machine Learning",
+  "PyTorch": "AI & Machine Learning",
+  "Scikit-learn": "AI & Machine Learning",
+
+  // Design & Product
+  "Figma": "UI/UX Design",
+  "UX Design": "UI/UX Design",
+  "Product Management": "Product & Agile Management",
+};
+
 const DISCIPLINE_BUCKETS: Record<string, string[]> = {
   Frontend: [
     "React", "Vue.js", "Angular", "Svelte", "JavaScript", "TypeScript", "HTML", "CSS", "Tailwind CSS",
@@ -259,9 +335,10 @@ const DISCIPLINE_BUCKETS: Record<string, string[]> = {
   Backend: [
     "Node.js", "Express.js", "Python", "Java", "Go", "PHP", "Ruby", "Django", "Flask", "FastAPI", "Spring",
     "SQL", "MongoDB", "Redis", "Elasticsearch", ".NET", "C#", "Microservices", "REST APIs", "WebSockets",
+    "Firebase", "DynamoDB",
   ],
-  "Data & ML": ["Machine Learning", "Data Science", "Python", "SQL", "R", "Scala"],
-  DevOps: ["DevOps", "AWS", "Google Cloud", "Azure", "Linux", "Git"],
+  "Data & ML": ["Machine Learning", "Data Science", "Python", "SQL", "R", "Scala", "Pandas", "NumPy", "TensorFlow", "PyTorch", "Scikit-learn"],
+  DevOps: ["DevOps", "AWS", "Google Cloud", "Azure", "Linux", "Git", "Docker", "Kubernetes", "Amazon S3", "Amazon EC2", "AWS Lambda"],
   Design: ["UX Design", "Figma"],
   Mobile: ["Swift", "Kotlin"],
   Product: ["Product Management"],
@@ -396,7 +473,12 @@ function mergeSkill(
       existing.matchedTokens.push(matchedToken);
     }
   } else {
-    map.set(canonical, { canonical, level: "unspecified", matchedTokens: [matchedToken] });
+    map.set(canonical, {
+      canonical,
+      level: "unspecified",
+      matchedTokens: [matchedToken],
+      category: SKILL_CATEGORY_MAP[canonical] || "Other Skills",
+    });
   }
 }
 

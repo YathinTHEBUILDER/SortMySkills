@@ -16,7 +16,7 @@ const updateProfileSchema = z.object({
     .string()
     .min(1, "Please select a target career role.")
     .trim(),
-  role: z.enum(["student", "graduate", "job_seeker", "admin"], {
+  role: z.enum(["student", "graduate", "job_seeker"], {
     message: "Please select a valid membership role.",
   }),
 });

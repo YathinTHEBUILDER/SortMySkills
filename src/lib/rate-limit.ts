@@ -129,15 +129,33 @@ export async function rateLimit(
       });
 
       if (insertError) {
-        // If conflict occurs from rapid parallel requests, default to success
-        console.warn("[RATE-LIMIT] Supabase insert conflict:", insertError.message);
+        // Handle insert conflicts under high concurrency (e.g., duplicate key)
+        // by retrying the select-then-update routine once.
+        console.warn("[RATE-LIMIT] Supabase insert conflict, retrying fetch + update:", insertError.message);
+        const { data: retryRecords, error: retryFetchError } = await query;
+        if (!retryFetchError && retryRecords?.[0]) {
+          const retryRecord = retryRecords[0];
+          if (retryRecord.request_count >= limit) {
+            return { success: false, resetTime };
+          }
+          const { error: retryUpdateError } = await supabase
+            .from("api_rate_limits")
+            .update({
+              request_count: retryRecord.request_count + 1,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", retryRecord.id);
+          if (retryUpdateError) {
+            console.error("[RATE-LIMIT] Supabase update retry failed:", retryUpdateError.message);
+          }
+        }
       }
 
       return { success: true, resetTime };
     }
 
   } catch (error) {
-    console.error("[RATE-LIMIT] Supabase rate limiter failed. Falling back to local memory:", error);
+    console.error("[RATE-LIMIT] Supabase rate limiter failed. Falling back to local memory (best-effort only; resets on serverless cold starts):", error);
     // Safe memory fallback using combined key (IP + feature)
     return localRateLimit(`${cleanFeature}:${ip}`, limit, windowMs);
   }

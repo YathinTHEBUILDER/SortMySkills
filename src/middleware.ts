@@ -42,6 +42,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/profile") ||
     pathname.startsWith("/skill-development") ||
     pathname.startsWith("/job-match") ||
+    pathname.startsWith("/career-analyser") ||
     pathname.startsWith("/interview-packs");
 
   // Auth pages (anonymous only): login, signup, verify OTP, forgot password

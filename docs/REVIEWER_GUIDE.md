@@ -1,164 +1,87 @@
 # Reviewer Guide — How to Present SortMySkills
 
-Use this when walking a professor, hiring manager, or teammate through the repository. It tells you **what to say**, **which files to open**, and **what not to claim**.
+Use this guide when walking a professor, hiring manager, or teammate through the SortMySkills repository. It details what to highlight, what files to inspect, and common questions.
 
 ---
 
-## Elevator pitch (30 seconds)
+## Elevator Pitch (30 seconds)
 
-> SortMySkills helps students learn **intentionally** instead of randomly. We normalize messy skill labels from resumes and job posts using a **browser-side taxonomy dictionary**, show **gap percentages**, recommend **curated Coursera paths**, and provide **600 interview questions** across six roles. It is a Next.js frontend prototype — no backend yet — focused on structure and UX.
+> **SortMySkills** is a highly secure, modern career-readiness SaaS platform. It leverages **Next.js 15, React 19, and Supabase** to normalize messy resumes, detect target job description gaps, and dynamically construct AI-driven study roadmaps. Featuring **Supabase OTP authentication**, **row-level security (RLS) database isolation**, and **Groq AI-powered validated timeline roadmaps**, it is designed to help students transition into placement-ready roles with authentic, trackable progress and complete data privacy control.
 
 ---
 
-## Architecture in plain language
+## Platform Architecture
 
 ```text
-┌─────────────────────────────────────────────────────────┐
-│  Next.js App Router (React 19, client components)       │
-├─────────────────────────────────────────────────────────┤
-│  Pages: marketing + 3 tools (planner, matcher, packs)   │
-├─────────────────────────────────────────────────────────┤
-│  Shared lib: skill-map.ts (parser), themes.ts (colors)  │
-├─────────────────────────────────────────────────────────┤
-│  Static data: interview-packs/*, ROLES_DATABASE, courses│
-├─────────────────────────────────────────────────────────┤
-│  UI: Tailwind 4, GSAP, Lenis, Recharts                  │
-└─────────────────────────────────────────────────────────┘
-          No server API · No database · No auth
+┌─────────────────────────────────────────────────────────────┐
+│  Next.js 15 App Router & React 19 Server Actions            │
+├─────────────────────────────────────────────────────────────┤
+│  Auth: Supabase OTP Email Login + Protective Middleware     │
+├─────────────────────────────────────────────────────────────┤
+│  AI: Groq Llama3 Timeline with Zod Schema Validation        │
+├─────────────────────────────────────────────────────────────┤
+│  Database: Supabase Postgres with Performance Indexing      │
+├─────────────────────────────────────────────────────────────┤
+│  Telemetry: Hardened Concurrency-Safe API Rate Limiting     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Recommended file open order
+## Recommended File Open Order
 
 Open these **in this sequence** during a code review:
 
-| Order | File | What to explain |
-|-------|------|-----------------|
-| 1 | `README.md` | Entry point + doc links |
-| 2 | `src/lib/skill-map.ts` | **Heart of the product** — parser + alias map |
-| 3 | `src/app/page.tsx` | Homepage UX + calls parser on form submit |
-| 4 | `src/app/job-match/page.tsx` | Resume/JD comparison using same parser |
-| 5 | `src/app/skill-development/page.tsx` | Role checklist + readiness math + Recharts |
-| 6 | `src/data/interview-packs/index.ts` | How 600 questions are registered |
-| 7 | `src/components/ThemeProvider.tsx` | Light/dark + accent packs |
-| 8 | `src/app/layout.tsx` | Fonts, theme script, global providers |
-
-Skip config boilerplate (`next.config.ts`, `eslint`) unless asked.
+| Order | File / Folder | What to explain |
+|-------|---------------|-----------------|
+| 1 | `README.md` | Entry point & overview |
+| 2 | `src/lib/skill-map.ts` | **Heart of the parser** — canonical lookup dictionary, multi-word matching, categories, and English false positive regex exclusions. |
+| 3 | `src/app/(app)/career-analyser/page.tsx` | **Unified workspace UI** — handles Readiness Scans, Job Matching, AI Roadmap inputs, localStorage caching, and data deletion triggers. |
+| 4 | `src/app/api/roadmap/route.ts` | **AI Route Controller** — auth checks, rate-limit shielding, verified resource filtering/injections, and Zod output validation/repair. |
+| 5 | `src/app/actions/analysis.ts` | **Server Actions** — secure `deleteMyAnalysisSessionsAction` using Postgres foreign keys to wipe account footprints. |
+| 6 | `supabase/migrations/` | **Database Schema & Hardening** — profile creations, sessions logging, RLS policy setups, and custom speed indices. |
+| 7 | `src/lib/rate-limit.ts` | **Telemetry Hardening** — concurrency-safe IP & User-scoped rate limiter featuring select-then-update auto-retries on insert conflict. |
 
 ---
 
-## File-by-file talking points
+## File-by-File Talking Points
 
-### `src/lib/skill-map.ts`
+### `src/lib/skill-map.ts` (Parser Engine)
+* **High Specificity**: Maps specific libraries and platforms (e.g. `Pandas`, `PyTorch`, `Kubernetes`, `Firebase`) to canonical terms rather than generic collapsed parent titles.
+* **Smart Category Mapping**: Automatically tags skills with their corresponding track families (`AI & Machine Learning`, `Databases & Storage`).
+* **Go False Positive Filter**: Avoids matching standard English verbs ("Let's go build") using strict context checks, but accurately parses when declaring the `Go` language.
 
-- **Single source of truth** for skill normalization.
-- `SKILL_MAP`: alias → canonical name.
-- `extractSkillsFromText()`: tokenize → lookup → substring fallback → dedupe.
-- Say: *“Adding a skill means adding keys here; all pages update automatically.”*
+### `src/app/(app)/career-analyser/page.tsx` (Unified Workspace)
+* paste inputs once → run **Readiness Scan** (formerly ATS Compatibility Score checking 5 weight structures) and **Skill Gaps** instantly.
+* Banners warn when utilizing John Doe / TechCorp **demo sample data** to prevent users from accidentally saving test runs.
+* Integrates a strict **🔒 Resume Privacy Notice** and a permanent delete function that clears localStorage keys and triggers server-side deletion.
 
-### `src/app/page.tsx`
+### `src/app/api/roadmap/route.ts` (AI Generation API)
+* Uses Groq Llama-3 to generate week-by-week timelines with goals and tasks.
+* Maps AI recommendations against a local registry of 14 curated free platforms (`Odin Project`, `roadmap.sh`, `freeCodeCamp`) and filters unverified URLs to block AI hallucination.
+* Zod validation ensures valid, parsing-safe JSON return payloads.
 
-- Marketing sections + **live hero demo** (comma-split loop, same map).
-- **Parser playground** calls `extractSkillsFromText` on submit.
-- `COURSERA_COURSES` static list on homepage.
-- GSAP for motion; not required for business logic.
-
-### `src/app/job-match/page.tsx`
-
-- Two textareas → same extractor on both sides.
-- Set math: `matched`, `missing`, `supplementary`, `score`.
-- `getCourseraBridges()` filters static courses by missing skills.
-- `SAMPLE_RESUME` / `SAMPLE_JD` for instant demo.
-
-### `src/app/skill-development/page.tsx`
-
-- `ROLES_DATABASE` defines 5 roles (no Backend role in planner yet — see roadmap).
-- Checkbox `userSkills` drives readiness %.
-- Recharts only on this page.
-- Coursera links are search URLs, not enroll API.
-
-### `src/data/interview-packs/`
-
-- One file per role; `buildPack()` in `types.ts` builds 100 questions.
-- Content is **data**, not logic — easy for non-devs to extend.
-- `index.ts` is the registry for the UI.
-
-### `src/components/`
-
-| File | Purpose |
-|------|---------|
-| `Navbar.tsx` | Routes + `ThemeControls` |
-| `ThemeProvider.tsx` | Persists theme to `localStorage` |
-| `ThemeControls.tsx` | Sun/moon + palette dropdown |
-| `Logo.tsx` | SVG uses CSS accent variables |
-| `SmoothScrollProvider.tsx` | Lenis wrapper |
-
-### `src/app/globals.css` + `src/lib/themes.ts`
-
-- Design system: charcoal/ivory surfaces, fine 0.5px borders.
-- Four swappable accent palettes.
-- Explain: *“We separated **layout theme** (light/dark) from **brand accent** (terracotta vs neon).”*
+### `src/lib/rate-limit.ts` (Hardened Limiting)
+* Prevents API spam via persistent, windowed, database-recorded check limits.
+* In high-concurrency conflicts (e.g., rapid duplicate key insertions), it retries the select-and-increment routine once rather than failing or silently bypassing.
 
 ---
 
-## Key design decisions to mention
+## Common Reviewer Questions & Answers
 
-1. **One parser function** — consistency between homepage and job match.
-2. **Client-only v1** — fast to demo, no infra cost; tradeoff is no saved profiles.
-3. **Editorial UI** — asymmetric grids, Geist + Georgia, no generic SaaS glassmorphism (see `homepage_prompts.md`).
-4. **Honest labeling** — UI says “Local NLP” but implementation is dictionary matching; clarify if asked.
-5. **Static course data** — curated quality over scraping Coursera.
+**Q: Is the Roadmap generation truly AI-backed?**  
+A: Yes, it is fully real. It queries Groq AI securely from the route handler, parses inputs against verified resource bounds, and runs strict schema validations.
 
----
+**Q: How is candidate privacy guaranteed?**  
+A: Every user's record is isolated under Supabase Row Level Security (RLS) policies requiring matching `auth.uid()`. Furthermore, candidates have a dedicated deletion server action that permanently wipes their CVs and roadmaps.
 
-## Common reviewer questions & answers
-
-**Q: Is this AI-powered?**  
-A: Not in v1. Rule-based normalization and set comparison. AI could augment parsing later.
-
-**Q: How accurate is the match score?**  
-A: Only as good as (1) what appears in the text and (2) what is in `SKILL_MAP`. It measures **tag overlap**, not years of experience or soft skills.
-
-**Q: Why no backend?**  
-A: Scope for prototype — prove UX and taxonomy model first. Roadmap includes API + persistence.
-
-**Q: Can it read PDF resumes?**  
-A: Not yet. Plain text paste only.
-
-**Q: How do interview packs work?**  
-A: Static TypeScript data, rendered as filterable lists. No scoring engine yet.
-
-**Q: How do themes work?**  
-A: CSS variables on `document.documentElement`, persisted in `localStorage`, applied before paint via inline script in `layout.tsx`.
-
----
-
-## What to run before the review
-
-```bash
-npm install
-npm run dev
-```
-
-Also verify build:
-
-```bash
-npm run build
-```
-
-URLs to have ready:
-
-- http://localhost:3000/
-- http://localhost:3000/skill-development
-- http://localhost:3000/job-match
-- http://localhost:3000/interview-packs
-- http://localhost:3000/interview-packs/frontend-engineer
+**Q: What happens if Supabase experiences a cold start or database failure?**  
+A: The rate-limiter features an automatic fallback to local, in-memory Map tracking so that the user's scan request completes safely without blocking.
 
 ---
 
 ## Related docs
 
-- Parser deep dive → [HOW_IT_WORKS.md](./HOW_IT_WORKS.md)
-- Diagrams → [APP_FLOW.md](./APP_FLOW.md)
-- Done vs todo → [ROADMAP.md](./ROADMAP.md)
+* Technical architecture deep dive → [HOW_IT_WORKS.md](./HOW_IT_WORKS.md)
+* Visual sitemaps and Persistence structures → [APP_FLOW.md](./APP_FLOW.md)
+* Progress tracker → [ROADMAP.md](./ROADMAP.md)

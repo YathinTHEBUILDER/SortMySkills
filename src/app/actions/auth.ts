@@ -21,7 +21,7 @@ const signUpSchema = z
   .object({
     fullName: z.string().min(2, "Full name must be at least 2 characters."),
     email: z.string().email("Please enter a valid email address."),
-    role: z.enum(["student", "graduate", "job_seeker", "admin"], {
+    role: z.enum(["student", "graduate", "job_seeker"], {
       message: "Please select a valid role.",
     }),
     password: z

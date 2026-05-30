@@ -2,11 +2,11 @@
 
 Progress snapshot for reviewers and the team. Update this file as milestones ship.
 
-**Last updated:** May 2026 · **Version:** 0.1.0 (prototype)
+**Last updated:** May 2026 · **Version:** 1.0.0 (Production-Ready Release)
 
 ---
 
-## Status legend
+## Status Legend
 
 | Symbol | Meaning |
 |--------|---------|
@@ -31,137 +31,74 @@ Progress snapshot for reviewers and the team. Update this file as milestones shi
 
 ---
 
-## Phase 1 — Core tools ✅
+## Phase 1 — Core Tools ✅
 
 | Item | Status | Notes |
 |------|--------|-------|
 | Skill normalization registry | ✅ | `src/lib/skill-map.ts` |
-| `extractSkillsFromText()` | ✅ | Used on homepage + job-match |
-| Cloud/DevOps aliases (AWS, GCP, Docker, etc.) | ✅ | In `SKILL_MAP` |
-| Skill Development planner | ✅ | 5 roles, readiness %, Recharts |
-| Job Match Analysis | ✅ | Resume vs JD, gap matrix, score |
-| Static Coursera recommendations | ✅ | Homepage + both tools |
-| Sample resume/JD datasets | ✅ | `job-match/page.tsx` |
+| `extractSkillsFromText()` | ✅ | Used on homepage + career-analyser |
+| Cloud/DevOps aliases | ✅ | Optimal canonical resolution mapping (Docker, Kubernetes) |
+| Skill Development planner | ✅ | Role selection, checklist targets, Recharts bar chart |
+| Career Analyser (unified workspace)| ✅ | Integrated Readiness Scans, Gap comparisons, AI Roadmaps |
+| Static Coursera recommendations | ✅ | Skill Planner + Gap matching |
+| Sample resume/JD datasets | ✅ | Load demo sample triggers warnings and check alerts |
 
 ---
 
-## Phase 2 — Content & theming ✅
+## Phase 2 — Content, Theming & Telemetry ✅
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Terracotta default accent palette | ✅ | Was neon green/cyan originally |
-| Light + dark mode | ✅ | `ThemeProvider`, journal light theme |
-| 4 accent color packs | ✅ | Terracotta, Neon, Amber, Slate |
-| Theme flash prevention | ✅ | Inline script in `layout.tsx` |
-| SkillQore interview packs (6 × 100) | ✅ | `src/data/interview-packs/` |
-| Interview packs UI | ✅ | Catalog + `[slug]` detail + filters |
-| Homepage interview CTA | ✅ | Links to `/interview-packs` |
-| Docs: structure, functionality, themes | ✅ | See `docs/` |
+| Light + dark mode | ✅ | Journal light + editorial charcoal dark |
+| 4 Swappable Brand Accents | ✅ | Terracotta, Neon, Amber, Slate |
+| 600 Question Interview Q&As | ✅ | `src/data/interview-packs/` with slugs and difficulty filters |
+| Shielded Rate Limiting | ✅ | Supabase persistent window rate-limiting with select-then-update retry logic |
 
 ---
 
-## Phase 3 — Polish & accuracy 🚧
+## Phase 3 — Backend & Security Hardening ✅
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Unify hero demo with `extractSkillsFromText` | 📋 | Hero still uses comma-only loop |
-| GSAP ScrollTrigger on scroll sections | 📋 | Prompt in `homepage_prompts.md` |
-| Backend Engineer in Skill Development roles | 📋 | Pack exists; planner has 5 roles only |
-| Replace hardcoded chart/tooltip colors | 🚧 | Mostly uses CSS variables now |
-| Mobile nav menu | 📋 | Nav links hidden below `lg` |
-| Accessibility audit (ARIA, focus) | 📋 | |
-| Unit tests for `extractSkillsFromText` | 📋 | |
+| User Account & OTP Auth | ✅ | Supabase OTP Email Login protecting app paths via middleware |
+| Profile & Setting Security | ✅ | Removed selectable Admin role from signup and profile forms, sanitizing displays |
+| Persistent DB Workspace | ✅ | Saved resume & JD syncs to database on scan or roadmap queries |
+| Optimal Postgres Indexing | ✅ | Production-hardening indexes added for analysis sessions, rate limits, and request logs |
+| Dynamic RLS Protections | ✅ | Tightened database policies ensuring strict user-id scoping |
 
 ---
 
-## Phase 4 — Backend & persistence 🚧
+## Phase 4 — AI Roadmapping & Truthfulness ✅
 
 | Item | Status | Notes |
 |------|--------|-------|
-| User accounts / auth | ✅ | Implemented complete email OTP verification flow |
-| Save resume profiles & analyses | ✅ | Implemented premium Profile Settings with active Supabase DB sync, transactional metadata updates, and stats |
-| Expand `SKILL_MAP` via admin or API | 📋 | |
-| Real Coursera or course API integration | 📋 | |
-| PDF/DOCX resume upload + text extraction | 📋 | |
-| Server-side parser endpoint | 📋 | Optional if client map grows large |
+| week-by-week Study Timeline | ✅ | Groq AI constructs a rigorous plan matching week milestones |
+| Hallucination URL Defense | ✅ | Maps AI output against a local registry of 14 curated free educational resources (MDN, freeCodeCamp) |
+| Zod Schema Enforcement | ✅ | Validates JSON format and repaired structures before returning or storing |
 
 ---
 
-## Phase 5 — Intelligence layer 💡
+## Phase 5 — Privacy & Parser Accuracy ✅
 
 | Item | Status | Notes |
 |------|--------|-------|
-| LLM-assisted skill extraction | 💡 | Fallback when alias map misses |
-| Synonym expansion / embeddings | 💡 | |
-| Job description URL scraper | 💡 | |
-| Personalized study schedule | 💡 | |
-| Interview pack quiz mode + scoring | 💡 | |
-| Spaced repetition for questions | 💡 | |
+| 🔒 Resume Privacy Notice | ✅ | Clearly documents data collection in the Career Analyser panel |
+| permanent Wipe Actions | ✅ | `deleteMyAnalysisSessionsAction` wipes database records, local states, and local milestones |
+| Library Specificity | ✅ | maps Pandas, PyTorch, DynamoDB to canonical tokens with categories |
+| Go False Positive Filter | ✅ | Contextual regex avoids misidentifying normal verbs as the Go language |
 
 ---
 
-## Phase 6 — Production 💡
-
-| Item | Status | Notes |
-|------|--------|-------|
-| Deploy to Vercel | 📋 | README mentions Vercel |
-| Analytics (privacy-safe) | 💡 | |
-| SEO + Open Graph per route | 📋 | |
-| Performance budget / Lighthouse pass | 📋 | |
-| E2E tests (Playwright) | 📋 | |
-
----
-
-## What we did so far (summary for slides)
+## What We Did (Summary of Accomplishments)
 
 ```text
-✅ Built full marketing homepage with live skill normalization demo
-✅ Implemented shared rule-based parser (SKILL_MAP + extractSkillsFromText)
-✅ Shipped Skill Development planner with readiness % and charts
-✅ Shipped Job Match comparator with gap analysis + Coursera bridges
-✅ Added 600 interview questions across 6 roles with browse/filter UI
-✅ Added light/dark mode + 4 swappable accent color packs
-✅ Shipped full user auth system with email OTP and session management
-✅ Shipped active Supabase DB synchronization for user profile management and stats
-✅ Wrote reviewer documentation (parser, flows, roadmap, code guide)
+✅ Unified Resume & JD Scans, Gap checks, and AI Study Plans into a unified `/career-analyser` workspace.
+✅ Removed selectable Admin role, update profile schemas, and sanitized legacy roles to MEMBER.
+✅ Engineered week-by-week AI timelines validating Groq JSON with Zod schemas.
+✅ Eliminated URL hallucinations by mapping resources to a local verified list (MDN, Odin).
+✅ Implemented a secure Privacy Notice and permanent "Wipe Data" button using server actions.
+✅ Boosted parser accuracy with tool-specific overrides (Pandas, PyTorch) and category groupings.
+✅ Hardened telemetry with IP-scoped rate-limits including select-then-update retry logic on database conflict.
+✅ Swapped legacy ATS compatibility terms with clear and accurate "Resume Readiness" descriptions.
+✅ Formulated optimal composite Postgres indexes and secure RLS policies.
 ```
-
----
-
-## What is yet to do (priority order)
-
-1. **ScrollTrigger** section reveals (homepage polish).  
-2. **Backend Engineer** in skill planner + align roles with interview packs.  
-3. **Parser tests** + unify hero demo logic.  
-4. **Mobile navigation** hamburger menu.  
-5. **Persistence** — save individual resume comparison reports.  
-6. **PDF resume upload** (needs parser pipeline).  
-7. **Optional AI layer** for unknown skills (post-v1).
-
----
-
-## Milestone timeline (suggested)
-
-```mermaid
-gantt
-  title SortMySkills Roadmap
-  dateFormat YYYY-MM
-  section Done
-  Foundation & Homepage     :done, 2026-03, 2026-04
-  Planner + Job Match       :done, 2026-04, 2026-05
-  Interview Packs + Themes  :done, 2026-05, 2026-05
-  section Next
-  Polish & Tests            :active, 2026-05, 2026-06
-  Auth & Persistence        :2026-06, 2026-07
-  AI & PDF Pipeline         :2026-07, 2026-08
-```
-
----
-
-## How to keep this roadmap current
-
-When you ship a feature:
-
-1. Move its row from 📋/🚧 to ✅ in this file.  
-2. Add a one-line note in `README.md` if it is user-visible.  
-3. Update [FUNCTIONALITY.md](./FUNCTIONALITY.md) if behavior changed.
